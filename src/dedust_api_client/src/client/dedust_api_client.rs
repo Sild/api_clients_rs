@@ -1,6 +1,6 @@
 use crate::api_v2::types::{Pool, PoolLite};
-use crate::client::executor::Executor;
 use crate::client::config::DedustApiClientConfig;
+use crate::client::executor::Executor;
 
 pub struct DedustApiClient {
     executor: Executor,
