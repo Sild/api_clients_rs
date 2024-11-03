@@ -278,6 +278,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "dedust_api_client"
+version = "0.0.1"
+dependencies = [
+ "anyhow",
+ "env_logger",
+ "log",
+ "reqwest",
+ "reqwest-middleware",
+ "reqwest-retry",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "serde_qs",
+ "serde_with",
+ "tokio",
+ "tokio-test",
+]
+
+[[package]]
 name = "deranged"
 version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
