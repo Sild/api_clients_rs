@@ -1,7 +1,11 @@
 [package]
-name = "stonfi_api_client"
 edition.workspace = true
+license.workspace = true
+repository.workspace = true
+name = "stonfi_api_client"
 version = "0.0.1"
+description = "API client for Stonfi"
+
 
 [dependencies]
 anyhow.workspace = true

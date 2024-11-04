@@ -1,7 +1,10 @@
 [package]
-name = "dedust_api_client"
 edition.workspace = true
+license.workspace = true
+repository.workspace = true
+name = "dedust_api_client"
 version = "0.0.1"
+description = "API client for Dedust"
 
 [dependencies]
 anyhow.workspace = true

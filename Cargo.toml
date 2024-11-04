@@ -8,6 +8,8 @@ members = [
 
 [workspace.package]
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/Sild/api_clients_rs"
 
 [workspace.dependencies]
 tokio = { version = "1.41", features = ["full"] }
