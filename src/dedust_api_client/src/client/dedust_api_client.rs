@@ -1,4 +1,5 @@
-use crate::api_v2::types::{Pool, PoolLite, PoolTrade};
+use crate::api_v2::req::V2Req;
+use crate::api_v2::rsp::V2Rsp;
 use crate::client::config::DedustApiClientConfig;
 use crate::client::executor::Executor;
 
@@ -23,16 +24,19 @@ impl DedustApiClient {
         Self { executor }
     }
 
-    pub async fn get_pools(&self) -> anyhow::Result<Vec<Pool>> {
-        self.executor.exec_get("pools").await
-    }
-
-    pub async fn get_pools_lite(&self) -> anyhow::Result<Vec<PoolLite>> {
-        self.executor.exec_get("pools-lite").await
-    }
-
-    pub async fn get_pool_trades(&self, pool_addr: &str) -> anyhow::Result<Vec<PoolTrade>> {
-        let path = format!("pools/{}/trades", pool_addr);
-        self.executor.exec_get(&path).await
+    pub async fn v2_exec(&self, req: &V2Req) -> anyhow::Result<V2Rsp> {
+        let rsp = match req {
+            V2Req::Pools => {
+                V2Rsp::Pools(self.executor.exec_get("pools").await?)
+            },
+            V2Req::PoolsLite => {
+                V2Rsp::PoolsLite(self.executor.exec_get("pools-lite").await?)
+            },
+            V2Req::PoolTrades(pool_addr) => {
+                let path = format!("pools/{}/trades", pool_addr);
+                V2Rsp::PoolTrades(self.executor.exec_get(&path).await?)
+            },
+        };
+        Ok(rsp)
     }
 }
