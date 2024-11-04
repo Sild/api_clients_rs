@@ -26,16 +26,12 @@ impl DedustApiClient {
 
     pub async fn v2_exec(&self, req: &V2Req) -> anyhow::Result<V2Rsp> {
         let rsp = match req {
-            V2Req::Pools => {
-                V2Rsp::Pools(self.executor.exec_get("pools").await?)
-            },
-            V2Req::PoolsLite => {
-                V2Rsp::PoolsLite(self.executor.exec_get("pools-lite").await?)
-            },
+            V2Req::Pools => V2Rsp::Pools(self.executor.exec_get("pools").await?),
+            V2Req::PoolsLite => V2Rsp::PoolsLite(self.executor.exec_get("pools-lite").await?),
             V2Req::PoolTrades(pool_addr) => {
                 let path = format!("pools/{}/trades", pool_addr);
                 V2Rsp::PoolTrades(self.executor.exec_get(&path).await?)
-            },
+            }
         };
         Ok(rsp)
     }
