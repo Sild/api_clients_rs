@@ -15,7 +15,6 @@ async fn test_get_pools() -> Result<()> {
     let client = init_env();
     let rsp = client.get_pools().await?;
     assert_ne!(rsp, vec![]);
-
     Ok(())
 }
 
@@ -24,6 +23,13 @@ async fn test_get_pools_lite() -> Result<()> {
     let client = init_env();
     let rsp = client.get_pools_lite().await?;
     assert_ne!(rsp, vec![]);
+    Ok(())
+}
 
+#[tokio::test]
+async fn test_get_pool_trades() -> Result<()> {
+    let client = init_env();
+    let rsp = client.get_pool_trades("EQAADLqcF3lNb1O_GQLowwky8vvUGXuzPRNGvKBwBxjsHR7s").await?;
+    assert_ne!(rsp, vec![]);
     Ok(())
 }

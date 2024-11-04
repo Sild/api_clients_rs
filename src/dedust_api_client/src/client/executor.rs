@@ -67,8 +67,8 @@ impl Executor {
         let rsp = req_builder.send().await?;
         let rsp_code = rsp.status();
         let rsp_body = rsp.text().await?;
-        let sl = &rsp_body[..3000];
-        log::info!("Got rsp_code: {rsp_code} rsp_body: '{sl}'");
+        // let sl = &rsp_body[..3000];
+        // log::info!("Got rsp_code: {rsp_code} rsp_body: '{sl}'");
 
         log::trace!("Got rsp_code: {rsp_code} rsp_body: '{rsp_body}'");
         Ok(serde_json::from_str(&rsp_body)?)

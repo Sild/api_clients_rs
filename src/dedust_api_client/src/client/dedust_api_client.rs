@@ -1,4 +1,4 @@
-use crate::api_v2::types::{Pool, PoolLite};
+use crate::api_v2::types::{Pool, PoolLite, PoolTrade};
 use crate::client::config::DedustApiClientConfig;
 use crate::client::executor::Executor;
 
@@ -29,5 +29,10 @@ impl DedustApiClient {
 
     pub async fn get_pools_lite(&self) -> anyhow::Result<Vec<PoolLite>> {
         self.executor.exec_get("pools-lite").await
+    }
+
+    pub async fn get_pool_trades(&self, pool_addr: &str) -> anyhow::Result<Vec<PoolTrade>> {
+        let path = format!("pools/{}/trades", pool_addr);
+        self.executor.exec_get(&path).await
     }
 }

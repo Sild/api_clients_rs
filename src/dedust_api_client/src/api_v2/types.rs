@@ -53,3 +53,26 @@ pub struct PoolLite {
     pub fees: Vec<String>,
     pub volume: Vec<String>,
 }
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct PoolAsset {
+    #[serde(rename = "type")]
+    pub asset_type: String,
+    pub address: Option<String>,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct PoolTrade {
+    pub sender: String,
+    #[serde(rename = "assetIn")]
+    pub asset_in: PoolAsset,
+    #[serde(rename = "assetOut")]
+    pub asset_out: PoolAsset,
+    #[serde(rename = "amountIn")]
+    pub amount_in: String,
+    #[serde(rename = "amountOut")]
+    pub amount_out: String,
+    pub lt: String,
+    #[serde(rename = "createdAt")]
+    pub created_at: String,
+}

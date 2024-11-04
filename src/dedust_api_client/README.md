@@ -18,3 +18,6 @@
 | /v2/jettons/{address}/total-supply       |           |
 | /v2/pools                                | ✅         |
 | /v2/pools-lite                           | ✅         |
+| /v2/pools/{address}/metadata             |           |
+| /v2/pools/{address}/trades               | ✅         |
+| /v2/prices                               |           |
