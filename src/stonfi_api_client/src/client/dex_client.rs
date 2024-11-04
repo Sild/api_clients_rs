@@ -11,7 +11,7 @@ pub struct DexClient {
 }
 
 impl DexClient {
-    pub(crate) fn new(executor: Arc<Executor>) -> Self {
+    pub(super) fn new(executor: Arc<Executor>) -> Self {
         Self { executor }
     }
 

@@ -3,13 +3,13 @@ use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
 use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
 use serde::{de, ser};
 
-pub(crate) struct Executor {
+pub(super) struct Executor {
     api_url: String,
     http_cli: ClientWithMiddleware,
 }
 
 impl Executor {
-    pub fn new(api_url: &str, retry_count: u32) -> Self {
+    pub(super) fn new(api_url: &str, retry_count: u32) -> Self {
         let retry_policy = ExponentialBackoff::builder().build_with_max_retries(retry_count);
 
         let http_cli = ClientBuilder::new(reqwest::Client::new())
@@ -22,7 +22,7 @@ impl Executor {
         }
     }
 
-    pub async fn exec_get<RSP>(&self, path: &str) -> Result<RSP>
+    pub(super) async fn exec_get<RSP>(&self, path: &str) -> Result<RSP>
     where
         RSP: de::DeserializeOwned,
     {
@@ -30,7 +30,7 @@ impl Executor {
         self.exec_get_with_params(path, &empty_params).await
     }
 
-    pub async fn exec_get_with_params<PARAMS, RSP>(&self, path: &str, params: &PARAMS) -> Result<RSP>
+    pub(super) async fn exec_get_with_params<PARAMS, RSP>(&self, path: &str, params: &PARAMS) -> Result<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
@@ -47,7 +47,7 @@ impl Executor {
         self.exec_impl(path, params, true).await
     }
 
-    pub async fn exec_impl<PARAMS, RSP>(&self, path: &str, params: &PARAMS, is_post: bool) -> Result<RSP>
+    async fn exec_impl<PARAMS, RSP>(&self, path: &str, params: &PARAMS, is_post: bool) -> Result<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
