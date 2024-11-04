@@ -1,37 +1,48 @@
 use crate::api_v1::types::{Asset, Pool, Router};
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug)]
-pub struct GetAssetsRsp {
+#[derive(Deserialize, Debug, Clone)]
+pub enum V1DexRsp {
+    Assets(AssetsRsp),
+    Asset(AssetRsp),
+    Pools(PoolsRsp),
+    Pool(PoolRsp),
+    Routers(RoutersRsp),
+    Router(RouterRsp),
+    SwapSimulate(SwapSimulateRsp),
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct AssetsRsp {
     pub asset_list: Vec<Asset>,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct GetAssetRsp {
+#[derive(Deserialize, Debug, Clone)]
+pub struct AssetRsp {
     pub asset: Asset,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct GetPoolsRsp {
+#[derive(Deserialize, Debug, Clone)]
+pub struct PoolsRsp {
     pub pool_list: Vec<Pool>,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct GetPoolRsp {
+#[derive(Deserialize, Debug, Clone)]
+pub struct PoolRsp {
     pub pool: Pool,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct GetRoutersRsp {
+#[derive(Deserialize, Debug, Clone)]
+pub struct RoutersRsp {
     pub router_list: Vec<Router>,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct GetRouterRsp {
+#[derive(Deserialize, Debug, Clone)]
+pub struct RouterRsp {
     pub router: Router,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct SwapSimulateRsp {
     pub ask_address: String,
     pub ask_jetton_wallet: String,

@@ -1,7 +1,17 @@
 use serde_derive::Serialize;
 
+pub enum V1DexReq {
+    Assets,
+    Asset(String),
+    Pools(PoolsParams),
+    Pool(String),
+    Router(String),
+    Routers(RoutersParams),
+    SwapSimulate(SwapSimulateParams),
+}
+
 #[serde_with::skip_serializing_none]
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 pub struct SwapSimulateParams {
     pub offer_address: String,
     pub ask_address: String,
@@ -12,12 +22,12 @@ pub struct SwapSimulateParams {
     pub dex_v2: Option<bool>,
 }
 
-#[derive(Serialize)]
-pub(crate) struct PoolsParams {
+#[derive(Serialize, Clone)]
+pub struct PoolsParams {
     pub dex_v2: bool,
 }
 
-#[derive(Serialize)]
-pub(crate) struct RoutersParams {
+#[derive(Serialize, Clone)]
+pub struct RoutersParams {
     pub dex_v2: bool,
 }

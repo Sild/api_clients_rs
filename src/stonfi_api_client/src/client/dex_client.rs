@@ -1,7 +1,5 @@
-use crate::api_v1::dex_req_params::{PoolsParams, RoutersParams, SwapSimulateParams};
-use crate::api_v1::dex_rsp::{
-    GetAssetRsp, GetAssetsRsp, GetPoolRsp, GetPoolsRsp, GetRouterRsp, GetRoutersRsp, SwapSimulateRsp,
-};
+use crate::api_v1::dex_req::V1DexReq;
+use crate::api_v1::dex_rsp::V1DexRsp;
 use crate::client::executor::Executor;
 use anyhow::Result;
 use std::sync::Arc;
@@ -11,40 +9,32 @@ pub struct DexClient {
 }
 
 impl DexClient {
-    pub(super) fn new(executor: Arc<Executor>) -> Self {
-        Self { executor }
-    }
+    pub(super) fn new(executor: Arc<Executor>) -> Self { Self { executor } }
 
-    pub async fn get_assets(&self) -> Result<GetAssetsRsp> {
-        self.executor.exec_get("assets").await
-    }
-
-    pub async fn get_asset(&self, addr: &str) -> Result<Option<GetAssetRsp>> {
-        let path = format!("assets/{}", addr);
-        self.executor.exec_get(&path).await
-    }
-
-    pub async fn get_pools(&self, dex_v2: bool) -> Result<GetPoolsRsp> {
-        let params = PoolsParams { dex_v2 };
-        self.executor.exec_get_with_params("pools", &params).await
-    }
-
-    pub async fn get_pool(&self, addr: &str) -> Result<Option<GetPoolRsp>> {
-        let path = format!("pools/{}", addr);
-        self.executor.exec_get(&path).await
-    }
-
-    pub async fn get_routers(&self, dex_v2: bool) -> Result<GetRoutersRsp> {
-        let params = RoutersParams { dex_v2 };
-        self.executor.exec_get_with_params("routers", &params).await
-    }
-
-    pub async fn get_router(&self, addr: &str) -> Result<Option<GetRouterRsp>> {
-        let path = format!("routers/{}", addr);
-        self.executor.exec_get(&path).await
-    }
-
-    pub async fn swap_simulate(&self, params: &SwapSimulateParams) -> Result<SwapSimulateRsp> {
-        self.executor.exec_post("swap/simulate", params).await
+    pub async fn v1_exec(&self, req: &V1DexReq) -> Result<V1DexRsp> {
+        let rsp = match req {
+            V1DexReq::Assets => {
+                V1DexRsp::Assets(self.executor.exec_get("assets").await?)
+            },
+            V1DexReq::Asset(addr) => {
+                V1DexRsp::Asset(self.executor.exec_get(&format!("assets/{}", addr)).await?)
+            },
+            V1DexReq::Pools(params) => {
+                V1DexRsp::Pools(self.executor.exec_get_with_params("pools", &params).await?)
+            },
+            V1DexReq::Pool(addr) => {
+                V1DexRsp::Pool(self.executor.exec_get(&format!("pools/{}", addr)).await?)
+            },
+            V1DexReq::Routers(params) => {
+                V1DexRsp::Routers(self.executor.exec_get_with_params("routers", &params).await?)
+            },
+            V1DexReq::Router(addr) => {
+                V1DexRsp::Router(self.executor.exec_get(&format!("routers/{}", addr)).await?)
+            },
+            V1DexReq::SwapSimulate(params) => {
+                V1DexRsp::SwapSimulate(self.executor.exec_post("swap/simulate", params).await?)
+            },
+        };
+        Ok(rsp)
     }
 }
