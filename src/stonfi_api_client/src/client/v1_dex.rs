@@ -4,16 +4,16 @@ use crate::client::executor::Executor;
 use anyhow::Result;
 use std::sync::Arc;
 
-pub struct DexClient {
+pub struct V1Dex {
     executor: Arc<Executor>,
 }
 
-impl DexClient {
+impl V1Dex {
     pub(super) fn new(executor: Arc<Executor>) -> Self {
         Self { executor }
     }
 
-    pub async fn v1_exec(&self, req: &V1DexReq) -> Result<V1DexRsp> {
+    pub async fn exec(&self, req: &V1DexReq) -> Result<V1DexRsp> {
         let rsp = match req {
             V1DexReq::Assets => V1DexRsp::Assets(self.executor.exec_get("assets").await?),
             V1DexReq::Asset(addr) => V1DexRsp::Asset(self.executor.exec_get(&format!("assets/{}", addr)).await?),

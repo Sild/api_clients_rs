@@ -1,10 +1,10 @@
 use crate::client::config::StonfiApiClientConfig;
-use crate::client::dex_client::DexClient;
 use crate::client::executor::Executor;
+use crate::client::v1_dex::V1Dex;
 use std::sync::Arc;
 
 pub struct StonfiApiClient {
-    pub dex: DexClient,
+    pub v1_dex: V1Dex,
 }
 
 impl Default for StonfiApiClient {
@@ -22,7 +22,7 @@ impl StonfiApiClient {
     pub fn new_with_config(config: StonfiApiClientConfig) -> Self {
         let executor = Arc::new(Executor::new(&config.api_url, config.retry_count));
         Self {
-            dex: DexClient::new(executor),
+            v1_dex: V1Dex::new(executor),
         }
     }
 }
