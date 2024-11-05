@@ -13,7 +13,7 @@ fn init_env() -> DedustApiClient {
 }
 
 #[tokio::test]
-async fn test_get_pools() -> Result<()> {
+async fn test_pools() -> Result<()> {
     let client = init_env();
     let req = V2Req::Pools;
     let V2Rsp::Pools(rsp) = client.v2_exec(&req).await? else {
@@ -24,7 +24,7 @@ async fn test_get_pools() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_get_pools_lite() -> Result<()> {
+async fn test_pools_lite() -> Result<()> {
     let client = init_env();
     let req = V2Req::PoolsLite;
     let V2Rsp::PoolsLite(rsp) = client.v2_exec(&req).await? else {
@@ -35,12 +35,23 @@ async fn test_get_pools_lite() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_get_pool_trades() -> Result<()> {
+async fn test_pool_trades() -> Result<()> {
     let client = init_env();
     let req = V2Req::PoolTrades("EQAADLqcF3lNb1O_GQLowwky8vvUGXuzPRNGvKBwBxjsHR7s".to_string());
     let V2Rsp::PoolTrades(rsp) = client.v2_exec(&req).await? else {
         panic!("V2Rsp::PoolTrades expected")
     };
     assert_ne!(rsp, vec![]);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_pool_metadata() -> Result<()> {
+    let client = init_env();
+    let req = V2Req::PoolMetadata("EQA-X_yo3fzzbDbJ_0bzFWKqtRuZFIRa1sJsveZJ1YpViO3r".to_string());
+    let V2Rsp::PoolMetadata(rsp) = client.v2_exec(&req).await? else {
+        panic!("V2Rsp::PoolMetadata expected")
+    };
+    assert_eq!(rsp.name, "DeDust Pool: TON/USDT");
     Ok(())
 }

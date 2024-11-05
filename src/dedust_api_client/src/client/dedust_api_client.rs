@@ -32,6 +32,10 @@ impl DedustApiClient {
                 let path = format!("pools/{}/trades", pool_addr);
                 V2Rsp::PoolTrades(self.executor.exec_get(&path).await?)
             }
+            V2Req::PoolMetadata(pool_addr) => {
+                let path = format!("pools/{}/metadata", pool_addr);
+                V2Rsp::PoolMetadata(self.executor.exec_get(&path).await?)
+            }
         };
         Ok(rsp)
     }

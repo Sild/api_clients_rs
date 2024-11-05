@@ -76,3 +76,9 @@ pub struct PoolTrade {
     #[serde(rename = "createdAt")]
     pub created_at: String,
 }
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct PoolMetadata {
+    pub name: String,
+    pub image: String,
+}
