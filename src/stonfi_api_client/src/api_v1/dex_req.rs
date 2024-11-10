@@ -2,13 +2,24 @@ use serde_derive::Serialize;
 
 pub enum V1DexReq {
     Assets,
+    AssetsQuery(TODO),
+    AssetsSearch(TODO),
     Asset(String),
+    Farms(FarmsParams),
+    Farm(String),
+    FarmByPool(String),
+    Markets,
+    PoolQuery(TODO),
     Pools(PoolsParams),
     Pool(String),
+    ReverseSwapSimulate(TODO),
     Router(String),
     Routers(RoutersParams),
     SwapSimulate(SwapSimulateParams),
+    SwapStatus(TODO),
 }
+
+pub struct TODO {}
 
 #[serde_with::skip_serializing_none]
 #[derive(Serialize, Clone)]
@@ -29,5 +40,10 @@ pub struct PoolsParams {
 
 #[derive(Serialize, Clone)]
 pub struct RoutersParams {
+    pub dex_v2: bool,
+}
+
+#[derive(Serialize, Clone)]
+pub struct FarmsParams {
     pub dex_v2: bool,
 }

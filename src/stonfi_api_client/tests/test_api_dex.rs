@@ -1,5 +1,5 @@
 use anyhow::Result;
-use stonfi_api_client::api_v1::dex_req::{PoolsParams, RoutersParams, SwapSimulateParams, V1DexReq};
+use stonfi_api_client::api_v1::dex_req::{FarmsParams, PoolsParams, RoutersParams, SwapSimulateParams, V1DexReq};
 use stonfi_api_client::api_v1::dex_rsp::V1DexRsp;
 use stonfi_api_client::client::{StonfiApiClient, StonfiApiClientConfig};
 
@@ -13,7 +13,7 @@ fn init_env() -> StonfiApiClient {
 }
 
 #[tokio::test]
-async fn test_get_assets() -> Result<()> {
+async fn test_assets() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::Assets;
     let V1DexRsp::Assets(rsp) = client.v1_dex.exec(&req).await? else {
@@ -24,7 +24,7 @@ async fn test_get_assets() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_get_asset() -> Result<()> {
+async fn test_asset() -> Result<()> {
     let client = init_env();
     let ton_addr = "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c";
     let req = V1DexReq::Asset(ton_addr.to_string());
@@ -37,7 +37,32 @@ async fn test_get_asset() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_get_pools() -> Result<()> {
+async fn test_farms() -> Result<()> {
+    let client = init_env();
+    let params = FarmsParams { dex_v2: true };
+    let req = V1DexReq::Farms(params);
+    let V1DexRsp::Farms(rsp) = client.v1_dex.exec(&req).await? else {
+        panic!("FarmsRsp expected")
+    };
+    assert_ne!(rsp.farm_list, vec![]);
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_farm() -> Result<()> {
+    let client = init_env();
+    let farm_minter = "EQCuq6v9szR4MrtVYN_kGHh2WMKU2ahJQzCL4J1VwfL1LSJm".to_string();
+    let req = V1DexReq::Farm(farm_minter.clone());
+    let V1DexRsp::Farm(rsp) = client.v1_dex.exec(&req).await? else {
+        panic!("FarmRsp expected")
+    };
+    assert_eq!(rsp.farm.minter_address, farm_minter);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_pools() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::Pools(PoolsParams { dex_v2: true });
     let V1DexRsp::Pools(rsp) = client.v1_dex.exec(&req).await? else {
@@ -48,7 +73,7 @@ async fn test_get_pools() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_get_pool() -> Result<()> {
+async fn test_pool() -> Result<()> {
     let client = init_env();
     let hmstr_usdt_pool = "EQBXg9I5MBvwv7O8Xd0ZOC6z7T6yoCojaBXQXoAYx6paDO2s";
     let req = V1DexReq::Pool(hmstr_usdt_pool.to_string());
@@ -62,7 +87,7 @@ async fn test_get_pool() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_get_routers() -> Result<()> {
+async fn test_routers() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::Routers(RoutersParams { dex_v2: true });
     let V1DexRsp::Routers(rsp) = client.v1_dex.exec(&req).await? else {
@@ -73,7 +98,7 @@ async fn test_get_routers() -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_get_router() -> Result<()> {
+async fn test_router() -> Result<()> {
     let client = init_env();
     let addr = "EQB3ncyBUTjZUA5EnFKR5_EnOMI9V1tTEAAPaiU71gc4TiUt";
     let req = V1DexReq::Router(addr.to_string());

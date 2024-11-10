@@ -1,10 +1,12 @@
-use crate::api_v1::types::{Asset, Pool, Router};
-use serde::Deserialize;
+use crate::api_v1::types::{Asset, Farm, Pool, Router};
+use serde_derive::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
 pub enum V1DexRsp {
     Assets(AssetsRsp),
     Asset(AssetRsp),
+    Farms(FarmsRsp),
+    Farm(FarmRsp),
     Pools(PoolsRsp),
     Pool(PoolRsp),
     Routers(RoutersRsp),
@@ -20,6 +22,16 @@ pub struct AssetsRsp {
 #[derive(Deserialize, Debug, Clone)]
 pub struct AssetRsp {
     pub asset: Asset,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct FarmsRsp {
+    pub farm_list: Vec<Farm>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct FarmRsp {
+    pub farm: Farm,
 }
 
 #[derive(Deserialize, Debug, Clone)]

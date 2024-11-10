@@ -55,7 +55,7 @@ impl Executor {
         let full_url = format!("{}/{path}?{get_params}", self.api_url);
 
         let req_type_str = if is_post { "POST" } else { "GET" };
-        log::trace!("Executing {req_type_str} request to {full_url}");
+        log::warn!("Executing {req_type_str} request to {full_url}");
 
         let req_builder = if is_post {
             self.http_cli.post(full_url)

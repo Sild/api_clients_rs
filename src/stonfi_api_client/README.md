@@ -5,8 +5,8 @@
 | dex   | /v1/assets/query                  |           |
 | dex   | /v1/assets/search                 |           | 
 | dex   | /v1/assets/{addr_str}             | ✅         |
-| dex   | /v1/farms                         |           | 
-| dex   | /v1/farms/{addr_str}              |           |
+| dex   | /v1/farms                         | ✅         | 
+| dex   | /v1/farms/{addr_str}              | ✅         |
 | dex   | /v1/farms_by_pool/{pool_addr_str} |           |
 | dex   | /v1/markets                       |           |
 | dex   | /v1/pool/query                    |           |

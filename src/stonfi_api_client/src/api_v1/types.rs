@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde_derive::Deserialize;
 
 #[derive(Debug, Deserialize, PartialEq, Eq)]
 pub struct Meta {
@@ -52,4 +52,43 @@ pub struct Router {
     pub pton_version: String,
     pub pton_wallet_address: String,
     pub router_type: String,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct FarmReward {
+    pub address: String,
+    pub remaining_rewards: String,
+    pub reward_rate_24h: String,
+    pub status: String,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct FarmNftReward {
+    pub address: String,
+    pub amount: String,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct FarmNft {
+    pub address: String,
+    pub create_timestamp: String,
+    pub min_unstake_timestamp: String,
+    pub nonclaimed_rewards: String,
+    pub rewards: Vec<FarmNftReward>,
+    pub staked_tokens: String,
+    pub status: String,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct Farm {
+    pub apy: String,
+    pub locked_total_lp: String,
+    pub locked_total_lp_usd: String,
+    pub min_stake_duration_s: String,
+    pub minter_address: String,
+    pub nft_infos: Vec<FarmNft>,
+    pub pool_address: String,
+    pub reward_token_address: String,
+    pub rewards: Vec<FarmReward>,
+    pub status: String,
 }
