@@ -32,6 +32,7 @@ impl DedustApiClient {
                 let path = format!("pools/{}/trades", pool_addr);
                 V2Rsp::PoolTrades(self.executor.exec_get(&path).await?)
             },
+            V2Req::RoutingPlan(params) => V2Rsp::RoutingPlan(self.executor.exec_post("routing/plan", params).await?),
         };
         Ok(rsp)
     }

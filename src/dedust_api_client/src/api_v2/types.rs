@@ -22,31 +22,28 @@ pub struct Asset {
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
 pub struct Pool {
     pub address: String,
     pub lt: String,
-    #[serde(rename = "totalSupply")]
     pub total_supply: String,
     #[serde(rename = "type")]
     pub pool_type: String,
-    #[serde(rename = "tradeFee")]
     pub trade_fee: String,
     pub assets: Vec<Asset>,
-    #[serde(rename = "lastPrice")]
     pub last_price: Option<String>,
     pub reserves: Vec<String>,
     pub stats: Stats,
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
 pub struct PoolLite {
     pub address: String,
     pub lt: String,
-    #[serde(rename = "totalSupply")]
     pub total_supply: String,
     #[serde(rename = "type")]
     pub pool_type: String,
-    #[serde(rename = "tradeFee")]
     pub trade_fee: String,
     pub assets: Vec<String>,
     pub reserves: Vec<String>,
@@ -62,17 +59,33 @@ pub struct PoolAsset {
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
 pub struct PoolTrade {
     pub sender: String,
-    #[serde(rename = "assetIn")]
     pub asset_in: PoolAsset,
-    #[serde(rename = "assetOut")]
     pub asset_out: PoolAsset,
-    #[serde(rename = "amountIn")]
     pub amount_in: String,
-    #[serde(rename = "amountOut")]
     pub amount_out: String,
     pub lt: String,
-    #[serde(rename = "createdAt")]
     pub created_at: String,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct PoolRoutingPlan {
+    pub address: String,
+    pub is_stable: bool,
+    pub assets: Vec<String>,
+    pub reserves: Vec<String>,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct RoutingPlanStep {
+    pub pool: PoolRoutingPlan,
+    pub asset_in: String,
+    pub asset_out: String,
+    pub trade_fee: String,
+    pub amount_in: String,
+    pub amount_out: String,
 }

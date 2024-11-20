@@ -1,4 +1,5 @@
 use anyhow::Result;
+use log::log_enabled;
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
 use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
 use serde::{de, ser};
@@ -52,22 +53,24 @@ impl Executor {
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
     {
-        let get_params = serde_qs::to_string(params)?;
-        let full_url = format!("{}/{path}?{get_params}", self.api_url);
-
+        let full_url = format!("{}/{path}", self.api_url);
         let req_type_str = if is_post { "POST" } else { "GET" };
-        log::trace!("Executing {req_type_str} request to {full_url}");
 
         let req_builder = if is_post {
-            self.http_cli.post(full_url)
+            if log_enabled!(log::Level::Trace) {
+                let params_str = serde_json::to_string(params)?;
+                log::trace!("Executing {req_type_str} request to {full_url} with params: {params_str}");
+            }
+            self.http_cli.post(full_url).json(params)
         } else {
+            log::trace!("Executing {req_type_str} request to {full_url}");
             self.http_cli.get(full_url)
         };
 
         let rsp = req_builder.send().await?;
         let rsp_code = rsp.status();
         let rsp_body = rsp.text().await?;
-        // let sl = &rsp_body[..3000];
+        // let sl = &rsp_body[..1000];
         // log::info!("Got rsp_code: {rsp_code} rsp_body: '{sl}'");
 
         log::trace!("Got rsp_code: {rsp_code} rsp_body: '{rsp_body}'");

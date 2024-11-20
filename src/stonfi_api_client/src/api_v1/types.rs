@@ -81,7 +81,6 @@ pub struct FarmNft {
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 pub struct Farm {
-    pub apy: String,
     pub locked_total_lp: String,
     pub locked_total_lp_usd: String,
     pub min_stake_duration_s: String,

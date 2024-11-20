@@ -21,3 +21,4 @@
 | /v2/pools/{address}/metadata             |           |
 | /v2/pools/{address}/trades               | ✅         |
 | /v2/prices                               |           |
+| /v2/routing/plan                         | ✅         |

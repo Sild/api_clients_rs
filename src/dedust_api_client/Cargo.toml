@@ -17,7 +17,7 @@ serde_with.workspace = true
 serde_qs.workspace = true
 serde_derive.workspace = true
 reqwest-retry.workspace = true
-reqwest-middleware.workspace = true
+reqwest-middleware = { workspace = true, features = ["json"] }
 
 [dev-dependencies]
 tokio-test.workspace = true
