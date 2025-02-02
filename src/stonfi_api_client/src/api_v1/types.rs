@@ -87,7 +87,6 @@ pub struct Farm {
     pub minter_address: String,
     pub nft_infos: Vec<FarmNft>,
     pub pool_address: String,
-    pub reward_token_address: String,
     pub rewards: Vec<FarmReward>,
     pub status: String,
 }
