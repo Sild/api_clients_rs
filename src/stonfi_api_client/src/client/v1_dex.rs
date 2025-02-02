@@ -19,8 +19,12 @@ impl V1Dex {
             V1DexReq::Asset(addr) => V1DexRsp::Asset(self.executor.exec_get(&format!("assets/{addr}")).await?),
             V1DexReq::Farms(params) => V1DexRsp::Farms(self.executor.exec_get_with_params("farms", &params).await?),
             V1DexReq::Farm(addr) => V1DexRsp::Farm(self.executor.exec_get(&format!("farms/{addr}")).await?),
-            V1DexReq::Pools(params) => V1DexRsp::Pools(self.executor.exec_get_with_params("pools", &params).await?),
             V1DexReq::Pool(addr) => V1DexRsp::Pool(self.executor.exec_get(&format!("pools/{addr}")).await?),
+            V1DexReq::Pools(params) => V1DexRsp::Pools(self.executor.exec_get_with_params("pools", &params).await?),
+            V1DexReq::PoolsByMarket(params) => {
+                let path = format!("pools/by_market/{}/{}", params.asset0_address, params.asset1_address);
+                V1DexRsp::Pools(self.executor.exec_get(&path).await?)
+            },
             V1DexReq::Routers(params) => {
                 V1DexRsp::Routers(self.executor.exec_get_with_params("routers", &params).await?)
             },

@@ -1,5 +1,7 @@
 use anyhow::Result;
-use stonfi_api_client::api_v1::dex_req::{FarmsParams, PoolsParams, RoutersParams, SwapSimulateParams, V1DexReq};
+use stonfi_api_client::api_v1::dex_req::{
+    FarmsParams, PoolsByMarketParams, PoolsParams, RoutersParams, SwapSimulateParams, V1DexReq,
+};
 use stonfi_api_client::api_v1::dex_rsp::V1DexRsp;
 use stonfi_api_client::client::{StonfiApiClient, StonfiApiClientConfig};
 
@@ -65,6 +67,21 @@ async fn test_farm() -> Result<()> {
 async fn test_pools() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::Pools(PoolsParams { dex_v2: true });
+    let V1DexRsp::Pools(rsp) = client.v1_dex.exec(&req).await? else {
+        panic!("PoolsRsp expected")
+    };
+    assert_ne!(rsp.pool_list, vec![]);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_pools_by_market() -> Result<()> {
+    let client = init_env();
+    let params = PoolsByMarketParams {
+        asset0_address: "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c".to_string(), // ton
+        asset1_address: "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs".to_string(), // usdt
+    };
+    let req = V1DexReq::PoolsByMarket(params);
     let V1DexRsp::Pools(rsp) = client.v1_dex.exec(&req).await? else {
         panic!("PoolsRsp expected")
     };

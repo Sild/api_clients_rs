@@ -11,6 +11,7 @@ pub enum V1DexReq {
     Markets,
     PoolQuery(TODO),
     Pools(PoolsParams),
+    PoolsByMarket(PoolsByMarketParams),
     Pool(String),
     ReverseSwapSimulate(TODO),
     Router(String),
@@ -46,4 +47,10 @@ pub struct RoutersParams {
 #[derive(Serialize, Clone)]
 pub struct FarmsParams {
     pub dex_v2: bool,
+}
+
+#[derive(Serialize, Clone)]
+pub struct PoolsByMarketParams {
+    pub asset0_address: String,
+    pub asset1_address: String,
 }
