@@ -3,7 +3,7 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 name = "dedust_api_client"
-version = "0.1.0"
+version = "0.1.1"
 description = "API client for Dedust"
 
 [dependencies]

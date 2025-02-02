@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.2.1...stonfi_api_client-v0.2.2) - 2025-02-02
+
+### Other
+
+- support stonfi::pools_by_market
+
 ## [0.2.0](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.1.1...stonfi_api_client-v0.2.0) - 2024-11-10
 
 ### Other
