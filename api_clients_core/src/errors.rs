@@ -10,6 +10,8 @@ pub enum ApiClientError {
     ClientError(u16, String),
     #[error("ApiClientUnknownError: {0}")]
     UnknownError(String),
+    #[error("ApiClientUnexpectedResponse: {0}")]
+    UnexpectedResponse(String),
     #[error("SerdeQSError: {0}")]
     SerdeQSError(#[from] serde_qs::Error),
     #[error("SerdeJSONError: {0}")]

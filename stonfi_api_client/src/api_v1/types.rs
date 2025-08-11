@@ -1,12 +1,12 @@
 use serde_derive::Deserialize;
 
-#[derive(Debug, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 pub struct Meta {
-    custom_payload_api_uri: String,
-    decimals: i32,
-    display_name: String,
-    image_url: String,
-    symbol: String,
+    custom_payload_api_uri: Option<String>,
+    decimals: Option<i32>,
+    display_name: Option<String>,
+    image_url: Option<String>,
+    symbol: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
@@ -21,6 +21,20 @@ pub struct Asset {
     pub blacklisted: bool,
     pub default_symbol: bool,
     pub taxable: bool,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq)]
+pub struct QueryAsset {
+    pub balance: Option<String>,
+    pub contract_address: String,
+    pub dex_price_usd: Option<String>,
+    pub extensions: Option<Vec<String>>,
+    pub kind: String,
+    pub meta: Option<Meta>,
+    pub pair_priority: Option<i64>,
+    pub popularity_index: Option<f64>,
+    pub tags: Vec<String>,
+    pub wallet_address: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]

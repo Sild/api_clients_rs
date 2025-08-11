@@ -2,7 +2,7 @@ use serde_derive::Serialize;
 
 pub enum V1DexReq {
     Assets,
-    AssetsQuery(TODO),
+    AssetsQuery(AssetsQueryParams),
     AssetsSearch(TODO),
     Asset(String),
     Farms(FarmsParams),
@@ -21,6 +21,14 @@ pub enum V1DexReq {
 }
 
 pub struct TODO {}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize, Clone)]
+pub struct AssetsQueryParams {
+    pub condition: Option<String>,
+    pub unconditional_asset: Vec<String>,
+    pub wallet_address: Option<String>,
+}
 
 #[serde_with::skip_serializing_none]
 #[derive(Serialize, Clone)]
