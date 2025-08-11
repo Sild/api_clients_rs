@@ -1,9 +1,24 @@
-use crate::api_v1::types::{Asset, Farm, Pool, Router};
+use crate::api_v1::types::{Asset, Farm, Pool, QueryAsset, Router};
 use serde_derive::Deserialize;
+
+#[macro_export]
+macro_rules! unwrap_rsp {
+    ($variant:ident, $result:expr) => {
+        match $result {
+            V1DexRsp::$variant(inner) => Ok(inner),
+            _ => Err(ApiClientError::UnexpectedResponse(format!(
+                "ApiClientError: expected {}, but got {:?}",
+                stringify!($variant),
+                $result
+            ))),
+        }
+    };
+}
 
 #[derive(Deserialize, Debug, Clone)]
 pub enum V1DexRsp {
     Assets(AssetsRsp),
+    AssetsQuery(AssetsQueryRsp),
     Asset(AssetRsp),
     Farms(FarmsRsp),
     Farm(FarmRsp),
@@ -17,6 +32,11 @@ pub enum V1DexRsp {
 #[derive(Deserialize, Debug, Clone)]
 pub struct AssetsRsp {
     pub asset_list: Vec<Asset>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct AssetsQueryRsp {
+    pub asset_list: Vec<QueryAsset>,
 }
 
 #[derive(Deserialize, Debug, Clone)]

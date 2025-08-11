@@ -1,9 +1,9 @@
 use anyhow::Result;
-use stonfi_api_client::api_v1::dex_req::{
-    FarmsParams, PoolsByMarketParams, PoolsParams, RoutersParams, SwapSimulateParams, V1DexReq,
-};
+use api_clients_core::ApiClientError;
+use stonfi_api_client::api_v1::dex_req::*;
 use stonfi_api_client::api_v1::dex_rsp::V1DexRsp;
 use stonfi_api_client::client::{StonfiApiClient, StonfiApiClientConfig};
+use stonfi_api_client::unwrap_rsp;
 
 fn init_env() -> StonfiApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
@@ -18,9 +18,20 @@ fn init_env() -> StonfiApiClient {
 async fn test_assets() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::Assets;
-    let V1DexRsp::Assets(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("AssetsRsp expected")
-    };
+    let rsp = unwrap_rsp!(Assets, client.v1_dex.exec(&req).await?)?;
+    assert_ne!(rsp.asset_list, vec![]);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_assets_query() -> Result<()> {
+    let client = init_env();
+    let req = V1DexReq::AssetsQuery(AssetsQueryParams {
+        condition: Some("!asset:liquidity:no & !asset:blacklisted".to_string()),
+        unconditional_asset: vec![],
+        wallet_address: None,
+    });
+    let rsp = unwrap_rsp!(AssetsQuery, client.v1_dex.exec(&req).await?)?;
     assert_ne!(rsp.asset_list, vec![]);
     Ok(())
 }
@@ -30,9 +41,7 @@ async fn test_asset() -> Result<()> {
     let client = init_env();
     let ton_addr = "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c";
     let req = V1DexReq::Asset(ton_addr.to_string());
-    let V1DexRsp::Asset(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("AssetRsp expected")
-    };
+    let rsp = unwrap_rsp!(Asset, client.v1_dex.exec(&req).await?)?;
     assert_eq!(rsp.asset.contract_address, ton_addr);
     assert_eq!(rsp.asset.display_name, "TON");
     Ok(())
@@ -43,9 +52,7 @@ async fn test_farms() -> Result<()> {
     let client = init_env();
     let params = FarmsParams { dex_v2: true };
     let req = V1DexReq::Farms(params);
-    let V1DexRsp::Farms(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("FarmsRsp expected")
-    };
+    let rsp = unwrap_rsp!(Farms, client.v1_dex.exec(&req).await?)?;
     assert_ne!(rsp.farm_list, vec![]);
 
     Ok(())
@@ -56,9 +63,7 @@ async fn test_farm() -> Result<()> {
     let client = init_env();
     let farm_minter = "EQCuq6v9szR4MrtVYN_kGHh2WMKU2ahJQzCL4J1VwfL1LSJm".to_string();
     let req = V1DexReq::Farm(farm_minter.clone());
-    let V1DexRsp::Farm(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("FarmRsp expected")
-    };
+    let rsp = unwrap_rsp!(Farm, client.v1_dex.exec(&req).await?)?;
     assert_eq!(rsp.farm.minter_address, farm_minter);
     Ok(())
 }
@@ -67,9 +72,7 @@ async fn test_farm() -> Result<()> {
 async fn test_pools() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::Pools(PoolsParams { dex_v2: true });
-    let V1DexRsp::Pools(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("PoolsRsp expected")
-    };
+    let rsp = unwrap_rsp!(Pools, client.v1_dex.exec(&req).await?)?;
     assert_ne!(rsp.pool_list, vec![]);
     Ok(())
 }
@@ -82,9 +85,7 @@ async fn test_pools_by_market() -> Result<()> {
         asset1_address: "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs".to_string(), // usdt
     };
     let req = V1DexReq::PoolsByMarket(params);
-    let V1DexRsp::Pools(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("PoolsRsp expected")
-    };
+    let rsp = unwrap_rsp!(Pools, client.v1_dex.exec(&req).await?)?;
     assert_ne!(rsp.pool_list, vec![]);
     Ok(())
 }
@@ -94,9 +95,7 @@ async fn test_pool() -> Result<()> {
     let client = init_env();
     let hmstr_usdt_pool = "EQBXg9I5MBvwv7O8Xd0ZOC6z7T6yoCojaBXQXoAYx6paDO2s";
     let req = V1DexReq::Pool(hmstr_usdt_pool.to_string());
-    let V1DexRsp::Pool(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("PoolRsp expected")
-    };
+    let rsp = unwrap_rsp!(Pool, client.v1_dex.exec(&req).await?)?;
     assert_eq!(rsp.pool.address, hmstr_usdt_pool);
     assert_eq!(rsp.pool.token0_address, "EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo"); // hmstr
     assert_eq!(rsp.pool.token1_address, "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs"); // usdt
@@ -107,9 +106,7 @@ async fn test_pool() -> Result<()> {
 async fn test_routers() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::Routers(RoutersParams { dex_v2: true });
-    let V1DexRsp::Routers(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("RoutersRsp expected")
-    };
+    let rsp = unwrap_rsp!(Routers, client.v1_dex.exec(&req).await?)?;
     assert_ne!(rsp.router_list, vec![]);
     Ok(())
 }
@@ -119,9 +116,7 @@ async fn test_router() -> Result<()> {
     let client = init_env();
     let addr = "EQB3ncyBUTjZUA5EnFKR5_EnOMI9V1tTEAAPaiU71gc4TiUt";
     let req = V1DexReq::Router(addr.to_string());
-    let V1DexRsp::Router(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("RouterRsp expected")
-    };
+    let rsp = unwrap_rsp!(Router, client.v1_dex.exec(&req).await?)?;
     assert_eq!(rsp.router.address, addr);
     Ok(())
 }
@@ -140,9 +135,7 @@ async fn test_swap_simulate() -> Result<()> {
         dex_v2: Some(true),
     };
     let req = V1DexReq::SwapSimulate(params.clone());
-    let V1DexRsp::SwapSimulate(rsp) = client.v1_dex.exec(&req).await? else {
-        panic!("SwapSimulateRsp expected")
-    };
+    let rsp = unwrap_rsp!(SwapSimulate, client.v1_dex.exec(&req).await?)?;
     assert_eq!(rsp.offer_address, params.offer_address);
     assert_eq!(rsp.ask_address, params.ask_address);
     Ok(())
