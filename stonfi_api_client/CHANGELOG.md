@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.4](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.2.3...stonfi_api_client-v0.2.4) - 2025-08-11
+
+### Other
+
+- support assets_query
+
 ## [0.2.3](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.2.2...stonfi_api_client-v0.2.3) - 2025-08-11
 
 ### Other
