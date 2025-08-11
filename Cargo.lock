@@ -293,7 +293,7 @@ dependencies = [
 
 [[package]]
 name = "dedust_api_client"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "api_clients_core",
@@ -1517,7 +1517,7 @@ checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
 
 [[package]]
 name = "stonfi_api_client"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "anyhow",
  "api_clients_core",
