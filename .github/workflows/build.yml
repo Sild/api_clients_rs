@@ -1,5 +1,9 @@
 name: Build-Test
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ "main" ]
@@ -13,7 +17,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - run: cargo fmt --check
-    - run: cargo build --verbose
-    - run: cargo test --all
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: Swatinem/rust-cache@v2
+      - run: rustup toolchain install nightly
+      - run: rustup component add --toolchain nightly-x86_64-unknown-linux-gnu rustfmt
+      - run: cargo +nightly fmt --check
+      - run: cargo build --all-features --verbose
+      - run: cargo test --lib --all
+      - run: cargo test --lib --all --all-features

@@ -1,6 +1,6 @@
 use crate::client::config::StonfiApiClientConfig;
-use crate::client::executor::Executor;
 use crate::client::v1_dex::V1Dex;
+use api_clients_core::Executor;
 use std::sync::Arc;
 
 pub struct StonfiApiClient {
@@ -8,9 +8,7 @@ pub struct StonfiApiClient {
 }
 
 impl Default for StonfiApiClient {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }
 
 impl StonfiApiClient {
