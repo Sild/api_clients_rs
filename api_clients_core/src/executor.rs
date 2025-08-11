@@ -1,8 +1,8 @@
+use crate::errors::ApiClientsResult;
+use crate::ApiClientError;
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
 use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
 use serde::{de, ser};
-use crate::ApiClientError;
-use crate::errors::ApiClientsResult;
 
 pub struct Executor {
     api_url: String,

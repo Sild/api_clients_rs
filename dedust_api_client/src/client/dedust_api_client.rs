@@ -1,16 +1,14 @@
-use api_clients_core::{ApiClientsResult, Executor};
 use crate::api_v2::req::V2Req;
 use crate::api_v2::rsp::V2Rsp;
 use crate::client::config::DedustApiClientConfig;
+use api_clients_core::{ApiClientsResult, Executor};
 
 pub struct DedustApiClient {
     executor: Executor,
 }
 
 impl Default for DedustApiClient {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }
 
 impl DedustApiClient {
@@ -31,7 +29,7 @@ impl DedustApiClient {
             V2Req::PoolTrades(pool_addr) => {
                 let path = format!("pools/{}/trades", pool_addr);
                 V2Rsp::PoolTrades(self.executor.exec_get(&path).await?)
-            },
+            }
             V2Req::RoutingPlan(params) => V2Rsp::RoutingPlan(self.executor.exec_post("routing/plan", params).await?),
         };
         Ok(rsp)

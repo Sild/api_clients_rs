@@ -1,5 +1,5 @@
-mod executor;
 mod errors;
+mod executor;
 
-pub use executor::*;
 pub use errors::*;
+pub use executor::*;
