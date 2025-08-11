@@ -1,7 +1,7 @@
 use crate::client::config::StonfiApiClientConfig;
-use crate::client::executor::Executor;
 use crate::client::v1_dex::V1Dex;
 use std::sync::Arc;
+use api_clients_core::Executor;
 
 pub struct StonfiApiClient {
     pub v1_dex: V1Dex,

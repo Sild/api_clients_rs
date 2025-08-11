@@ -1,7 +1,7 @@
+use api_clients_core::{ApiClientsResult, Executor};
 use crate::api_v2::req::V2Req;
 use crate::api_v2::rsp::V2Rsp;
 use crate::client::config::DedustApiClientConfig;
-use crate::client::executor::Executor;
 
 pub struct DedustApiClient {
     executor: Executor,
@@ -24,7 +24,7 @@ impl DedustApiClient {
         Self { executor }
     }
 
-    pub async fn v2_exec(&self, req: &V2Req) -> anyhow::Result<V2Rsp> {
+    pub async fn v2_exec(&self, req: &V2Req) -> ApiClientsResult<V2Rsp> {
         let rsp = match req {
             V2Req::Pools => V2Rsp::Pools(self.executor.exec_get("pools").await?),
             V2Req::PoolsLite => V2Rsp::PoolsLite(self.executor.exec_get("pools-lite").await?),

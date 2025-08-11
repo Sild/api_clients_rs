@@ -1,8 +1,7 @@
 use crate::api_v1::dex_req::V1DexReq;
 use crate::api_v1::dex_rsp::V1DexRsp;
-use crate::client::executor::Executor;
-use anyhow::Result;
 use std::sync::Arc;
+use api_clients_core::{ApiClientsResult, Executor};
 
 pub struct V1Dex {
     executor: Arc<Executor>,
@@ -13,7 +12,7 @@ impl V1Dex {
         Self { executor }
     }
 
-    pub async fn exec(&self, req: &V1DexReq) -> Result<V1DexRsp> {
+    pub async fn exec(&self, req: &V1DexReq) -> ApiClientsResult<V1DexRsp> {
         let rsp = match req {
             V1DexReq::Assets => V1DexRsp::Assets(self.executor.exec_get("assets").await?),
             V1DexReq::Asset(addr) => V1DexRsp::Asset(self.executor.exec_get(&format!("assets/{addr}")).await?),

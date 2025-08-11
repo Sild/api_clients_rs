@@ -56,7 +56,7 @@ pub struct Router {
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 pub struct FarmReward {
-    pub address: String,
+    pub address: Option<String>,
     pub remaining_rewards: String,
     pub reward_rate_24h: String,
     pub status: String,

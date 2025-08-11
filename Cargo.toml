@@ -2,8 +2,9 @@
 resolver = "2"
 
 members = [
-    "src/dedust_api_client",
-    "src/stonfi_api_client",
+    "api_clients_core",
+    "dedust_api_client",
+    "stonfi_api_client",
 ]
 
 [workspace.package]
@@ -12,6 +13,9 @@ license = "MIT"
 repository = "https://github.com/Sild/api_clients_rs"
 
 [workspace.dependencies]
+api_clients_core = { path = "./api_clients_core" }
+
+thiserror = "2.0"
 tokio = { version = "1.41", features = ["full"] }
 anyhow = "1.0"
 log = "0.4"
