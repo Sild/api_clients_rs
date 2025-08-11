@@ -1,6 +1,7 @@
 [package]
 name = "api_clients_core"
 version = "0.0.1"
+description = "core API clients features for various services"
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
