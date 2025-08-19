@@ -2,11 +2,11 @@ use serde_derive::Deserialize;
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 pub struct Meta {
-    custom_payload_api_uri: Option<String>,
-    decimals: Option<i32>,
-    display_name: Option<String>,
-    image_url: Option<String>,
-    symbol: Option<String>,
+    pub custom_payload_api_uri: Option<String>,
+    pub decimals: Option<i32>,
+    pub display_name: Option<String>,
+    pub image_url: Option<String>,
+    pub symbol: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
