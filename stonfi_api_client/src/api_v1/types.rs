@@ -9,18 +9,30 @@ pub struct Meta {
     pub symbol: Option<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Deserialize, PartialEq)]
 pub struct Asset {
-    pub contract_address: String,
-    pub symbol: String,
-    pub display_name: String,
-    pub decimals: u32,
-    pub kind: String,
-    pub deprecated: bool,
-    pub community: bool,
+    pub balance: Option<String>,
     pub blacklisted: bool,
+    pub community: bool,
+    pub contract_address: String,
+    pub custom_payload_api_uri: Option<String>,
+    pub decimals: u32,
     pub default_symbol: bool,
+    pub deprecated: bool,
+    pub dex_price_usd: Option<String>,
+    pub dex_usd_price: Option<String>,
+    pub display_name: Option<String>,
+    pub extensions: Option<Vec<String>>,
+    pub image_url: Option<String>,
+    pub kind: String,
+    pub popularity_index: Option<f64>,
+    pub priority: u32,
+    pub symbol: String,
+    pub tags: Vec<String>,
     pub taxable: bool,
+    pub third_party_price_usd: Option<String>,
+    pub third_party_usd_price: Option<String>,
+    pub wallet_address: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, PartialEq)]

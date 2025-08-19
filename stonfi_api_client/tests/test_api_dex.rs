@@ -43,7 +43,7 @@ async fn test_asset() -> Result<()> {
     let req = V1DexReq::Asset(ton_addr.to_string());
     let rsp = unwrap_rsp!(Asset, client.v1_dex.exec(&req).await?)?;
     assert_eq!(rsp.asset.contract_address, ton_addr);
-    assert_eq!(rsp.asset.display_name, "TON");
+    assert_eq!(rsp.asset.display_name, Some("TON".to_string()));
     Ok(())
 }
 
