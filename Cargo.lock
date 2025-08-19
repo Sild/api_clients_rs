@@ -99,7 +99,7 @@ checksum = "b0674a1ddeecb70197781e945de4b3b8ffb61fa939a5597bcf48503737663100"
 
 [[package]]
 name = "api_clients_core"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "log",
  "reqwest",
@@ -1686,7 +1686,7 @@ checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
 
 [[package]]
 name = "stonfi_api_client"
-version = "0.2.5"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "api_clients_core",
