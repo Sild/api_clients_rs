@@ -1,12 +1,13 @@
 use serde::Deserialize;
+use serde_derive::Serialize;
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Stats {
     pub fees: Vec<String>,
     pub volume: Vec<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Metadata {
     pub name: String,
     pub symbol: String,
@@ -14,14 +15,14 @@ pub struct Metadata {
     pub decimals: i64,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Asset {
     #[serde(rename = "type")]
     pub asset_type: String,
     pub metadata: Option<Metadata>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Pool {
     pub address: String,
@@ -36,7 +37,7 @@ pub struct Pool {
     pub stats: Stats,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PoolLite {
     pub address: String,
@@ -51,14 +52,14 @@ pub struct PoolLite {
     pub volume: Vec<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PoolAsset {
     #[serde(rename = "type")]
     pub asset_type: String,
     pub address: Option<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PoolTrade {
     pub sender: String,
@@ -70,7 +71,7 @@ pub struct PoolTrade {
     pub created_at: String,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PoolRoutingPlan {
     pub address: String,
@@ -79,7 +80,7 @@ pub struct PoolRoutingPlan {
     pub reserves: Vec<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RoutingPlanStep {
     pub pool: PoolRoutingPlan,

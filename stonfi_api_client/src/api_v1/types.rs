@@ -1,6 +1,6 @@
-use serde_derive::Deserialize;
+use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Meta {
     pub custom_payload_api_uri: Option<String>,
     pub decimals: Option<i32>,
@@ -9,7 +9,7 @@ pub struct Meta {
     pub symbol: Option<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Asset {
     pub balance: Option<String>,
     pub blacklisted: bool,
@@ -35,7 +35,7 @@ pub struct Asset {
     pub wallet_address: Option<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QueryAsset {
     pub balance: Option<String>,
     pub contract_address: String,
@@ -49,7 +49,7 @@ pub struct QueryAsset {
     pub wallet_address: Option<String>,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Pool {
     pub address: String,
     pub collected_token0_protocol_fee: String,
@@ -68,7 +68,7 @@ pub struct Pool {
     pub token1_address: String,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Router {
     pub address: String,
     pub major_version: i64,
@@ -80,7 +80,7 @@ pub struct Router {
     pub router_type: String,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FarmReward {
     pub address: Option<String>,
     pub remaining_rewards: String,
@@ -88,13 +88,13 @@ pub struct FarmReward {
     pub status: String,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FarmNftReward {
     pub address: String,
     pub amount: String,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FarmNft {
     pub address: String,
     pub create_timestamp: String,
@@ -105,7 +105,7 @@ pub struct FarmNft {
     pub status: String,
 }
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Farm {
     pub locked_total_lp: String,
     pub locked_total_lp_usd: String,
