@@ -1,6 +1,7 @@
 use serde_derive::Serialize;
 
 pub enum V2Req {
+    Assets,
     Pools,
     PoolsLite,
     PoolTrades(String),

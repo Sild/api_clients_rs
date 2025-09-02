@@ -8,18 +8,13 @@ pub struct Stats {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Metadata {
-    pub name: String,
-    pub symbol: String,
-    pub image: String,
-    pub decimals: i64,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Asset {
     #[serde(rename = "type")]
     pub asset_type: String,
-    pub metadata: Option<Metadata>,
+    pub address: Option<String>, // must be present if type != "native"
+    pub symbol: String,
+    pub image: Option<String>,
+    pub decimals: i64,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

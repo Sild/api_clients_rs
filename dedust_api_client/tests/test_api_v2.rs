@@ -1,7 +1,9 @@
 use anyhow::Result;
+use api_clients_core::ApiClientError;
 use dedust_api_client::api_v2::req::{RoutingPlanParams, V2Req};
 use dedust_api_client::api_v2::rsp::V2Rsp;
 use dedust_api_client::client::{DedustApiClient, DedustApiClientConfig};
+use dedust_api_client::unwrap_rsp;
 
 fn init_env() -> DedustApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
@@ -13,34 +15,37 @@ fn init_env() -> DedustApiClient {
 }
 
 #[tokio::test]
-async fn test_get_pools() -> Result<()> {
+async fn test_assets() -> Result<()> {
+    let client = init_env();
+    let req = V2Req::Assets;
+    let rsp = unwrap_rsp!(Assets, client.v2_exec(&req).await?)?;
+    assert_ne!(rsp, vec![]);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_pools() -> Result<()> {
     let client = init_env();
     let req = V2Req::Pools;
-    let V2Rsp::Pools(rsp) = client.v2_exec(&req).await? else {
-        panic!("V2Rsp::Pools expected")
-    };
+    let rsp = unwrap_rsp!(Pools, client.v2_exec(&req).await?)?;
     assert_ne!(rsp, vec![]);
     Ok(())
 }
 
 #[tokio::test]
-async fn test_get_pools_lite() -> Result<()> {
+async fn test_pools_lite() -> Result<()> {
     let client = init_env();
     let req = V2Req::PoolsLite;
-    let V2Rsp::PoolsLite(rsp) = client.v2_exec(&req).await? else {
-        panic!("V2Rsp::PoolsLite expected")
-    };
+    let rsp = unwrap_rsp!(PoolsLite, client.v2_exec(&req).await?)?;
     assert_ne!(rsp, vec![]);
     Ok(())
 }
 
 #[tokio::test]
-async fn test_get_pool_trades() -> Result<()> {
+async fn test_pool_trades() -> Result<()> {
     let client = init_env();
     let req = V2Req::PoolTrades("EQAADLqcF3lNb1O_GQLowwky8vvUGXuzPRNGvKBwBxjsHR7s".to_string());
-    let V2Rsp::PoolTrades(rsp) = client.v2_exec(&req).await? else {
-        panic!("V2Rsp::PoolTrades expected")
-    };
+    let rsp = unwrap_rsp!(PoolTrades, client.v2_exec(&req).await?)?;
     assert_ne!(rsp, vec![]);
     Ok(())
 }
@@ -49,13 +54,11 @@ async fn test_get_pool_trades() -> Result<()> {
 #[ignore = "TODO: Server response with 500: an internal server error occurred"]
 async fn test_routing_plan() -> Result<()> {
     let client = init_env();
-    let hmstr_addr = "0:09f2e59dec406ab26a5259a45d7ff23ef11f3e5c7c21de0b0d2a1cbe52b76b3d".to_string();
-    let ton_addr = "0:0000000000000000000000000000000000000000000000000000000000000000".to_string();
-    let params = RoutingPlanParams::new(&hmstr_addr, &ton_addr, &10_0000.to_string());
+    let usdt_addr = "0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe";
+    let ton_addr = "0:0000000000000000000000000000000000000000000000000000000000000000";
+    let params = RoutingPlanParams::new(usdt_addr, ton_addr, &10.to_string());
     let req = V2Req::RoutingPlan(params);
-    let V2Rsp::RoutingPlan(rsp) = client.v2_exec(&req).await? else {
-        panic!("V2Rsp::RoutingPlan expected")
-    };
+    let rsp = unwrap_rsp!(RoutingPlan, client.v2_exec(&req).await?)?;
     assert!(!rsp.is_empty());
     Ok(())
 }
