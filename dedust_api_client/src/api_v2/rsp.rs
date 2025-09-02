@@ -1,7 +1,24 @@
-use crate::api_v2::types::{Pool, PoolLite, PoolTrade, RoutingPlanStep};
+use crate::api_v2::types::*;
+use serde_derive::Deserialize;
 use std::collections::HashMap;
 
+#[macro_export]
+macro_rules! unwrap_rsp {
+    ($variant:ident, $result:expr) => {
+        match $result {
+            V2Rsp::$variant(inner) => Ok(inner),
+            _ => Err(ApiClientError::UnexpectedResponse(format!(
+                "ApiClientError: expected {}, but got {:?}",
+                stringify!($variant),
+                $result
+            ))),
+        }
+    };
+}
+
+#[derive(Deserialize, Debug, Clone)]
 pub enum V2Rsp {
+    Assets(Vec<Asset>),
     Pools(Vec<Pool>),
     PoolsLite(Vec<PoolLite>),
     PoolTrades(Vec<PoolTrade>),
