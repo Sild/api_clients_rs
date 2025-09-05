@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.3](https://github.com/Sild/api_clients_rs/compare/dedust_api_client-v0.3.2...dedust_api_client-v0.3.3) - 2025-09-05
+
+### Fixed
+
+- fix exports
+- fix exports
+
 ## [0.3.2](https://github.com/Sild/api_clients_rs/compare/dedust_api_client-v0.3.1...dedust_api_client-v0.3.2) - 2025-09-05
 
 ### Fixed
