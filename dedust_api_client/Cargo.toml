@@ -15,7 +15,6 @@ serde.workspace = true
 log.workspace = true
 tokio.workspace = true
 serde_derive.workspace = true
-serde_with.workspace = true
 
 [dev-dependencies]
 env_logger.workspace = true

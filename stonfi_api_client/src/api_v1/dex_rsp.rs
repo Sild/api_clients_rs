@@ -6,7 +6,7 @@ macro_rules! unwrap_rsp {
     ($variant:ident, $result:expr) => {
         match $result {
             V1DexRsp::$variant(inner) => Ok(inner),
-            _ => Err(api_clients_core::ApiClientError::UnexpectedResponse(format!(
+            _ => Err(ApiClientError::UnexpectedResponse(format!(
                 "ApiClientError: expected {}, but got {:?}",
                 stringify!($variant),
                 $result
