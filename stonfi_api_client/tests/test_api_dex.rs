@@ -1,5 +1,4 @@
 use anyhow::Result;
-use api_clients_core::ApiClientError;
 use stonfi_api_client::api_v1::dex_req::*;
 use stonfi_api_client::api_v1::dex_rsp::V1DexRsp;
 use stonfi_api_client::client::{StonfiApiClient, StonfiApiClientConfig};

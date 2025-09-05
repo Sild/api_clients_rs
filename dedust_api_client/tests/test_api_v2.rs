@@ -1,5 +1,4 @@
 use anyhow::Result;
-use api_clients_core::ApiClientError;
 use dedust_api_client::api_v2::req::{RoutingPlanParams, V2Req};
 use dedust_api_client::api_v2::rsp::V2Rsp;
 use dedust_api_client::client::{DedustApiClient, DedustApiClientConfig};

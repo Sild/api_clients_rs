@@ -75,6 +75,13 @@ impl Executor {
         }
 
         log::trace!("Got rsp_code: {rsp_code} rsp_body: '{rsp_body}'");
-        Ok(serde_json::from_str(&rsp_body)?)
+
+        match serde_json::from_str(&rsp_body) {
+            Ok(rsp) => Ok(rsp),
+            Err(err) => {
+                log::warn!("Failed to parse response body: '{rsp_body}', err: {err}");
+                Err(ApiClientError::SerdeJSONError(err))
+            }
+        }
     }
 }

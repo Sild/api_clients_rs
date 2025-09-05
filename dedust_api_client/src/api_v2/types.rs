@@ -27,7 +27,7 @@ pub struct Pool {
     #[serde(rename = "type")]
     pub pool_type: String,
     pub trade_fee: String,
-    pub assets: Vec<Asset>,
+    pub assets: Vec<PoolAsset>,
     pub last_price: Option<String>,
     pub reserves: Vec<String>,
     pub stats: Stats,
