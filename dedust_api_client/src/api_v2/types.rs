@@ -11,6 +11,7 @@ pub struct Stats {
 pub struct Asset {
     #[serde(rename = "type")]
     pub asset_type: String,
+    pub name: String,
     pub address: Option<String>, // must be present if type != "native"
     pub symbol: String,
     pub image: Option<String>,
