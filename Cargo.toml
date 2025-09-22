@@ -5,6 +5,7 @@ members = [
     "api_clients_core",
     "dedust_api_client",
     "stonfi_api_client",
+    "tonco_api_client",
 ]
 
 [workspace.package]
@@ -31,3 +32,4 @@ serde_derive = "1.0"
 env_logger = "0.11"
 reqwest-retry = "0.7"
 reqwest-middleware = "0.4"
+graphql_client = "0.14.0"

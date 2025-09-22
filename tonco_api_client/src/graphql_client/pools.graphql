@@ -1,0 +1,10 @@
+query Pools {
+  pools {
+    address
+    fee
+    liquidity
+    priceSqrt
+    jetton0 { address symbol decimals name }
+    jetton1 { address symbol decimals name }
+  }
+}

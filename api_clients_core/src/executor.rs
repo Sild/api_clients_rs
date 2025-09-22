@@ -1,5 +1,6 @@
 use crate::errors::ApiClientsResult;
 use crate::ApiClientError;
+use reqwest::Response;
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
 use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
 use serde::{de, ser};
@@ -27,61 +28,98 @@ impl Executor {
     where
         RSP: de::DeserializeOwned,
     {
-        let empty_params = serde_json::Value::Null;
-        self.exec_get_with_params(path, &empty_params).await
+        self.exec_get_extra(path, &serde_json::Value::Null, &[]).await
     }
 
-    pub async fn exec_get_with_params<PARAMS, RSP>(&self, path: &str, params: &PARAMS) -> ApiClientsResult<RSP>
-    where
-        PARAMS: ser::Serialize,
-        RSP: de::DeserializeOwned,
-    {
-        self.exec_impl(path, params, false).await
-    }
-
-    pub async fn exec_post<PARAMS, RSP>(&self, path: &str, params: &PARAMS) -> ApiClientsResult<RSP>
-    where
-        PARAMS: ser::Serialize,
-        RSP: de::DeserializeOwned,
-    {
-        self.exec_impl(path, params, true).await
-    }
-
-    async fn exec_impl<PARAMS, RSP>(&self, path: &str, params: &PARAMS, is_post: bool) -> ApiClientsResult<RSP>
+    pub async fn exec_get_extra<PARAMS, RSP>(
+        &self,
+        path: &str,
+        params: &PARAMS,
+        headers: &[(String, String)],
+    ) -> ApiClientsResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
     {
         let get_params = serde_qs::to_string(params)?;
         let full_url = format!("{}/{path}?{get_params}", self.api_url);
+        log::trace!("Executing GET request to {full_url}");
 
-        let req_type_str = if is_post { "POST" } else { "GET" };
-        log::trace!("Executing {req_type_str} request to {full_url}");
-
-        let req_builder = if is_post {
-            self.http_cli.post(full_url)
-        } else {
-            self.http_cli.get(full_url)
-        };
-
-        let rsp = req_builder.send().await?;
-        let rsp_code = rsp.status();
-        let rsp_body = rsp.text().await?;
-
-        match rsp_code.as_u16() {
-            400..=499 => return Err(ApiClientError::ClientError(rsp_code.as_u16(), rsp_body)),
-            500..=599 => return Err(ApiClientError::ServerError(rsp_code.as_u16(), rsp_body)),
-            _ => {}
+        let mut req_builder = self.http_cli.get(full_url);
+        for (key, value) in headers {
+            req_builder = req_builder.header(key, value);
         }
 
-        log::trace!("Got rsp_code: {rsp_code} rsp_body: '{rsp_body}'");
+        handle_response(req_builder.send().await?).await
+    }
 
-        match serde_json::from_str(&rsp_body) {
-            Ok(rsp) => Ok(rsp),
-            Err(err) => {
-                log::warn!("Failed to parse response body: '{rsp_body}', err: {err}");
-                Err(ApiClientError::SerdeJSONError(err))
-            }
+    // put params as query string
+    pub async fn exec_post_qs<PARAMS, RSP>(
+        &self,
+        path: &str,
+        params: &PARAMS,
+        headers: &[(String, String)],
+    ) -> ApiClientsResult<RSP>
+    where
+        PARAMS: ser::Serialize,
+        RSP: de::DeserializeOwned,
+    {
+        let get_params = serde_qs::to_string(params)?;
+        let full_url = format!("{}/{path}?{get_params}", self.api_url);
+        log::trace!("Executing POST request to {full_url}");
+
+        let mut req_builder = self.http_cli.post(full_url);
+        for (key, value) in headers {
+            req_builder = req_builder.header(key, value);
+        }
+
+        handle_response(req_builder.send().await?).await
+    }
+
+    // put params as body in json format
+    pub async fn exec_post_body<PARAMS, RSP>(
+        &self,
+        path: &str,
+        params: &PARAMS,
+        headers: &[(String, String)],
+    ) -> ApiClientsResult<RSP>
+    where
+        PARAMS: ser::Serialize,
+        RSP: de::DeserializeOwned,
+    {
+        let full_url = format!("{}/{path}", self.api_url);
+        log::trace!("Executing POST request to {full_url}");
+
+        let mut req_builder = self.http_cli.post(full_url);
+        for (key, value) in headers {
+            req_builder = req_builder.header(key, value);
+        }
+        req_builder = req_builder.body(serde_json::to_string(params)?);
+
+        handle_response(req_builder.send().await?).await
+    }
+}
+
+async fn handle_response<RSP>(response: Response) -> ApiClientsResult<RSP>
+where
+    RSP: de::DeserializeOwned,
+{
+    let rsp_code = response.status();
+    let rsp_body = response.text().await?;
+
+    match rsp_code.as_u16() {
+        400..=499 => return Err(ApiClientError::ClientError(rsp_code.as_u16(), rsp_body)),
+        500..=599 => return Err(ApiClientError::ServerError(rsp_code.as_u16(), rsp_body)),
+        _ => {}
+    }
+
+    log::trace!("Got rsp_code: {rsp_code} rsp_body: '{rsp_body}'");
+
+    match serde_json::from_str(&rsp_body) {
+        Ok(rsp) => Ok(rsp),
+        Err(err) => {
+            log::warn!("Failed to parse response body: '{rsp_body}', err: {err}");
+            Err(ApiClientError::SerdeJSONError(err))
         }
     }
 }

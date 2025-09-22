@@ -1,0 +1,24 @@
+[package]
+name = "tonco_api_client"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+# Internal
+api_clients_core.workspace = true
+
+# External
+serde.workspace = true
+log.workspace = true
+tokio.workspace = true
+graphql_client.workspace = true
+reqwest.workspace = true
+
+
+
+[dev-dependencies]
+tokio-test.workspace = true
+env_logger.workspace = true
+anyhow.workspace = true
