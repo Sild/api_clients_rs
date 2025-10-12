@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.3.4...stonfi_api_client-v0.4.0) - 2025-10-12
+
+### Other
+
+- Merge pull request #21 from Sild/tonco
+- rewrite clients using builder, add tonco client
+- add tonco_api_client
+
 ## [0.3.4](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.3.3...stonfi_api_client-v0.3.4) - 2025-09-05
 
 ### Fixed
