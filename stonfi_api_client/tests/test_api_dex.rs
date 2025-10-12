@@ -2,16 +2,12 @@ use anyhow::Result;
 use api_clients_core::ApiClientError;
 use stonfi_api_client::api_v1::dex_req::*;
 use stonfi_api_client::api_v1::dex_rsp::V1DexRsp;
-use stonfi_api_client::client::{StonfiApiClient, StonfiApiClientConfig};
+use stonfi_api_client::client::StonfiApiClient;
 use stonfi_api_client::unwrap_rsp;
 
 fn init_env() -> StonfiApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
-    let config = StonfiApiClientConfig {
-        retry_count: 5,
-        ..Default::default()
-    };
-    StonfiApiClient::new_with_config(config)
+    StonfiApiClient::builder().with_retry_count(5).build()
 }
 
 #[tokio::test]

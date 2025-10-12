@@ -2,16 +2,12 @@ use anyhow::Result;
 use api_clients_core::ApiClientError;
 use dedust_api_client::api_v2::req::{RoutingPlanParams, V2Req};
 use dedust_api_client::api_v2::rsp::V2Rsp;
-use dedust_api_client::client::{DedustApiClient, DedustApiClientConfig};
+use dedust_api_client::client::DedustApiClient;
 use dedust_api_client::unwrap_rsp;
 
 fn init_env() -> DedustApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
-    let config = DedustApiClientConfig {
-        retry_count: 5,
-        ..Default::default()
-    };
-    DedustApiClient::new_with_config(config)
+    DedustApiClient::builder().with_retry_count(5).build()
 }
 
 #[tokio::test]

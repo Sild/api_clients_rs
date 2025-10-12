@@ -1,0 +1,8 @@
+query Pools {
+    pools {
+        address
+        totalValueLockedUsd
+        jetton0 { address }
+        jetton1 { address }
+    }
+}
