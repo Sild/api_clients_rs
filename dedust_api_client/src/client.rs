@@ -1,28 +1,20 @@
+mod builder;
+
 use crate::api_v2::req::V2Req;
 use crate::api_v2::rsp::V2Rsp;
-use crate::client::config::DedustApiClientConfig;
-use api_clients_core::{ApiClientsResult, Executor};
+use crate::client::builder::Builder;
+use api_clients_core::{ApiClientResult, Executor};
+use std::sync::Arc;
 
+#[derive(Clone)]
 pub struct DedustApiClient {
-    executor: Executor,
-}
-
-impl Default for DedustApiClient {
-    fn default() -> Self { Self::new() }
+    executor: Arc<Executor>,
 }
 
 impl DedustApiClient {
-    pub fn new() -> Self {
-        let config = DedustApiClientConfig::default();
-        Self::new_with_config(config)
-    }
+    pub fn builder() -> Builder { Default::default() }
 
-    pub fn new_with_config(config: DedustApiClientConfig) -> Self {
-        let executor = Executor::new(&config.api_url, config.retry_count);
-        Self { executor }
-    }
-
-    pub async fn v2_exec(&self, req: &V2Req) -> ApiClientsResult<V2Rsp> {
+    pub async fn v2_exec(&self, req: &V2Req) -> ApiClientResult<V2Rsp> {
         let rsp = match req {
             V2Req::Assets => V2Rsp::Assets(self.executor.exec_get("assets").await?),
             V2Req::Pools => V2Rsp::Pools(self.executor.exec_get("pools").await?),

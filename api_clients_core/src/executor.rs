@@ -1,4 +1,4 @@
-use crate::errors::ApiClientsResult;
+use crate::errors::ApiClientResult;
 use crate::ApiClientError;
 use reqwest::Response;
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
@@ -24,7 +24,7 @@ impl Executor {
         }
     }
 
-    pub async fn exec_get<RSP>(&self, path: &str) -> ApiClientsResult<RSP>
+    pub async fn exec_get<RSP>(&self, path: &str) -> ApiClientResult<RSP>
     where
         RSP: de::DeserializeOwned,
     {
@@ -36,7 +36,7 @@ impl Executor {
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientsResult<RSP>
+    ) -> ApiClientResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
@@ -59,7 +59,7 @@ impl Executor {
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientsResult<RSP>
+    ) -> ApiClientResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
@@ -82,7 +82,7 @@ impl Executor {
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientsResult<RSP>
+    ) -> ApiClientResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
@@ -100,7 +100,7 @@ impl Executor {
     }
 }
 
-async fn handle_response<RSP>(response: Response) -> ApiClientsResult<RSP>
+async fn handle_response<RSP>(response: Response) -> ApiClientResult<RSP>
 where
     RSP: de::DeserializeOwned,
 {

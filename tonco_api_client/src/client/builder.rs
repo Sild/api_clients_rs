@@ -1,32 +1,21 @@
-use crate::client::ToncoApiClient;
-use crate::{GraphqlClient, DEFAULT_GRAPHQL_ENDPOINT};
+use crate::ToncoApiClient;
 use api_clients_core::Executor;
+use derive_setters::Setters;
 use std::sync::Arc;
+pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io/";
 
-#[derive(Default)]
-pub struct ToncoApiClientBuilder {
-    endpoint: Option<String>,
-    retries: Option<u32>,
+#[derive(Setters, Debug, Default)]
+#[setters(prefix = "with_", strip_option)]
+pub struct Builder {
+    graphql_endpoint: Option<String>,
+    retry_count: Option<u32>,
 }
 
-impl ToncoApiClientBuilder {
-    pub fn with_endpoint(mut self, endpoint: String) -> Self {
-        self.endpoint = Some(endpoint);
-        self
-    }
-    pub fn with_retries(mut self, retries: u32) -> Self {
-        self.retries = Some(retries);
-        self
-    }
-
+impl Builder {
     pub fn build(self) -> ToncoApiClient {
-        let endpoint = self.endpoint.unwrap_or_else(|| DEFAULT_GRAPHQL_ENDPOINT.to_owned());
-        let retries = self.retries.unwrap_or(0);
-
-        let executor = Arc::new(Executor::new(&endpoint, retries));
-
-        let graphql = GraphqlClient { executor };
-
-        ToncoApiClient { graphql }
+        let endpoint = self.graphql_endpoint.unwrap_or_else(|| DEFAULT_GRAPHQL_ENDPOINT.to_string());
+        let retry_count = self.retry_count.unwrap_or(3);
+        let executor = Arc::new(Executor::new(&endpoint, retry_count));
+        ToncoApiClient { executor }
     }
 }

@@ -1,8 +1,0 @@
-query Jettons {
-    jettons {
-        address
-        symbol
-        name
-        decimals
-    }
-}

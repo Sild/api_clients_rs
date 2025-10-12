@@ -46,4 +46,4 @@ impl From<reqwest_middleware::Error> for ApiClientError {
     }
 }
 
-pub type ApiClientsResult<T> = Result<T, ApiClientError>;
+pub type ApiClientResult<T> = Result<T, ApiClientError>;

@@ -15,10 +15,9 @@ log.workspace = true
 tokio.workspace = true
 graphql_client.workspace = true
 reqwest.workspace = true
-
+derive_setters.workspace = true
 
 
 [dev-dependencies]
-tokio-test.workspace = true
 env_logger.workspace = true
 anyhow.workspace = true
