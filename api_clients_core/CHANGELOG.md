@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1](https://github.com/Sild/api_clients_rs/compare/api_clients_core-v0.1.0...api_clients_core-v0.1.1) - 2025-10-15
+
+### Other
+
+- allow custom http_client for executor
+
 ## [0.0.5](https://github.com/Sild/api_clients_rs/compare/api_clients_core-v0.0.4...api_clients_core-v0.0.5) - 2025-10-12
 
 ### Other
