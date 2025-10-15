@@ -5,19 +5,29 @@ use std::sync::Arc;
 
 pub const DEFAULT_API_V2_URL: &str = "https://api.dedust.io/v2";
 
-#[derive(Setters, Default, Debug)]
+#[derive(Setters)]
 #[setters(prefix = "with_", strip_option)]
 pub struct Builder {
-    api_url: Option<String>,
-    retry_count: Option<u32>,
+    api_url: String,
+    retry_count: u32,
+    executor: Option<Arc<Executor>>,
 }
 
 impl Builder {
-    pub fn build(self) -> DedustApiClient {
-        let api_url = self.api_url.unwrap_or_else(|| DEFAULT_API_V2_URL.to_string());
-        let retry_count = self.retry_count.unwrap_or(3);
-        DedustApiClient {
-            executor: Arc::new(Executor::new(&api_url, retry_count)),
+    pub(super) fn new() -> Self {
+        Self {
+            api_url: DEFAULT_API_V2_URL.to_string(),
+            retry_count: 3,
+            executor: None,
         }
+    }
+
+    pub fn build(self) -> DedustApiClient {
+        let executor = match self.executor {
+            Some(executor) => executor,
+            None => Executor::builder(self.api_url).with_retry_count(self.retry_count).build().into(),
+        };
+
+        DedustApiClient { executor }
     }
 }

@@ -11,7 +11,7 @@ pub struct ToncoApiClient {
 }
 
 impl ToncoApiClient {
-    pub fn builder() -> Builder { Default::default() }
+    pub fn builder() -> Builder { Builder::new() }
 
     pub async fn exec_graphql<PARAMS, RSP>(&self, op_name: &str, graphql_query: &PARAMS) -> ApiClientResult<RSP>
     where

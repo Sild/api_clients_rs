@@ -12,7 +12,7 @@ pub struct DedustApiClient {
 }
 
 impl DedustApiClient {
-    pub fn builder() -> Builder { Default::default() }
+    pub fn builder() -> Builder { Builder::new() }
 
     pub async fn v2_exec(&self, req: &V2Req) -> ApiClientResult<V2Rsp> {
         let rsp = match req {

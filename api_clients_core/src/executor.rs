@@ -1,8 +1,9 @@
+mod builder;
+
 use crate::errors::ApiClientResult;
 use crate::ApiClientError;
 use reqwest::Response;
-use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
-use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
+use reqwest_middleware::ClientWithMiddleware;
 use serde::{de, ser};
 
 pub struct Executor {
@@ -11,18 +12,7 @@ pub struct Executor {
 }
 
 impl Executor {
-    pub fn new(api_url: &str, retry_count: u32) -> Self {
-        let retry_policy = ExponentialBackoff::builder().build_with_max_retries(retry_count);
-
-        let http_cli = ClientBuilder::new(reqwest::Client::new())
-            .with(RetryTransientMiddleware::new_with_policy(retry_policy))
-            .build();
-
-        Self {
-            api_url: api_url.to_string(),
-            http_cli,
-        }
-    }
+    pub fn builder<T: Into<String>>(api_endpoint: T) -> builder::Builder { builder::Builder::new(api_endpoint.into()) }
 
     pub async fn exec_get<RSP>(&self, path: &str) -> ApiClientResult<RSP>
     where

@@ -8,5 +8,5 @@ pub struct StonfiApiClient {
 }
 
 impl StonfiApiClient {
-    pub fn builder() -> Builder { Builder::default() }
+    pub fn builder() -> Builder { Builder::new() }
 }
