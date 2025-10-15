@@ -1,4 +1,4 @@
-use crate::api_v1::types::{Asset, Farm, Pool, QueryAsset, Router};
+use crate::v1_dex::types::{Asset, Farm, Pool, QueryAsset, Router};
 use serde_derive::Deserialize;
 
 #[macro_export]

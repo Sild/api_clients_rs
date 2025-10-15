@@ -1,14 +1,14 @@
-use crate::api_v1::dex_req::V1DexReq;
-use crate::api_v1::dex_rsp::V1DexRsp;
+use crate::v1_dex::dex_rsp::V1DexRsp;
+use crate::v1_dex::V1DexReq;
 use api_clients_core::{ApiClientResult, Executor};
 use std::sync::Arc;
 
-pub struct V1Dex {
+pub struct V1DexClient {
     executor: Arc<Executor>,
 }
 
-impl V1Dex {
-    pub(super) fn new(executor: Arc<Executor>) -> Self { Self { executor } }
+impl V1DexClient {
+    pub(crate) fn new(executor: Arc<Executor>) -> Self { Self { executor } }
 
     #[rustfmt::skip]
     pub async fn exec(&self, req: &V1DexReq) -> ApiClientResult<V1DexRsp> {

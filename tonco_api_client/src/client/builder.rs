@@ -1,7 +1,8 @@
-use crate::ToncoApiClient;
+use crate::client::ToncoApiClient;
 use api_clients_core::Executor;
 use derive_setters::Setters;
 use std::sync::Arc;
+
 pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io/";
 
 #[derive(Setters)]

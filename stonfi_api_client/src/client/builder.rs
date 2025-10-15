@@ -1,5 +1,5 @@
-use crate::client::v1_dex::V1Dex;
 use crate::client::StonfiApiClient;
+use crate::v1_dex::V1DexClient;
 use api_clients_core::Executor;
 use derive_setters::Setters;
 use std::sync::Arc;
@@ -29,7 +29,7 @@ impl Builder {
             None => Executor::builder(self.api_url).with_retry_count(self.retry_count).build().into(),
         };
 
-        let v1_dex = V1Dex::new(executor);
+        let v1_dex = V1DexClient::new(executor);
         StonfiApiClient { v1_dex }
     }
 }

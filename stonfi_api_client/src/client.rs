@@ -1,10 +1,9 @@
 mod builder;
-mod v1_dex;
 use crate::client::builder::Builder;
-use crate::client::v1_dex::V1Dex;
+use crate::v1_dex::V1DexClient;
 
 pub struct StonfiApiClient {
-    pub v1_dex: V1Dex,
+    pub v1_dex: V1DexClient,
 }
 
 impl StonfiApiClient {

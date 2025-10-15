@@ -1,9 +1,9 @@
 use anyhow::Result;
 use api_clients_core::ApiClientError;
-use stonfi_api_client::api_v1::dex_req::*;
-use stonfi_api_client::api_v1::dex_rsp::V1DexRsp;
 use stonfi_api_client::client::StonfiApiClient;
 use stonfi_api_client::unwrap_rsp;
+use stonfi_api_client::v1_dex::V1DexRsp;
+use stonfi_api_client::v1_dex::*;
 
 fn init_env() -> StonfiApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();

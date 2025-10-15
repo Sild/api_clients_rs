@@ -1,7 +1,7 @@
 use anyhow::Result;
 use api_clients_core::ApiClientError;
-use dedust_api_client::api_v2::req::{RoutingPlanParams, V2Req};
-use dedust_api_client::api_v2::rsp::V2Rsp;
+use dedust_api_client::api_v2::V2Rsp;
+use dedust_api_client::api_v2::{RoutingPlanParams, V2Req};
 use dedust_api_client::client::DedustApiClient;
 use dedust_api_client::unwrap_rsp;
 
@@ -14,7 +14,7 @@ fn init_env() -> DedustApiClient {
 async fn test_assets() -> Result<()> {
     let client = init_env();
     let req = V2Req::Assets;
-    let rsp = unwrap_rsp!(Assets, client.v2_exec(&req).await?)?;
+    let rsp = unwrap_rsp!(Assets, client.exec_api_v2(&req).await?)?;
     assert_ne!(rsp, vec![]);
     Ok(())
 }
@@ -23,7 +23,7 @@ async fn test_assets() -> Result<()> {
 async fn test_pools() -> Result<()> {
     let client = init_env();
     let req = V2Req::Pools;
-    let rsp = unwrap_rsp!(Pools, client.v2_exec(&req).await?)?;
+    let rsp = unwrap_rsp!(Pools, client.exec_api_v2(&req).await?)?;
     assert_ne!(rsp, vec![]);
     Ok(())
 }
@@ -32,7 +32,7 @@ async fn test_pools() -> Result<()> {
 async fn test_pools_lite() -> Result<()> {
     let client = init_env();
     let req = V2Req::PoolsLite;
-    let rsp = unwrap_rsp!(PoolsLite, client.v2_exec(&req).await?)?;
+    let rsp = unwrap_rsp!(PoolsLite, client.exec_api_v2(&req).await?)?;
     assert_ne!(rsp, vec![]);
     Ok(())
 }
@@ -41,7 +41,7 @@ async fn test_pools_lite() -> Result<()> {
 async fn test_pool_trades() -> Result<()> {
     let client = init_env();
     let req = V2Req::PoolTrades("EQAADLqcF3lNb1O_GQLowwky8vvUGXuzPRNGvKBwBxjsHR7s".to_string());
-    let rsp = unwrap_rsp!(PoolTrades, client.v2_exec(&req).await?)?;
+    let rsp = unwrap_rsp!(PoolTrades, client.exec_api_v2(&req).await?)?;
     assert_ne!(rsp, vec![]);
     Ok(())
 }
@@ -54,7 +54,7 @@ async fn test_routing_plan() -> Result<()> {
     let ton_addr = "0:0000000000000000000000000000000000000000000000000000000000000000";
     let params = RoutingPlanParams::new(usdt_addr, ton_addr, &10.to_string());
     let req = V2Req::RoutingPlan(params);
-    let rsp = unwrap_rsp!(RoutingPlan, client.v2_exec(&req).await?)?;
+    let rsp = unwrap_rsp!(RoutingPlan, client.exec_api_v2(&req).await?)?;
     assert!(!rsp.is_empty());
     Ok(())
 }
