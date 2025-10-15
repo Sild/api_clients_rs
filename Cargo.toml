@@ -15,7 +15,7 @@ repository = "https://github.com/Sild/api_clients_rs"
 
 [workspace.dependencies]
 # Internal
-api_clients_core = { path = "./api_clients_core", version = "0.0" }
+api_clients_core = { path = "./api_clients_core", version = "0.1" }
 
 # External
 thiserror = "2.0"
