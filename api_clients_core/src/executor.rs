@@ -5,10 +5,11 @@ use crate::ApiClientError;
 use reqwest::Response;
 use reqwest_middleware::ClientWithMiddleware;
 use serde::{de, ser};
+use std::sync::Arc;
 
 pub struct Executor {
     api_url: String,
-    http_cli: ClientWithMiddleware,
+    http_client: Arc<ClientWithMiddleware>,
 }
 
 impl Executor {
@@ -35,7 +36,7 @@ impl Executor {
         let full_url = format!("{}/{path}?{get_params}", self.api_url);
         log::trace!("Executing GET request to {full_url}");
 
-        let mut req_builder = self.http_cli.get(full_url);
+        let mut req_builder = self.http_client.get(full_url);
         for (key, value) in headers {
             req_builder = req_builder.header(key, value);
         }
@@ -58,7 +59,7 @@ impl Executor {
         let full_url = format!("{}/{path}?{get_params}", self.api_url);
         log::trace!("Executing POST request to {full_url}");
 
-        let mut req_builder = self.http_cli.post(full_url);
+        let mut req_builder = self.http_client.post(full_url);
         for (key, value) in headers {
             req_builder = req_builder.header(key, value);
         }
@@ -80,7 +81,7 @@ impl Executor {
         let full_url = format!("{}/{path}", self.api_url);
         log::trace!("Executing POST request to {full_url}");
 
-        let mut req_builder = self.http_cli.post(full_url);
+        let mut req_builder = self.http_client.post(full_url);
         for (key, value) in headers {
             req_builder = req_builder.header(key, value);
         }
