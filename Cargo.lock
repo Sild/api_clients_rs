@@ -2058,7 +2058,7 @@ dependencies = [
 
 [[package]]
 name = "tonco_api_client"
-version = "0.1.0"
+version = "0.0.1"
 dependencies = [
  "anyhow",
  "api_clients_core",
