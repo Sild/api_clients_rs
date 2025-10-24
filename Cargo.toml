@@ -5,6 +5,7 @@ members = [
     "api_clients_core",
     "dedust_api_client",
     "stonfi_api_client",
+    "swap_coffee_api_client",
     "tonco_api_client",
 ]
 
