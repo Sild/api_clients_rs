@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.2](https://github.com/Sild/api_clients_rs/compare/tonco_api_client-v0.0.1...tonco_api_client-v0.0.2) - 2025-10-24
+
+### Other
+
+- release
+
 ## [0.0.1](https://github.com/Sild/api_clients_rs/releases/tag/tonco_api_client-v0.0.1) - 2025-10-15
 
 ### Fixed
