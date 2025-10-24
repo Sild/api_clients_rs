@@ -12,15 +12,11 @@ pub struct SwapCoffeeApiClient {
 }
 
 impl Default for SwapCoffeeApiClient {
-    fn default() -> Self {
-        SwapCoffeeApiClient::builder().build()
-    }
+    fn default() -> Self { SwapCoffeeApiClient::builder().build() }
 }
 
 impl SwapCoffeeApiClient {
-    pub fn builder() -> Builder {
-        Builder::new()
-    }
+    pub fn builder() -> Builder { Builder::new() }
 
     pub async fn exec_api_v1(&self, req: &V1Req) -> ApiClientResult<V1Rsp> {
         let rsp = match req {
