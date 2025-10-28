@@ -1,10 +1,12 @@
 mod builder;
+pub use builder::*;
 
 use crate::api_v1::V1Req;
 use crate::api_v1::V1Rsp;
-use crate::client::builder::Builder;
 use api_clients_core::{ApiClientResult, Executor};
 use std::sync::Arc;
+
+pub const DEFAULT_API_V1_URL: &str = "https://backend.swap.coffee/v1";
 
 #[derive(Clone)]
 pub struct SwapCoffeeApiClient {

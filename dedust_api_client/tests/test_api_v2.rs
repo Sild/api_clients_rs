@@ -1,5 +1,5 @@
 use anyhow::Result;
-use api_clients_core::ApiClientError;
+use api_clients_core::ApiClientsError;
 use dedust_api_client::api_v2::V2Rsp;
 use dedust_api_client::api_v2::{RoutingPlanParams, V2Req};
 use dedust_api_client::client::DedustApiClient;
@@ -47,7 +47,6 @@ async fn test_pool_trades() -> Result<()> {
 }
 
 #[tokio::test]
-#[ignore = "TODO: Server response with 500: an internal server error occurred"]
 async fn test_routing_plan() -> Result<()> {
     let client = init_env();
     let usdt_addr = "0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe";
@@ -55,6 +54,7 @@ async fn test_routing_plan() -> Result<()> {
     let params = RoutingPlanParams::new(usdt_addr, ton_addr, &10.to_string());
     let req = V2Req::RoutingPlan(params);
     let rsp = unwrap_rsp!(RoutingPlan, client.exec_api_v2(&req).await?)?;
-    assert!(!rsp.is_empty());
+    assert_ne!(rsp.len(), 0);
+    assert_ne!(rsp[0], vec![]);
     Ok(())
 }

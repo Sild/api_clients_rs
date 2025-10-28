@@ -1,4 +1,4 @@
-use api_clients_core::ApiClientError;
+use api_clients_core::ApiClientsError;
 use std::vec;
 
 use anyhow::Result;

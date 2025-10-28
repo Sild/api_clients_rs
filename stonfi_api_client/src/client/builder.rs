@@ -1,10 +1,8 @@
-use crate::client::StonfiApiClient;
+use crate::client::{StonfiApiClient, DEFAULT_API_V1_URL};
 use crate::v1_dex::V1DexClient;
 use api_clients_core::Executor;
 use derive_setters::Setters;
 use std::sync::Arc;
-
-const DEFAULT_API_V1_URL: &str = "https://api.ston.fi/v1";
 
 #[derive(Setters)]
 #[setters(prefix = "with_", strip_option)]

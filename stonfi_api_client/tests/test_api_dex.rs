@@ -1,5 +1,5 @@
 use anyhow::Result;
-use api_clients_core::ApiClientError;
+use api_clients_core::ApiClientsError;
 use stonfi_api_client::client::StonfiApiClient;
 use stonfi_api_client::unwrap_rsp;
 use stonfi_api_client::v1_dex::V1DexRsp;
