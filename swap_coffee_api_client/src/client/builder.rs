@@ -1,9 +1,7 @@
-use crate::client::SwapCoffeeApiClient;
+use crate::client::{SwapCoffeeApiClient, DEFAULT_API_V1_URL};
 use api_clients_core::Executor;
 use derive_setters::Setters;
 use std::sync::Arc;
-
-pub const DEFAULT_API_V1_URL: &str = "https://backend.swap.coffee/v1";
 
 #[derive(Setters)]
 #[setters(prefix = "with_", strip_option)]

@@ -1,10 +1,12 @@
 mod builder;
+pub use builder::*;
 
-use crate::client::builder::Builder;
-use api_clients_core::{ApiClientError, ApiClientResult, Executor};
+use api_clients_core::{ApiClientResult, ApiClientsError, Executor};
 use graphql_client::Response;
 use serde::{de, ser};
 use std::sync::Arc;
+
+pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io/";
 
 pub struct ToncoApiClient {
     executor: Arc<Executor>,
@@ -31,10 +33,10 @@ fn handle_graphql_result<R>(graphql_result: Response<R>) -> ApiClientResult<R> {
     if let Some(errors) = graphql_result.errors {
         let msgs: Vec<String> = errors.into_iter().map(|e| e.message).collect();
         let err_msg = msgs.join(", ");
-        Err(ApiClientError::UnexpectedResponse(err_msg))
+        Err(ApiClientsError::UnexpectedResponse(err_msg))
     } else if let Some(data) = graphql_result.data {
         Ok(data)
     } else {
-        Err(ApiClientError::UnknownError("No data in GraphQL response".to_string()))
+        Err(ApiClientsError::UnknownError("No data in GraphQL response".to_string()))
     }
 }

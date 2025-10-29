@@ -1,7 +1,8 @@
 mod builder;
 
 use crate::errors::ApiClientResult;
-use crate::ApiClientError;
+use crate::ApiClientsError;
+use crate::ApiClientsError::*;
 use reqwest::Response;
 use reqwest_middleware::ClientWithMiddleware;
 use serde::{de, ser};
@@ -32,7 +33,7 @@ impl Executor {
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
     {
-        let get_params = serde_qs::to_string(params)?;
+        let get_params = serde_qs::to_string(params).map_err(|x| InvalidArgs(x.to_string()))?;
         let full_url = format!("{}/{path}?{get_params}", self.api_url);
         log::trace!("Executing GET request to {full_url}");
 
@@ -55,7 +56,7 @@ impl Executor {
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
     {
-        let get_params = serde_qs::to_string(params)?;
+        let get_params = serde_qs::to_string(params).map_err(|x| ApiClientsError::InvalidArgs(x.to_string()))?;
         let full_url = format!("{}/{path}?{get_params}", self.api_url);
         log::trace!("Executing POST request to {full_url}");
 
@@ -85,7 +86,8 @@ impl Executor {
         for (key, value) in headers {
             req_builder = req_builder.header(key, value);
         }
-        req_builder = req_builder.body(serde_json::to_string(params)?);
+        let body = serde_json::to_string(params).map_err(|x| InvalidArgs(x.to_string()))?;
+        req_builder = req_builder.body(body);
 
         handle_response(req_builder.send().await?).await
     }
@@ -99,8 +101,8 @@ where
     let rsp_body = response.text().await?;
 
     match rsp_code.as_u16() {
-        400..=499 => return Err(ApiClientError::ClientError(rsp_code.as_u16(), rsp_body)),
-        500..=599 => return Err(ApiClientError::ServerError(rsp_code.as_u16(), rsp_body)),
+        400..=499 => return Err(ClientError(rsp_code.as_u16(), rsp_body)),
+        500..=599 => return Err(ServerError(rsp_code.as_u16(), rsp_body)),
         _ => {}
     }
 
@@ -110,7 +112,7 @@ where
         Ok(rsp) => Ok(rsp),
         Err(err) => {
             log::warn!("Failed to parse response body: '{rsp_body}', err: {err}");
-            Err(ApiClientError::SerdeJSONError(err))
+            Err(UnexpectedResponse(err.to_string()))
         }
     }
 }

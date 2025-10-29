@@ -1,9 +1,7 @@
-use crate::client::DedustApiClient;
+use crate::client::{DedustApiClient, DEFAULT_API_V2_URL};
 use api_clients_core::Executor;
 use derive_setters::Setters;
 use std::sync::Arc;
-
-pub const DEFAULT_API_V2_URL: &str = "https://api.dedust.io/v2";
 
 #[derive(Setters)]
 #[setters(prefix = "with_", strip_option)]
