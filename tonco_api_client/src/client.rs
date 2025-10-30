@@ -1,6 +1,6 @@
 mod builder;
-pub use builder::*;
 
+use crate::client::builder::Builder;
 use api_clients_core::{ApiClientResult, ApiClientsError, Executor};
 use graphql_client::Response;
 use serde::{de, ser};

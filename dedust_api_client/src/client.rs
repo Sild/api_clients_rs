@@ -1,8 +1,8 @@
 mod builder;
-pub use builder::*;
 
 use crate::api_v2::V2Req;
 use crate::api_v2::V2Rsp;
+use crate::client::builder::Builder;
 use api_clients_core::{ApiClientResult, Executor};
 use std::sync::Arc;
 
