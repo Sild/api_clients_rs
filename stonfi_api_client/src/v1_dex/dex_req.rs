@@ -26,7 +26,7 @@ pub struct TODO {}
 #[derive(Serialize, Clone)]
 pub struct AssetsQueryParams {
     pub condition: Option<String>,
-    pub unconditional_asset: Vec<String>,
+    pub unconditional_assets: Vec<String>,
     pub wallet_address: Option<String>,
 }
 

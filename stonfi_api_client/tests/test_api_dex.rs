@@ -24,11 +24,22 @@ async fn test_assets_query() -> Result<()> {
     let client = init_env();
     let req = V1DexReq::AssetsQuery(AssetsQueryParams {
         condition: Some("!asset:liquidity:no & !asset:blacklisted".to_string()),
-        unconditional_asset: vec![],
+        unconditional_assets: vec![],
         wallet_address: None,
     });
     let rsp = unwrap_rsp!(AssetsQuery, client.v1_dex.exec(&req).await?)?;
-    assert_ne!(rsp.asset_list, vec![]);
+    assert!(rsp.asset_list.len() > 1);
+
+    let req = V1DexReq::AssetsQuery(AssetsQueryParams {
+        condition: None,
+        unconditional_assets: vec![
+            "EQBfkgKxD8zkHquKL6pqZWGiQCkrbgXIw4ToqNRb9-RW0ba1".to_string(),
+            "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs".to_string(),
+        ],
+        wallet_address: None,
+    });
+    let rsp = unwrap_rsp!(AssetsQuery, client.v1_dex.exec(&req).await?)?;
+    assert_eq!(rsp.asset_list.len(), 3);
     Ok(())
 }
 
