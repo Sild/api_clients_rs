@@ -300,7 +300,7 @@ dependencies = [
 
 [[package]]
 name = "dedust_api_client"
-version = "0.5.1"
+version = "0.6.0"
 dependencies = [
  "anyhow",
  "api_clients_core",
@@ -1786,7 +1786,7 @@ checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
 
 [[package]]
 name = "stonfi_api_client"
-version = "0.5.1"
+version = "0.6.0"
 dependencies = [
  "anyhow",
  "api_clients_core",
@@ -1814,7 +1814,7 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "swap_coffee_api_client"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "anyhow",
  "api_clients_core",
@@ -2073,7 +2073,7 @@ dependencies = [
 
 [[package]]
 name = "tonco_api_client"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "anyhow",
  "api_clients_core",
