@@ -7,7 +7,7 @@ use stonfi_api_client::v1_dex::*;
 
 fn init_env() -> StonfiApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
-    StonfiApiClient::builder().with_retry_count(5).build()
+    StonfiApiClient::builder().build().unwrap()
 }
 
 #[tokio::test]

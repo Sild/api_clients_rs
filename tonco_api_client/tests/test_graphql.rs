@@ -3,7 +3,7 @@ use tonco_api_client::client::ToncoApiClient;
 
 fn init_env() -> ToncoApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
-    ToncoApiClient::builder().build()
+    ToncoApiClient::builder().build().unwrap()
 }
 
 // Use the following commands to update `graphql_schema.json`:
