@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.2](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.6.1...stonfi_api_client-v0.6.2) - 2025-11-05
+
+### Other
+
+- support timeout
+
 ## [0.6.1](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.6.0...stonfi_api_client-v0.6.1) - 2025-10-30
 
 ### Fixed
