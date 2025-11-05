@@ -1,6 +1,7 @@
 mod builder;
 
-use crate::errors::ApiClientResult;
+use crate::errors::ApiClientsResult;
+use crate::executor::builder::Builder;
 use crate::ApiClientsError;
 use crate::ApiClientsError::*;
 use reqwest::Response;
@@ -9,14 +10,14 @@ use serde::{de, ser};
 use std::sync::Arc;
 
 pub struct Executor {
-    api_url: String,
+    api_endpoint: String,
     http_client: Arc<ClientWithMiddleware>,
 }
 
 impl Executor {
-    pub fn builder<T: Into<String>>(api_endpoint: T) -> builder::Builder { builder::Builder::new(api_endpoint.into()) }
+    pub fn builder<T: Into<String>>(api_endpoint: T) -> Builder { Builder::new(api_endpoint.into()) }
 
-    pub async fn exec_get<RSP>(&self, path: &str) -> ApiClientResult<RSP>
+    pub async fn exec_get<RSP>(&self, path: &str) -> ApiClientsResult<RSP>
     where
         RSP: de::DeserializeOwned,
     {
@@ -28,13 +29,13 @@ impl Executor {
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientResult<RSP>
+    ) -> ApiClientsResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
     {
         let get_params = serde_qs::to_string(params).map_err(|x| InvalidArgs(x.to_string()))?;
-        let full_url = format!("{}/{path}?{get_params}", self.api_url);
+        let full_url = format!("{}/{path}?{get_params}", self.api_endpoint);
         log::trace!("Executing GET request to {full_url}");
 
         let mut req_builder = self.http_client.get(full_url);
@@ -51,13 +52,13 @@ impl Executor {
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientResult<RSP>
+    ) -> ApiClientsResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
     {
         let get_params = serde_qs::to_string(params).map_err(|x| ApiClientsError::InvalidArgs(x.to_string()))?;
-        let full_url = format!("{}/{path}?{get_params}", self.api_url);
+        let full_url = format!("{}/{path}?{get_params}", self.api_endpoint);
         log::trace!("Executing POST request to {full_url}");
 
         let mut req_builder = self.http_client.post(full_url);
@@ -74,12 +75,12 @@ impl Executor {
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientResult<RSP>
+    ) -> ApiClientsResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
     {
-        let full_url = format!("{}/{path}", self.api_url);
+        let full_url = format!("{}/{path}", self.api_endpoint);
         log::trace!("Executing POST request to {full_url}");
 
         let mut req_builder = self.http_client.post(full_url);
@@ -93,7 +94,7 @@ impl Executor {
     }
 }
 
-async fn handle_response<RSP>(response: Response) -> ApiClientResult<RSP>
+async fn handle_response<RSP>(response: Response) -> ApiClientsResult<RSP>
 where
     RSP: de::DeserializeOwned,
 {
@@ -101,8 +102,8 @@ where
     let rsp_body = response.text().await?;
 
     match rsp_code.as_u16() {
-        400..=499 => return Err(ClientError(rsp_code.as_u16(), rsp_body)),
-        500..=599 => return Err(ServerError(rsp_code.as_u16(), rsp_body)),
+        400..=499 => return Err(Client(rsp_code.as_u16(), rsp_body)),
+        500..=599 => return Err(Server(rsp_code.as_u16(), rsp_body)),
         _ => {}
     }
 

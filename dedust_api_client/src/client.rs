@@ -3,7 +3,7 @@ mod builder;
 use crate::api_v2::V2Req;
 use crate::api_v2::V2Rsp;
 use crate::client::builder::Builder;
-use api_clients_core::{ApiClientResult, Executor};
+use api_clients_core::{ApiClientsResult, Executor};
 use std::sync::Arc;
 
 pub const DEFAULT_API_V2_URL: &str = "https://api.dedust.io/v2";
@@ -16,7 +16,7 @@ pub struct DedustApiClient {
 impl DedustApiClient {
     pub fn builder() -> Builder { Builder::new() }
 
-    pub async fn exec_api_v2(&self, req: &V2Req) -> ApiClientResult<V2Rsp> {
+    pub async fn exec_api_v2(&self, req: &V2Req) -> ApiClientsResult<V2Rsp> {
         let rsp = match req {
             V2Req::Assets => V2Rsp::Assets(self.executor.exec_get("assets").await?),
             V2Req::Pools => V2Rsp::Pools(self.executor.exec_get("pools").await?),

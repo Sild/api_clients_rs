@@ -1,7 +1,7 @@
 mod builder;
 
 use crate::client::builder::Builder;
-use api_clients_core::{ApiClientResult, ApiClientsError, Executor};
+use api_clients_core::{ApiClientsError, ApiClientsResult, Executor};
 use graphql_client::Response;
 use serde::{de, ser};
 use std::sync::Arc;
@@ -15,7 +15,7 @@ pub struct ToncoApiClient {
 impl ToncoApiClient {
     pub fn builder() -> Builder { Builder::new() }
 
-    pub async fn exec_graphql<PARAMS, RSP>(&self, op_name: &str, graphql_query: &PARAMS) -> ApiClientResult<RSP>
+    pub async fn exec_graphql<PARAMS, RSP>(&self, op_name: &str, graphql_query: &PARAMS) -> ApiClientsResult<RSP>
     where
         PARAMS: ser::Serialize,
         RSP: de::DeserializeOwned,
@@ -29,7 +29,7 @@ impl ToncoApiClient {
     }
 }
 
-fn handle_graphql_result<R>(graphql_result: Response<R>) -> ApiClientResult<R> {
+fn handle_graphql_result<R>(graphql_result: Response<R>) -> ApiClientsResult<R> {
     if let Some(errors) = graphql_result.errors {
         let msgs: Vec<String> = errors.into_iter().map(|e| e.message).collect();
         let err_msg = msgs.join(", ");
@@ -37,6 +37,6 @@ fn handle_graphql_result<R>(graphql_result: Response<R>) -> ApiClientResult<R> {
     } else if let Some(data) = graphql_result.data {
         Ok(data)
     } else {
-        Err(ApiClientsError::UnknownError("No data in GraphQL response".to_string()))
+        Err(ApiClientsError::UnexpectedResponse("No data in GraphQL response".to_string()))
     }
 }

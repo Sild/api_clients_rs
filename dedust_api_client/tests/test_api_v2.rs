@@ -7,7 +7,7 @@ use dedust_api_client::unwrap_rsp;
 
 fn init_env() -> DedustApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
-    DedustApiClient::builder().with_retry_count(5).build()
+    DedustApiClient::builder().build().unwrap()
 }
 
 #[tokio::test]

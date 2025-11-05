@@ -9,7 +9,7 @@ use swap_coffee_api_client::unwrap_rsp;
 
 fn init_env() -> SwapCoffeeApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
-    SwapCoffeeApiClient::builder().with_retry_count(5).build()
+    SwapCoffeeApiClient::builder().build().unwrap()
 }
 
 #[tokio::test]

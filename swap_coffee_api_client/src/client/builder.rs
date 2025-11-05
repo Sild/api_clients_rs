@@ -1,5 +1,5 @@
 use crate::client::{SwapCoffeeApiClient, DEFAULT_API_V1_URL};
-use api_clients_core::Executor;
+use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
 
@@ -7,7 +7,6 @@ use std::sync::Arc;
 #[setters(prefix = "with_", strip_option)]
 pub struct Builder {
     api_url: String,
-    retry_count: u32,
     executor: Option<Arc<Executor>>,
 }
 
@@ -15,17 +14,16 @@ impl Builder {
     pub(super) fn new() -> Self {
         Self {
             api_url: DEFAULT_API_V1_URL.to_string(),
-            retry_count: 3,
             executor: None,
         }
     }
 
-    pub fn build(self) -> SwapCoffeeApiClient {
+    pub fn build(self) -> ApiClientsResult<SwapCoffeeApiClient> {
         let executor = match self.executor {
             Some(executor) => executor,
-            None => Executor::builder(self.api_url).with_retry_count(self.retry_count).build().into(),
+            None => Executor::builder(self.api_url).build()?.into(),
         };
 
-        SwapCoffeeApiClient { executor }
+        Ok(SwapCoffeeApiClient { executor })
     }
 }
