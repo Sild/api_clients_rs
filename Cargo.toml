@@ -7,6 +7,7 @@ members = [
     "stonfi_api_client",
     "swap_coffee_api_client",
     "tonco_api_client",
+    "bidask_api_client",
 ]
 
 [workspace.package]
