@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.3](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.6.2...stonfi_api_client-v0.6.3) - 2025-11-23
+
+### Added
+
+- rename v1_dex -> v1
+- add support to /v1/transactions/{hash}/action_tree
+
 ## [0.6.2](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.6.1...stonfi_api_client-v0.6.2) - 2025-11-05
 
 ### Other
