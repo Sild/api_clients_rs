@@ -18,90 +18,35 @@ pub enum Action {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
 pub enum AmmAction {
-    Swap(
-        ActionData<
-            DexMajorVersion,
-            SwapData,
-            ActionStatus<SwapResult>,
-        >
-    ),
+    Swap(ActionData<DexMajorVersion, SwapData, ActionStatus<SwapResult>>),
     ProvideLiquidity(
         WithEffects<
-            ActionData<
-                DexMajorVersion,
-                ProvideLiquidityData,
-                ActionStatus<ProvideLiquidityResult>
-            >,
-            ProvideLiquidityEffect
-        >
+            ActionData<DexMajorVersion, ProvideLiquidityData, ActionStatus<ProvideLiquidityResult>>,
+            ProvideLiquidityEffect,
+        >,
     ),
-    DirectAddLiquidity(
-        ActionData<
-            DexMajorVersion,
-            DirectAddLiquidityData,
-            ActionStatus<CbAddLiquidityResult>
-        >
-    ),
-    JettonBurn(
-        ActionData<
-            DexMajorVersion,
-            BurnData,
-            ActionStatus<BurnNotificationResult>
-        >
-    ),
-    CollectFees(
-        ActionData<
-            DexMajorVersion,
-            CollectFeesData,
-            ActionStatus<CollectFeesResult>
-        >
-    ),
-    WithdrawFee(
-        ActionData<
-            DexMajorVersion,
-            WithdrawFeesData,
-            ActionStatus<WithdrawFeeResult>
-        >
-    ),
-    RefundLiquidity(
-        ActionData<
-            DexMajorVersion,
-            RefundLiquidityData,
-            ActionStatus<RefundResult>
-        >
-    ),
+    DirectAddLiquidity(ActionData<DexMajorVersion, DirectAddLiquidityData, ActionStatus<CbAddLiquidityResult>>),
+    JettonBurn(ActionData<DexMajorVersion, BurnData, ActionStatus<BurnNotificationResult>>),
+    CollectFees(ActionData<DexMajorVersion, CollectFeesData, ActionStatus<CollectFeesResult>>),
+    WithdrawFee(ActionData<DexMajorVersion, WithdrawFeesData, ActionStatus<WithdrawFeeResult>>),
+    RefundLiquidity(ActionData<DexMajorVersion, RefundLiquidityData, ActionStatus<RefundResult>>),
 }
-
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
 pub enum FarmAction {
-    FarmDeposit(
-        ActionData<
-            FarmMajorVersion,
-            FarmDepositData,
-            ActionStatus<FarmMinterStakeResult>
-        >
-    ),
+    FarmDeposit(ActionData<FarmMajorVersion, FarmDepositData, ActionStatus<FarmMinterStakeResult>>),
     FarmWithdraw(
         WithEffects<
-            ActionData<
-                FarmMajorVersion,
-                FarmWithdrawData,
-                ActionStatus<FarmNftUnstakeResult>
-            >,
-            FarmWithdrawEffect
-        >
+            ActionData<FarmMajorVersion, FarmWithdrawData, ActionStatus<FarmNftUnstakeResult>>,
+            FarmWithdrawEffect,
+        >,
     ),
     FarmClaimRewards(
         WithEffects<
-            ActionData<
-                FarmMajorVersion,
-                FarmClaimRewardsData,
-                ActionStatus<FarmNftClaimRewardsResult>
-            >,
-            FarmClaimRewardsEffect
-        >
+            ActionData<FarmMajorVersion, FarmClaimRewardsData, ActionStatus<FarmNftClaimRewardsResult>>,
+            FarmClaimRewardsEffect,
+        >,
     ),
 }
 
@@ -420,7 +365,6 @@ pub enum ProvideLiquidityResult {
     Bounce,
 }
 
-
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
 pub enum ProvideLiquidityEffect {
@@ -429,9 +373,7 @@ pub enum ProvideLiquidityEffect {
 }
 
 impl Default for ProvideLiquidityEffect {
-    fn default() -> Self {
-        ProvideLiquidityEffect::Never
-    }
+    fn default() -> Self { ProvideLiquidityEffect::Never }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -629,9 +571,7 @@ pub enum FarmWithdrawEffect {
 }
 
 impl Default for FarmWithdrawEffect {
-    fn default() -> Self {
-        FarmWithdrawEffect::Never
-    }
+    fn default() -> Self { FarmWithdrawEffect::Never }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -642,9 +582,7 @@ pub enum FarmClaimRewardsEffect {
 }
 
 impl Default for FarmClaimRewardsEffect {
-    fn default() -> Self {
-        FarmClaimRewardsEffect::Never
-    }
+    fn default() -> Self { FarmClaimRewardsEffect::Never }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

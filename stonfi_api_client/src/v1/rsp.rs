@@ -1,12 +1,12 @@
-use crate::v1_dex::types::{Asset, Farm, Pool, QueryAsset, Router};
+use crate::v1::types::{Asset, Farm, Pool, QueryAsset, Router};
+use crate::v1::TransactionActionTree;
 use serde_derive::Deserialize;
-use crate::v1_dex::TransactionActionTree;
 
 #[macro_export]
 macro_rules! unwrap_rsp {
     ($variant:ident, $result:expr) => {
         match $result {
-            V1DexRsp::$variant(inner) => Ok(inner),
+            V1Rsp::$variant(inner) => Ok(inner),
             _ => Err(ApiClientsError::UnexpectedResponse(format!(
                 "ApiClientError: expected {}, but got {:?}",
                 stringify!($variant),
@@ -17,7 +17,7 @@ macro_rules! unwrap_rsp {
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub enum V1DexRsp {
+pub enum V1Rsp {
     Assets(AssetsRsp),
     AssetsQuery(AssetsQueryRsp),
     Asset(AssetRsp),

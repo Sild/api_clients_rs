@@ -1,5 +1,5 @@
+use crate::v1::actions::{Action, TxId};
 use serde_derive::{Deserialize, Serialize};
-use crate::v1_dex::dex_actions::{Action, TxId};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Meta {
