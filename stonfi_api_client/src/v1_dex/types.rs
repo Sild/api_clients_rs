@@ -1,4 +1,5 @@
 use serde_derive::{Deserialize, Serialize};
+use crate::v1_dex::dex_actions::{Action, TxId};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Meta {
@@ -115,4 +116,11 @@ pub struct Farm {
     pub pool_address: String,
     pub rewards: Vec<FarmReward>,
     pub status: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TransactionActionTree {
+    pub tx_chain_completed: bool,
+    pub initial_tx_id: TxId,
+    pub actions: Vec<Action>,
 }

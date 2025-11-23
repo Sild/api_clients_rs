@@ -18,6 +18,7 @@ pub enum V1DexReq {
     Routers(RoutersParams),
     SwapSimulate(SwapSimulateParams),
     SwapStatus(TODO),
+    TransactionActionTree(String)
 }
 
 pub struct TODO {}

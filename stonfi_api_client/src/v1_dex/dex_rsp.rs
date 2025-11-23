@@ -1,5 +1,6 @@
 use crate::v1_dex::types::{Asset, Farm, Pool, QueryAsset, Router};
 use serde_derive::Deserialize;
+use crate::v1_dex::TransactionActionTree;
 
 #[macro_export]
 macro_rules! unwrap_rsp {
@@ -27,6 +28,7 @@ pub enum V1DexRsp {
     Routers(RoutersRsp),
     Router(RouterRsp),
     SwapSimulate(SwapSimulateRsp),
+    TransactionActionTree(TransactionActionTreeRsp),
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -92,3 +94,5 @@ pub struct SwapSimulateRsp {
     pub slippage_tolerance: String,
     pub swap_rate: String,
 }
+
+pub type TransactionActionTreeRsp = TransactionActionTree;

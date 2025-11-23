@@ -47,6 +47,9 @@ impl V1DexClient {
             V1DexReq::SwapSimulate(params) => {
                 V1DexRsp::SwapSimulate(self.executor.exec_post_qs("swap/simulate", params, &[]).await?)
             },
+            V1DexReq::TransactionActionTree(hash) => {
+                V1DexRsp::TransactionActionTree(self.executor.exec_get(&format!("transactions/{hash}/action_tree")).await?)
+            },
             _ => unimplemented!(),
         };
         Ok(rsp)

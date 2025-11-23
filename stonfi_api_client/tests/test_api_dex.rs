@@ -147,3 +147,56 @@ async fn test_swap_simulate() -> Result<()> {
     assert_eq!(rsp.ask_address, params.ask_address);
     Ok(())
 }
+
+#[tokio::test]
+async fn test_tx_action_tree_swap() -> Result<()> {
+    let client = init_env();
+    let hash = "0a3154df02213c26a88714c7f75b70701d8230f1ed0acf0d96fcea7458a723fc";
+    let req = V1DexReq::TransactionActionTree(hash.to_string());
+    let rsp = unwrap_rsp!(TransactionActionTree, client.v1_dex.exec(&req).await?)?;
+
+    assert_eq!(rsp.initial_tx_id.hash, hash);
+
+    let swap_ask_jetton_amount = rsp.actions.first().and_then(|action| match action {
+        Action::Amm(AmmAction::Swap(data)) => match &data.status {
+            ActionStatus::Completed(payload) => match &payload.data {
+                SwapResult::Ok { ask_jetton_amount, .. } => Some(ask_jetton_amount.clone()),
+                _ => None,
+            },
+            _ => None,
+        },
+        _ => None,
+    });
+
+    assert_eq!(swap_ask_jetton_amount, Some("23810546".to_string()));
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_tx_action_tree_swap_plus_lp() -> Result<()> {
+    let client = init_env();
+    let hash = "ccd5d1c148ffc9157dd248b8350da05a17e958d913150fde3904e85e82c5b5a9";
+    let req = V1DexReq::TransactionActionTree(hash.to_string());
+    let rsp = unwrap_rsp!(TransactionActionTree, client.v1_dex.exec(&req).await?)?;
+
+    assert_eq!(rsp.initial_tx_id.hash, hash);
+
+    let lp_out = rsp.actions.get(1).and_then(|action| match action {
+        Action::Amm(AmmAction::ProvideLiquidity(data)) => match data.effects.first() {
+            Some(ProvideLiquidityEffect::CbAddLiquidity(effect_data)) => match &effect_data.status {
+                ActionStatus::Completed(payload) => match &payload.data {
+                    CbAddLiquidityResult::MintLp { lp_out } => Some(lp_out.clone()),
+                    _ => None,
+                },
+                _ => None,
+            },
+            _ => None,
+        },
+        _ => None,
+    });
+
+    assert_eq!(lp_out, Some("85942".to_string()));
+
+    Ok(())
+}
