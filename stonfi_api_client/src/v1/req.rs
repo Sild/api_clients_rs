@@ -1,6 +1,6 @@
 use serde_derive::Serialize;
 
-pub enum V1DexReq {
+pub enum V1Req {
     Assets,
     AssetsQuery(AssetsQueryParams),
     AssetsSearch(TODO),
@@ -18,6 +18,7 @@ pub enum V1DexReq {
     Routers(RoutersParams),
     SwapSimulate(SwapSimulateParams),
     SwapStatus(TODO),
+    TransactionActionTree(String),
 }
 
 pub struct TODO {}
