@@ -47,6 +47,9 @@ impl V1Client {
             V1Req::SwapSimulate(params) => {
                 V1Rsp::SwapSimulate(self.executor.exec_post_qs("swap/simulate", params, &[]).await?)
             },
+            V1Req::TransactionQuery(params) => {
+                V1Rsp::TransactionQuery(self.executor.exec_get_extra("transactions/query", &params, &[]).await?)
+            },
             V1Req::TransactionActionTree(hash) => {
                 V1Rsp::TransactionActionTree(self.executor.exec_get(&format!("transactions/{hash}/action_tree")).await?)
             },

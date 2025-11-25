@@ -149,6 +149,26 @@ async fn test_swap_simulate() -> Result<()> {
 }
 
 #[tokio::test]
+async fn test_tx_query() -> Result<()> {
+    let client = init_env();
+    let ext_msg_hash = "c88578dba0219474bc9eced97a5ed3c85d1bf1d48d4484832eb72113e982d181";
+    let req = V1Req::TransactionQuery(TransactionQueryParams {
+        wallet_address: None,
+        query_id: None,
+        ext_msg_hash: Some(ext_msg_hash.to_string()),
+        min_tx_timestamp: Some("2025-11-25T00:00:00".to_string()),
+    });
+    let rsp = unwrap_rsp!(TransactionQuery, client.v1.exec(&req).await?)?;
+
+    let tx_id = rsp.tx_id.unwrap();
+
+    assert_eq!(tx_id.hash, "23e1a6c13d9cdd284056265c583033b5825c10ee2661c58d8c1f486b1259955c".to_string());
+    assert_eq!(tx_id.lt, 63979849000001);
+
+    Ok(())
+}
+
+#[tokio::test]
 async fn test_tx_action_tree_swap() -> Result<()> {
     let client = init_env();
     let hash = "0a3154df02213c26a88714c7f75b70701d8230f1ed0acf0d96fcea7458a723fc";

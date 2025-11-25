@@ -1,5 +1,5 @@
 use crate::v1::types::{Asset, Farm, Pool, QueryAsset, Router};
-use crate::v1::TransactionActionTree;
+use crate::v1::{TransactionActionTree, TxId};
 use serde_derive::Deserialize;
 
 #[macro_export]
@@ -29,6 +29,7 @@ pub enum V1Rsp {
     Router(RouterRsp),
     SwapSimulate(SwapSimulateRsp),
     TransactionActionTree(TransactionActionTreeRsp),
+    TransactionQuery(TransactionQueryRsp),
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -93,6 +94,12 @@ pub struct SwapSimulateRsp {
     pub router_address: String,
     pub slippage_tolerance: String,
     pub swap_rate: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct TransactionQueryRsp {
+    pub tx_id: Option<TxId>,
+    pub wallet_seqno: Option<u32>,
 }
 
 pub type TransactionActionTreeRsp = TransactionActionTree;
