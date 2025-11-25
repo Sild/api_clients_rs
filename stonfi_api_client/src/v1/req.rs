@@ -18,6 +18,7 @@ pub enum V1Req {
     Routers(RoutersParams),
     SwapSimulate(SwapSimulateParams),
     SwapStatus(TODO),
+    TransactionQuery(TransactionQueryParams),
     TransactionActionTree(String),
 }
 
@@ -62,4 +63,13 @@ pub struct FarmsParams {
 pub struct PoolsByMarketParams {
     pub asset0_address: String,
     pub asset1_address: String,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize, Clone)]
+pub struct TransactionQueryParams {
+    pub wallet_address: Option<String>,
+    pub query_id: Option<u64>,
+    pub min_tx_timestamp: Option<String>,
+    pub ext_msg_hash: Option<String>,
 }
