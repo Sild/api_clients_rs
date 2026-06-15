@@ -25,7 +25,7 @@ async fn test_tonco_pools() -> anyhow::Result<()> {
     let rsp: pools::ResponseData = client.exec_graphql(pools::OPERATION_NAME, &query).await?;
     assert!(rsp.pools.is_some());
     let pools = rsp.pools.unwrap();
-    assert!(pools.len() > 0);
+    assert!(!pools.is_empty());
     assert!(pools[0].is_some());
     Ok(())
 }
