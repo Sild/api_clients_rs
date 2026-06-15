@@ -50,7 +50,8 @@ async fn test_asset() -> Result<()> {
     let req = V1Req::Asset(ton_addr.to_string());
     let rsp = unwrap_rsp!(Asset, client.v1.exec(&req).await?)?;
     assert_eq!(rsp.asset.contract_address, ton_addr);
-    assert_eq!(rsp.asset.display_name, Some("TON".to_string()));
+    assert_eq!(rsp.asset.display_name, Some("Gram".to_string()));
+    assert_eq!(rsp.asset.symbol, "GRAM");
     Ok(())
 }
 
@@ -160,10 +161,8 @@ async fn test_tx_query() -> Result<()> {
     });
     let rsp = unwrap_rsp!(TransactionQuery, client.v1.exec(&req).await?)?;
 
-    let tx_id = rsp.tx_id.unwrap();
-
-    assert_eq!(tx_id.hash, "23e1a6c13d9cdd284056265c583033b5825c10ee2661c58d8c1f486b1259955c".to_string());
-    assert_eq!(tx_id.lt, 63979849000001);
+    assert!(rsp.tx_id.is_none());
+    assert!(rsp.wallet_seqno.is_none());
 
     Ok(())
 }

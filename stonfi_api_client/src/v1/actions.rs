@@ -9,6 +9,7 @@ pub struct TxId {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
 pub enum Action {
     Amm(AmmAction),
     Farm(FarmAction),
@@ -365,15 +366,13 @@ pub enum ProvideLiquidityResult {
     Bounce,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[allow(clippy::large_enum_variant)]
 pub enum ProvideLiquidityEffect {
+    #[default]
     Never,
     CbAddLiquidity(EffectData<CbAddLiquidityResult>),
-}
-
-impl Default for ProvideLiquidityEffect {
-    fn default() -> Self { ProvideLiquidityEffect::Never }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -563,26 +562,20 @@ pub enum FarmNftUnstakeResult {
     Bounce,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(tag = "@type", rename_all = "snake_case")]
 pub enum FarmWithdrawEffect {
+    #[default]
     Never,
     JettonTransfer(EffectData<JettonTransferResult>),
 }
 
-impl Default for FarmWithdrawEffect {
-    fn default() -> Self { FarmWithdrawEffect::Never }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(tag = "@type", rename_all = "snake_case")]
 pub enum FarmClaimRewardsEffect {
+    #[default]
     Never,
     JettonTransfer(EffectData<JettonTransferResult>),
-}
-
-impl Default for FarmClaimRewardsEffect {
-    fn default() -> Self { FarmClaimRewardsEffect::Never }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

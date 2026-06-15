@@ -6,7 +6,7 @@ use graphql_client::Response;
 use serde::{de, ser};
 use std::sync::Arc;
 
-pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io/";
+pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io";
 
 pub struct ToncoApiClient {
     executor: Arc<Executor>,
