@@ -1,11 +1,11 @@
 mod actions;
-mod req;
-mod rsp;
+mod request;
+mod response;
 mod types;
 mod v1_client;
 
 pub use actions::*;
-pub use req::*;
-pub use rsp::*;
+pub use request::*;
+pub use response::*;
 pub use types::*;
 pub use v1_client::*;

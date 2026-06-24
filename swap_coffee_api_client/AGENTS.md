@@ -14,9 +14,9 @@ changes.
 The crate exposes a thin typed client:
 
 - `SwapCoffeeApiClient::builder().build()?`
-- `client.exec_api_v1(&V1Req::...)`
-- request params in `api_v1/req.rs`
-- response enums and models in `api_v1/rsp.rs` and `api_v1/types.rs`
+- `client.exec_api_v1(&V1Request::...)`
+- request params in `api_v1/request.rs`
+- response enums and models in `api_v1/response.rs` and `api_v1/types.rs`
 
 Do not add routing decisions or swap execution flows here. Keep this crate to
 API request/response wrapping.
@@ -27,10 +27,16 @@ Treat these as public contracts:
 
 - `SwapCoffeeApiClient`
 - `DEFAULT_API_V1_URL`
-- `V1Req`
+- `V1Request`
 - `Dexes`
-- `V1Rsp` and public response/type structs
-- `unwrap_rsp!`
+- `V1Response` and public response/type structs
+- `unwrap_response!`
+
+Request parameter structs are `#[non_exhaustive]`; use their `new()`
+methods instead of struct literals in downstream examples and integration
+tests. Pass request parameters directly to `exec_api_v1` where `Into<V1Request>` is
+implemented. Public enums are `#[non_exhaustive]`; downstream matches need
+wildcard arms.
 
 `Dexes` is serialized into query parameters for `/pools`; preserve that shape
 unless the upstream API changes.
@@ -43,19 +49,15 @@ assertions on returned pool counts, token ordering, or dynamic metadata.
 ## Downstream Integration Example
 
 ```rust
-use swap_coffee_api_client::api_v1::{Dexes, V1Req, V1Rsp};
+use swap_coffee_api_client::api_v1::{Dexes, V1Request, V1Response};
 use swap_coffee_api_client::client::SwapCoffeeApiClient;
 
 # async fn example() -> anyhow::Result<()> {
 let client = SwapCoffeeApiClient::builder().build()?;
-let response = client
-    .exec_api_v1(&V1Req::Pools(Dexes {
-        dexes: "stonfi_v2".to_string(),
-    }))
-    .await?;
+let response = client.exec_api_v1(Dexes::new("stonfi_v2")).await?;
 
 match response {
-    V1Rsp::Pools(pools) => println!("pool pages: {}", pools.len()),
+    V1Response::Pools(pools) => println!("pool pages: {}", pools.len()),
     other => anyhow::bail!("unexpected Swap Coffee response: {other:?}"),
 }
 # Ok(())

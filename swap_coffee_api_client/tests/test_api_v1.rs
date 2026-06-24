@@ -1,11 +1,10 @@
-use api_clients_core::ApiClientsError;
 use std::vec;
 
 use anyhow::Result;
-use swap_coffee_api_client::api_v1::V1Req;
-use swap_coffee_api_client::api_v1::{Dexes, V1Rsp};
+use swap_coffee_api_client::api_v1::Dexes;
+use swap_coffee_api_client::api_v1::V1Request;
 use swap_coffee_api_client::client::SwapCoffeeApiClient;
-use swap_coffee_api_client::unwrap_rsp;
+use swap_coffee_api_client::unwrap_response;
 
 fn init_env() -> SwapCoffeeApiClient {
     let _ = env_logger::builder().filter_level(log::LevelFilter::Debug).try_init();
@@ -15,20 +14,17 @@ fn init_env() -> SwapCoffeeApiClient {
 #[tokio::test]
 async fn test_assets() -> Result<()> {
     let client = init_env();
-    let req = V1Req::Assets;
-    let rsp = unwrap_rsp!(Assets, client.exec_api_v1(&req).await?)?;
-    assert_ne!(rsp, vec![]);
+    let request = V1Request::Assets;
+    let response = unwrap_response!(Assets, client.exec_api_v1(&request).await?)?;
+    assert_ne!(response, vec![]);
     Ok(())
 }
 
 #[tokio::test]
 async fn test_pools() -> Result<()> {
     let client = init_env();
-    let req = V1Req::Pools(Dexes {
-        dexes: "coffee".to_string(),
-    });
-    let rsp = unwrap_rsp!(Pools, client.exec_api_v1(&req).await?)?;
-    log::debug!("rsp: {:?}", rsp[0].pools[0]);
-    assert_ne!(rsp[0].pools, vec![]);
+    let response = unwrap_response!(Pools, client.exec_api_v1(Dexes::new("coffee")).await?)?;
+    log::debug!("response: {:?}", response[0].pools[0]);
+    assert_ne!(response[0].pools, vec![]);
     Ok(())
 }

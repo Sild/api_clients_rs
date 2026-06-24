@@ -8,6 +8,7 @@ use std::time::Duration;
 
 #[derive(Setters, Debug)]
 #[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
 pub struct Builder {
     #[setters(skip)]
     api_url: String,

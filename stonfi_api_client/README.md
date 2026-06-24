@@ -2,13 +2,13 @@
 | Group | Method                                        | Supported |
 |-------|-----------------------------------------------|----------|
 | AMM   | /v1/assets                                    | ✅        |
-| AMM   | /v1/assets/query                              |          |
+| AMM   | /v1/assets/query                              | ✅        |
 | AMM   | /v1/assets/search                             |          | 
 | AMM   | /v1/assets/{addr_str}                         | ✅        |
 | AMM   | /v1/farms                                     | ✅        | 
 | AMM   | /v1/farms/by_pool/{pool_addr_str}             |          |
 | AMM   | /v1/farms/{addr_str}                          | ✅        |
-| AMM   | /v1/liquidity_provision/simulate              | ✅        |
+| AMM   | /v1/liquidity_provision/simulate              |          |
 | AMM   | /v1/markets                                   |          |
 | AMM   | /v1/pool/query                                |          |
 | AMM   | /v1/pools                                     | ✅        |
@@ -22,3 +22,7 @@
 | AMM   | /v1/transactions/query                        | ✅        |
 | AMM   | /v1/transactions/{hash}/action_tree           | ✅        |
 
+Public request and response types are marked `#[non_exhaustive]` for semver
+headroom. Build request parameter structs through `Default::default()` or
+`new()` constructors, pass them directly to `V1Client::exec` where `Into<V1Request>`
+is implemented, and include a wildcard arm when matching response enums.

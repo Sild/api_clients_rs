@@ -1,7 +1,7 @@
-mod req;
-mod rsp;
+mod request;
+mod response;
 mod types;
 
-pub use req::*;
-pub use rsp::*;
+pub use request::*;
+pub use response::*;
 pub use types::*;

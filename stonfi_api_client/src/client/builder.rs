@@ -6,6 +6,7 @@ use std::sync::Arc;
 
 #[derive(Setters)]
 #[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
 pub struct Builder {
     api_url: String,
     executor: Option<Arc<Executor>>,

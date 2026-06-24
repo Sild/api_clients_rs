@@ -1,9 +1,16 @@
+use derive_more::From;
 use serde_derive::Serialize;
 
-pub enum V2Req {
+#[derive(Clone, From)]
+#[non_exhaustive]
+pub enum V2Request {
+    #[from(skip)]
     Assets,
+    #[from(skip)]
     Pools,
+    #[from(skip)]
     PoolsLite,
+    #[from(skip)]
     PoolTrades(String),
     RoutingPlan(RoutingPlanParams),
 }
@@ -11,10 +18,15 @@ pub enum V2Req {
 /// Expecting addresses in format `workchain_id:hex_hash`
 /// Check tests for examples
 #[derive(Serialize, Clone)]
+#[non_exhaustive]
 pub struct RoutingPlanParams {
     pub from: String,
     pub to: String,
     pub amount: String,
+}
+
+impl From<&V2Request> for V2Request {
+    fn from(request: &V2Request) -> Self { request.clone() }
 }
 
 impl RoutingPlanParams {

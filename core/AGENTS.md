@@ -34,6 +34,9 @@ Treat these as public library contracts:
 - `ApiClientsError`
 - `ApiClientsResult`
 
+`ApiClientsError` is `#[non_exhaustive]`; downstream matches need wildcard arms
+so new error variants can be added without breaking minor releases.
+
 Do not change URL construction, retry defaults, timeout defaults, error
 classification, or response parsing semantics without reviewing every service
 crate and downstream integration guidance.

@@ -1,6 +1,7 @@
 use thiserror::Error;
 
 #[derive(Error, Debug)]
+#[non_exhaustive]
 pub enum ApiClientsError {
     #[error("NetworkError: code: {0}, msg: {1}")]
     Network(u16, String),

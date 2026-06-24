@@ -29,6 +29,9 @@ Treat these as public contracts:
 - `DEFAULT_GRAPHQL_ENDPOINT`
 - `ToncoApiClient::exec_graphql`
 
+Public client types are `#[non_exhaustive]` where applicable; avoid public
+struct literal construction in examples.
+
 The default endpoint intentionally has no trailing slash:
 `https://indexer.tonco.io`. `exec_graphql` posts through
 `Executor::exec_post_body("", ...)`, so a trailing slash would produce `POST //`

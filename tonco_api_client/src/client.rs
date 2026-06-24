@@ -8,6 +8,7 @@ use std::sync::Arc;
 
 pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io";
 
+#[non_exhaustive]
 pub struct ToncoApiClient {
     executor: Arc<Executor>,
 }
@@ -24,8 +25,8 @@ impl ToncoApiClient {
             (reqwest::header::CONTENT_TYPE.to_string(), "application/json".to_string()),
             ("x-apollo-operation-name".to_string(), op_name.to_string()),
         ];
-        let rsp = self.executor.exec_post_body("", graphql_query, headers).await?;
-        handle_graphql_result(rsp)
+        let response = self.executor.exec_post_body("", graphql_query, headers).await?;
+        handle_graphql_result(response)
     }
 }
 

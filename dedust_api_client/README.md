@@ -4,7 +4,7 @@
 |------------------------------------------|-----------|
 | /v2/accounts/{address}/assets            |           |
 | /v2/accounts/{address}/trades            |           |
-| /v2/assets                               |           |
+| /v2/assets                               | ✅         |
 | /v2/assets/{symbol}                      |           |
 | /v2/coinmarketcap/markets                |           |
 | /v2/dns/{domain}                         |           |
@@ -22,3 +22,7 @@
 | /v2/pools/{address}/trades               | ✅         |
 | /v2/prices                               |           |
 | /v2/routing/plan                         | ✅         |
+
+Public request and response types are marked `#[non_exhaustive]` for semver
+headroom. Build request parameter structs through their `new()` constructors,
+pass them directly to `exec_api_v2` where `Into<V2Request>` is implemented, and include a wildcard arm when matching response enums.

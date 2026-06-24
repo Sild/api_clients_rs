@@ -4,12 +4,14 @@ use serde::Deserialize;
 use serde_derive::Serialize;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PoolInfo {
     pub pool: Pool,
     pub info: Info,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Pool {
     pub dex: String,
     pub address: String,
@@ -25,18 +27,21 @@ pub struct Pool {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Token {
     pub address: Address,
     pub metadata: Metadata,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Address {
     pub blockchain: String,
     pub address: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Metadata {
     pub name: String,
     pub symbol: String,
@@ -47,6 +52,7 @@ pub struct Metadata {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Fees {
     pub average_gas: f64,
     pub divider: Option<i64>,
@@ -57,6 +63,7 @@ pub struct Fees {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Info {
     pub address: String,
     pub tvl_usd: f64,
@@ -69,6 +76,7 @@ pub struct Info {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Restriction {
     pub min_swap_amount: Option<f64>,
     pub max_swap_amount: Option<f64>,

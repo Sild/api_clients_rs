@@ -3,8 +3,8 @@ mod builder;
 use crate::api::PageInfo;
 use crate::api::PaginatedResponse;
 use crate::api::PoolInfo;
-use crate::api::Req;
-use crate::api::Rsp;
+use crate::api::Request;
+use crate::api::Response;
 use crate::client::builder::Builder;
 use api_clients_core::{ApiClientsResult, Executor};
 use serde::Serialize;
@@ -13,6 +13,7 @@ use std::sync::Arc;
 pub const DEFAULT_API_URL: &str = "https://api.bidask.finance/api";
 
 #[derive(Clone)]
+#[non_exhaustive]
 pub struct BidaskApiClient {
     executor: Arc<Executor>,
 }
@@ -20,11 +21,14 @@ pub struct BidaskApiClient {
 impl BidaskApiClient {
     pub fn builder() -> Builder { Builder::new() }
 
-    pub async fn exec_api(&self, req: &Req) -> ApiClientsResult<Rsp> {
-        let rsp = match req {
-            Req::Pools => Rsp::Pools(self.fetch_all_pool_pages().await?),
+    pub async fn exec_api<REQUEST>(&self, request: REQUEST) -> ApiClientsResult<Response>
+    where
+        REQUEST: Into<Request>,
+    {
+        let response = match request.into() {
+            Request::Pools => Response::Pools(self.fetch_all_pool_pages().await?),
         };
-        Ok(rsp)
+        Ok(response)
     }
 
     async fn fetch_all_pool_pages(&self) -> ApiClientsResult<Vec<PoolInfo>> {

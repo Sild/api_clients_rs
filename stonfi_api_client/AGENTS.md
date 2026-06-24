@@ -14,9 +14,9 @@ changes.
 The crate exposes a thin typed client:
 
 - `StonfiApiClient::builder().build()?`
-- `client.v1.exec(&V1Req::...)`
-- request params in `v1/req.rs`
-- response enums and models in `v1/rsp.rs`, `v1/types.rs`, and
+- `client.v1.exec(&V1Request::...)`
+- request params in `v1/request.rs`
+- response enums and models in `v1/response.rs`, `v1/types.rs`, and
   `v1/actions.rs`
 
 Do not add application-level swap orchestration or transaction execution logic
@@ -29,10 +29,16 @@ Treat these as public contracts:
 - `StonfiApiClient`
 - `DEFAULT_API_V1_URL`
 - `V1Client`
-- `V1Req`
+- `V1Request`
 - all public request parameter structs
-- `V1Rsp` and public response/action/type structs
-- `unwrap_rsp!`
+- `V1Response` and public response/action/type structs
+- `unwrap_response!`
+
+Request parameter structs are `#[non_exhaustive]`; use `Default::default()` or
+their `new()` constructors instead of struct literals in downstream examples and
+integration tests. Pass request parameters directly to `V1Client::exec` where
+`Into<V1Request>` is implemented. Public enums are `#[non_exhaustive]`; downstream
+matches need wildcard arms.
 
 When adding an endpoint, update the README support matrix and add coverage that
 proves the request path, method, params, and response parsing.
@@ -54,14 +60,14 @@ Known recent contract observations:
 
 ```rust
 use stonfi_api_client::client::StonfiApiClient;
-use stonfi_api_client::v1::{PoolsParams, V1Req, V1Rsp};
+use stonfi_api_client::v1::{PoolsParams, V1Request, V1Response};
 
 # async fn example() -> anyhow::Result<()> {
 let client = StonfiApiClient::builder().build()?;
-let response = client.v1.exec(&V1Req::Pools(PoolsParams { dex_v2: true })).await?;
+let response = client.v1.exec(PoolsParams::default()).await?;
 
 match response {
-    V1Rsp::Pools(pools) => {
+    V1Response::Pools(pools) => {
         println!("pools: {}", pools.pool_list.len());
     }
     other => {

@@ -26,5 +26,20 @@ jobs:
       - run: rustup component add --toolchain nightly-x86_64-unknown-linux-gnu rustfmt
       - run: cargo +nightly fmt --check
       - run: cargo build --all-features --verbose
-      - run: cargo test --lib --all
-      - run: cargo test --lib --all --all-features
+      - run: cargo test --workspace --lib
+      - run: cargo test --workspace --lib --all-features
+      - run: cargo test --workspace --doc
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps
+      - name: Verify package contents
+        run: |
+          for package in \
+            api_clients_core \
+            stonfi_api_client \
+            dedust_api_client \
+            swap_coffee_api_client \
+            tonco_api_client \
+            bidask_api_client
+          do
+            cargo package --list -p "$package"
+          done

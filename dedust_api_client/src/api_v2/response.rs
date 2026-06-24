@@ -1,22 +1,24 @@
 use crate::api_v2::types::*;
+use derive_more::From;
 use serde_derive::Deserialize;
 
 #[macro_export]
-macro_rules! unwrap_rsp {
+macro_rules! unwrap_response {
     ($variant:ident, $result:expr) => {
         match $result {
-            V2Rsp::$variant(inner) => Ok(inner),
-            _ => Err(ApiClientsError::UnexpectedResponse(format!(
+            $crate::api_v2::V2Response::$variant(inner) => Ok(inner),
+            other => Err($crate::api_clients_core::ApiClientsError::UnexpectedResponse(format!(
                 "ApiClientError: expected {}, but got {:?}",
                 stringify!($variant),
-                $result
+                other
             ))),
         }
     };
 }
 
-#[derive(Deserialize, Debug, Clone)]
-pub enum V2Rsp {
+#[derive(Deserialize, Debug, Clone, From)]
+#[non_exhaustive]
+pub enum V2Response {
     Assets(Vec<Asset>),
     Pools(Vec<Pool>),
     PoolsLite(Vec<PoolLite>),

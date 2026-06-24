@@ -9,6 +9,7 @@ use reqwest_middleware::ClientWithMiddleware;
 use serde::{de, ser};
 use std::sync::Arc;
 
+#[non_exhaustive]
 pub struct Executor {
     api_endpoint: String,
     http_client: Arc<ClientWithMiddleware>,
@@ -17,102 +18,102 @@ pub struct Executor {
 impl Executor {
     pub fn builder<T: Into<String>>(api_endpoint: T) -> Builder { Builder::new(api_endpoint.into()) }
 
-    pub async fn exec_get<RSP>(&self, path: &str) -> ApiClientsResult<RSP>
+    pub async fn exec_get<RESPONSE>(&self, path: &str) -> ApiClientsResult<RESPONSE>
     where
-        RSP: de::DeserializeOwned,
+        RESPONSE: de::DeserializeOwned,
     {
         self.exec_get_extra(path, &serde_json::Value::Null, &[]).await
     }
 
-    pub async fn exec_get_extra<PARAMS, RSP>(
+    pub async fn exec_get_extra<PARAMS, RESPONSE>(
         &self,
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientsResult<RSP>
+    ) -> ApiClientsResult<RESPONSE>
     where
         PARAMS: ser::Serialize,
-        RSP: de::DeserializeOwned,
+        RESPONSE: de::DeserializeOwned,
     {
         let get_params = serde_qs::to_string(params).map_err(|x| InvalidArgs(x.to_string()))?;
         let full_url = format!("{}/{path}?{get_params}", self.api_endpoint);
         log::trace!("Executing GET request to {full_url}");
 
-        let mut req_builder = self.http_client.get(full_url);
+        let mut request_builder = self.http_client.get(full_url);
         for (key, value) in headers {
-            req_builder = req_builder.header(key, value);
+            request_builder = request_builder.header(key, value);
         }
 
-        handle_response(req_builder.send().await?).await
+        handle_response(request_builder.send().await?).await
     }
 
     // put params as query string
-    pub async fn exec_post_qs<PARAMS, RSP>(
+    pub async fn exec_post_qs<PARAMS, RESPONSE>(
         &self,
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientsResult<RSP>
+    ) -> ApiClientsResult<RESPONSE>
     where
         PARAMS: ser::Serialize,
-        RSP: de::DeserializeOwned,
+        RESPONSE: de::DeserializeOwned,
     {
         let get_params = serde_qs::to_string(params).map_err(|x| ApiClientsError::InvalidArgs(x.to_string()))?;
         let full_url = format!("{}/{path}?{get_params}", self.api_endpoint);
         log::trace!("Executing POST request to {full_url}");
 
-        let mut req_builder = self.http_client.post(full_url);
+        let mut request_builder = self.http_client.post(full_url);
         for (key, value) in headers {
-            req_builder = req_builder.header(key, value);
+            request_builder = request_builder.header(key, value);
         }
 
-        handle_response(req_builder.send().await?).await
+        handle_response(request_builder.send().await?).await
     }
 
     // put params as body in json format
-    pub async fn exec_post_body<PARAMS, RSP>(
+    pub async fn exec_post_body<PARAMS, RESPONSE>(
         &self,
         path: &str,
         params: &PARAMS,
         headers: &[(String, String)],
-    ) -> ApiClientsResult<RSP>
+    ) -> ApiClientsResult<RESPONSE>
     where
         PARAMS: ser::Serialize,
-        RSP: de::DeserializeOwned,
+        RESPONSE: de::DeserializeOwned,
     {
         let full_url = format!("{}/{path}", self.api_endpoint);
         log::trace!("Executing POST request to {full_url}");
 
-        let mut req_builder = self.http_client.post(full_url);
+        let mut request_builder = self.http_client.post(full_url);
         for (key, value) in headers {
-            req_builder = req_builder.header(key, value);
+            request_builder = request_builder.header(key, value);
         }
         let body = serde_json::to_string(params).map_err(|x| InvalidArgs(x.to_string()))?;
-        req_builder = req_builder.body(body);
+        request_builder = request_builder.body(body);
 
-        handle_response(req_builder.send().await?).await
+        handle_response(request_builder.send().await?).await
     }
 }
 
-async fn handle_response<RSP>(response: Response) -> ApiClientsResult<RSP>
+async fn handle_response<RESPONSE>(response: Response) -> ApiClientsResult<RESPONSE>
 where
-    RSP: de::DeserializeOwned,
+    RESPONSE: de::DeserializeOwned,
 {
-    let rsp_code = response.status();
-    let rsp_body = response.text().await?;
+    let response_code = response.status();
+    let response_body = response.text().await?;
 
-    match rsp_code.as_u16() {
-        400..=499 => return Err(Client(rsp_code.as_u16(), rsp_body)),
-        500..=599 => return Err(Server(rsp_code.as_u16(), rsp_body)),
+    match response_code.as_u16() {
+        400..=499 => return Err(Client(response_code.as_u16(), response_body)),
+        500..=599 => return Err(Server(response_code.as_u16(), response_body)),
         _ => {}
     }
 
-    log::trace!("Got rsp_code: {rsp_code} rsp_body: '{rsp_body}'");
+    log::trace!("Got response_code: {response_code} response_body: '{response_body}'");
 
-    match serde_json::from_str(&rsp_body) {
-        Ok(rsp) => Ok(rsp),
+    match serde_json::from_str(&response_body) {
+        Ok(response) => Ok(response),
         Err(err) => {
-            log::warn!("Failed to parse response body: '{rsp_body}', err: {err}");
+            log::warn!("Failed to parse response body: '{response_body}', err: {err}");
             Err(UnexpectedResponse(err.to_string()))
         }
     }

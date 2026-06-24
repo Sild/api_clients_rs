@@ -14,9 +14,9 @@ changes.
 The crate exposes a thin typed client:
 
 - `DedustApiClient::builder().build()?`
-- `client.exec_api_v2(&V2Req::...)`
-- request params in `api_v2/req.rs`
-- response enums and models in `api_v2/rsp.rs` and `api_v2/types.rs`
+- `client.exec_api_v2(&V2Request::...)`
+- request params in `api_v2/request.rs`
+- response enums and models in `api_v2/response.rs` and `api_v2/types.rs`
 
 Keep DeDust-specific address formatting and endpoint mapping in this crate.
 
@@ -26,10 +26,16 @@ Treat these as public contracts:
 
 - `DedustApiClient`
 - `DEFAULT_API_V2_URL`
-- `V2Req`
+- `V2Request`
 - `RoutingPlanParams`
-- `V2Rsp` and public response/type structs
-- `unwrap_rsp!`
+- `V2Response` and public response/type structs
+- `unwrap_response!`
+
+Request parameter structs are `#[non_exhaustive]`; use their constructors or
+`new()` constructors instead of struct literals in downstream examples and
+integration tests. Pass request parameters directly to `exec_api_v2` where
+`Into<V2Request>` is implemented. Public enums are `#[non_exhaustive]`; downstream
+matches need wildcard arms.
 
 `RoutingPlanParams::new` maps the zero TON address to `native` and all other
 addresses to `jetton:<address>`. Do not change that mapping without validating
@@ -44,7 +50,7 @@ counts, routing amounts, or ordering.
 ## Downstream Integration Example
 
 ```rust
-use dedust_api_client::api_v2::{RoutingPlanParams, V2Req, V2Rsp};
+use dedust_api_client::api_v2::{RoutingPlanParams, V2Request, V2Response};
 use dedust_api_client::client::DedustApiClient;
 
 # async fn example() -> anyhow::Result<()> {
@@ -54,10 +60,10 @@ let params = RoutingPlanParams::new(
     "0:0000000000000000000000000000000000000000000000000000000000000000",
     "1000000000",
 );
-let response = client.exec_api_v2(&V2Req::RoutingPlan(params)).await?;
+let response = client.exec_api_v2(params).await?;
 
 match response {
-    V2Rsp::RoutingPlan(routes) => println!("routes: {}", routes.len()),
+    V2Response::RoutingPlan(routes) => println!("routes: {}", routes.len()),
     other => anyhow::bail!("unexpected DeDust response: {other:?}"),
 }
 # Ok(())

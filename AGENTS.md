@@ -49,8 +49,14 @@ Treat these as public library surface:
 - public response enums and response/type structs
 - public constants such as default API endpoints
 - `api_clients_core::{ApiClientsError, ApiClientsResult, Executor}`
-- exported helper macros such as `unwrap_rsp!`
+- exported helper macros such as `unwrap_response!`
 - README endpoint support tables and examples
+
+Public structs and enums are generally marked `#[non_exhaustive]` to preserve
+semver headroom for new fields and variants. Use `Default::default()` or
+request parameter constructors in examples/tests instead of public struct literals,
+pass request parameters directly to clients where `Into<Request>` is implemented,
+and include wildcard arms when matching public enums.
 
 When any public interface, endpoint capability, feature flag, workspace member,
 default endpoint, or crate package surface changes, review and update the
@@ -63,7 +69,7 @@ change is needed, state why in the final report.
 - Preserve thin-wrapper behavior. Prefer adding the missing endpoint mapping,
   request params, response types, and tests over redesigning the client.
 - Follow the existing crate shape: `client.rs`, `client/builder.rs`, API module
-  files such as `api_v1.rs`, `api_v1/req.rs`, `api_v1/rsp.rs`, and
+  files such as `api_v1.rs`, `api_v1/request.rs`, `api_v1/response.rs`, and
   `api_v1/types.rs`.
 - Use the existing `derive_setters` builder pattern for client configuration.
 - Prefer typed request parameter structs with serde derives over manual query
@@ -90,6 +96,18 @@ Most service-crate tests hit live third-party APIs. When they fail:
 - Prefer assertions that prove shape, parsing, request routing, and known
   stable fields.
 
+Integration tests must call the real upstream service. They are the primary
+correctness check for these thin wrappers because upstream response contracts
+can drift.
+
+Do not replace live integration coverage with mock-server tests, and do not add
+environment gates that make integration tests silently skip. CI/CD must not run
+integration tests. Run integration tests manually before pushing to a remote:
+
+```bash
+cargo test --workspace --tests
+```
+
 Known project pitfall: `api_clients_core::Executor` builds URLs with
 `format!("{endpoint}/{path}")`. Default endpoints should not have a trailing
 slash unless the specific client path construction is designed for it. Tonco's
@@ -100,8 +118,8 @@ queries post to an empty path.
 
 For REST crates:
 
-1. Add or update the request enum and parameter struct in `req.rs`.
-2. Add or update response enum variants and response/type structs in `rsp.rs`
+1. Add or update the request enum and parameter struct in `request.rs`.
+2. Add or update response enum variants and response/type structs in `response.rs`
    and `types.rs`.
 3. Wire the endpoint path and HTTP method in the crate client.
 4. Add focused live or unit coverage for the new project-owned mapping.
@@ -133,7 +151,7 @@ When helping an agent integrate these crates into a final application:
   fixture availability.
 - If the app overrides endpoints or injects an executor, avoid trailing slash
   mismatches with `Executor` URL construction.
-- Prefer matching response enum variants or using the crate `unwrap_rsp!`
+- Prefer matching response enum variants or using the crate `unwrap_response!`
   helper where it improves clarity. Do not unwrap blindly in app code.
 - Pin crate versions or git revisions in applications that need reproducible
   behavior.

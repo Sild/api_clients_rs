@@ -4,12 +4,14 @@ use serde_derive::Serialize;
 pub type TonAddress = String;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PaginatedResponse {
     pub page: PageInfo,
     pub result: Vec<PoolInfo>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PageInfo {
     pub current: i64,
     pub size: i64,
@@ -17,6 +19,7 @@ pub struct PageInfo {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PoolInfo {
     pub address: TonAddress,
     pub apr_24h: Option<String>,
@@ -58,12 +61,14 @@ pub struct PoolInfo {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TokensPair {
     pub token_x: Option<TokenInfo>,
     pub token_y: Option<TokenInfo>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TokenInfo {
     pub address: TonAddress,
     pub banner_url: Option<String>,
@@ -90,12 +95,14 @@ pub struct TokenInfo {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TokensInBin {
     pub bin: i32,
     pub tokens: TokenAmounts,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TokenAmounts {
     pub token_x_amount: String,
     pub token_y_amount: String,
@@ -103,6 +110,7 @@ pub struct TokenAmounts {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FraudStatus {
     Fine,
     PriceMismatch,
@@ -111,6 +119,7 @@ pub enum FraudStatus {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum PoolType {
     Clmm,
     Dlmm,

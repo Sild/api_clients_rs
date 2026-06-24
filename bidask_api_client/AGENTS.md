@@ -14,9 +14,9 @@ changes.
 The crate exposes a thin typed client:
 
 - `BidaskApiClient::builder().build()?`
-- `client.exec_api(&Req::...)`
-- request enum in `api/req.rs`
-- response enum and models in `api/rsp.rs` and `api/types.rs`
+- `client.exec_api(&Request::...)`
+- request enum in `api/request.rs`
+- response enum and models in `api/response.rs` and `api/types.rs`
 
 The current client aggregates paginated `/pools` responses into one
 `Vec<PoolInfo>`.
@@ -27,10 +27,14 @@ Treat these as public contracts:
 
 - `BidaskApiClient`
 - `DEFAULT_API_URL`
-- `Req`
-- `Rsp`
+- `Request`
+- `Response`
 - public response/type structs
-- `unwrap_rsp!`
+- `unwrap_response!`
+
+Public request/response types are `#[non_exhaustive]`; downstream matches need
+wildcard arms, and examples should avoid struct literal construction for public
+models.
 
 Preserve pagination behavior unless the user explicitly asks for page-level
 control. If adding endpoints, keep pagination decisions explicit in the request
@@ -39,20 +43,21 @@ or response type.
 ## Live API Notes
 
 Tests in `tests/test_api.rs` hit the live Bidask API. Avoid brittle assertions
-on pool totals, ordering, or token metadata.
+on pool totals, ordering, or token metadata. Do not replace live coverage with
+mock-server tests.
 
 ## Downstream Integration Example
 
 ```rust
-use bidask_api_client::api::{Req, Rsp};
+use bidask_api_client::api::{Request, Response};
 use bidask_api_client::client::BidaskApiClient;
 
 # async fn example() -> anyhow::Result<()> {
 let client = BidaskApiClient::builder().build()?;
-let response = client.exec_api(&Req::Pools).await?;
+let response = client.exec_api(&Request::Pools).await?;
 
 match response {
-    Rsp::Pools(pools) => println!("pools: {}", pools.len()),
+    Response::Pools(pools) => println!("pools: {}", pools.len()),
     other => anyhow::bail!("unexpected Bidask response: {other:?}"),
 }
 # Ok(())

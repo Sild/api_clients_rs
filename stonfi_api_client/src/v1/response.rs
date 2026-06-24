@@ -1,84 +1,96 @@
 use crate::v1::types::{Asset, Farm, Pool, QueryAsset, Router};
 use crate::v1::{TransactionActionTree, TxId};
+use derive_more::From;
 use serde_derive::Deserialize;
 
 #[macro_export]
-macro_rules! unwrap_rsp {
+macro_rules! unwrap_response {
     ($variant:ident, $result:expr) => {
         match $result {
-            V1Rsp::$variant(inner) => Ok(inner),
-            _ => Err(ApiClientsError::UnexpectedResponse(format!(
+            $crate::v1::V1Response::$variant(inner) => Ok(inner),
+            other => Err($crate::api_clients_core::ApiClientsError::UnexpectedResponse(format!(
                 "ApiClientError: expected {}, but got {:?}",
                 stringify!($variant),
-                $result
+                other
             ))),
         }
     };
 }
 
-#[derive(Deserialize, Debug, Clone)]
-pub enum V1Rsp {
-    Assets(AssetsRsp),
-    AssetsQuery(AssetsQueryRsp),
-    Asset(AssetRsp),
-    Farms(FarmsRsp),
-    Farm(FarmRsp),
-    Pools(PoolsRsp),
-    Pool(PoolRsp),
-    Routers(RoutersRsp),
-    Router(RouterRsp),
-    SwapSimulate(SwapSimulateRsp),
-    TransactionActionTree(TransactionActionTreeRsp),
-    TransactionQuery(TransactionQueryRsp),
+#[derive(Deserialize, Debug, Clone, From)]
+#[non_exhaustive]
+pub enum V1Response {
+    Assets(AssetsResponse),
+    AssetsQuery(AssetsQueryResponse),
+    Asset(AssetResponse),
+    Farms(FarmsResponse),
+    Farm(FarmResponse),
+    Pools(PoolsResponse),
+    Pool(PoolResponse),
+    Routers(RoutersResponse),
+    Router(RouterResponse),
+    SwapSimulate(SwapSimulateResponse),
+    TransactionActionTree(TransactionActionTreeResponse),
+    TransactionQuery(TransactionQueryResponse),
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct AssetsRsp {
+#[non_exhaustive]
+pub struct AssetsResponse {
     pub asset_list: Vec<Asset>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct AssetsQueryRsp {
+#[non_exhaustive]
+pub struct AssetsQueryResponse {
     pub asset_list: Vec<QueryAsset>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct AssetRsp {
+#[non_exhaustive]
+pub struct AssetResponse {
     pub asset: Asset,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct FarmsRsp {
+#[non_exhaustive]
+pub struct FarmsResponse {
     pub farm_list: Vec<Farm>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct FarmRsp {
+#[non_exhaustive]
+pub struct FarmResponse {
     pub farm: Farm,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct PoolsRsp {
+#[non_exhaustive]
+pub struct PoolsResponse {
     pub pool_list: Vec<Pool>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct PoolRsp {
+#[non_exhaustive]
+pub struct PoolResponse {
     pub pool: Pool,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct RoutersRsp {
+#[non_exhaustive]
+pub struct RoutersResponse {
     pub router_list: Vec<Router>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct RouterRsp {
+#[non_exhaustive]
+pub struct RouterResponse {
     pub router: Router,
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct SwapSimulateRsp {
+#[non_exhaustive]
+pub struct SwapSimulateResponse {
     pub ask_address: String,
     pub ask_jetton_wallet: String,
     pub ask_units: String,
@@ -97,9 +109,10 @@ pub struct SwapSimulateRsp {
 }
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct TransactionQueryRsp {
+#[non_exhaustive]
+pub struct TransactionQueryResponse {
     pub tx_id: Option<TxId>,
     pub wallet_seqno: Option<u32>,
 }
 
-pub type TransactionActionTreeRsp = TransactionActionTree;
+pub type TransactionActionTreeResponse = TransactionActionTree;
