@@ -50,7 +50,7 @@ assertions on returned pool counts, token ordering, or dynamic metadata.
 
 ```rust
 use swap_coffee_api_client::api_v1::{Dexes, V1Request, V1Response};
-use swap_coffee_api_client::client::SwapCoffeeApiClient;
+use swap_coffee_api_client::api_client::SwapCoffeeApiClient;
 
 # async fn example() -> anyhow::Result<()> {
 let client = SwapCoffeeApiClient::builder().build()?;

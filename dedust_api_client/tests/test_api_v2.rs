@@ -1,6 +1,6 @@
 use anyhow::Result;
+use dedust_api_client::api_client::DedustApiClient;
 use dedust_api_client::api_v2::{RoutingPlanParams, V2Request};
-use dedust_api_client::client::DedustApiClient;
 use dedust_api_client::unwrap_response;
 
 fn init_env() -> DedustApiClient {

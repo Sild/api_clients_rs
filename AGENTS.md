@@ -68,7 +68,7 @@ change is needed, state why in the final report.
 
 - Preserve thin-wrapper behavior. Prefer adding the missing endpoint mapping,
   request params, response types, and tests over redesigning the client.
-- Follow the existing crate shape: `client.rs`, `client/builder.rs`, API module
+- Follow the existing crate shape: `api_client.rs`, `api_client/builder.rs`, API module
   files such as `api_v1.rs`, `api_v1/request.rs`, `api_v1/response.rs`, and
   `api_v1/types.rs`.
 - Use the existing `derive_setters` builder pattern for client configuration.

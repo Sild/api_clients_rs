@@ -2,7 +2,7 @@ use std::vec;
 
 use anyhow::Result;
 use bidask_api_client::api::Request;
-use bidask_api_client::client::BidaskApiClient;
+use bidask_api_client::api_client::BidaskApiClient;
 use bidask_api_client::unwrap_response;
 
 fn init_env() -> BidaskApiClient {

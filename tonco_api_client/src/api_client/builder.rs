@@ -1,5 +1,4 @@
-use crate::client::{StonfiApiClient, DEFAULT_API_V1_URL};
-use crate::v1::V1Client;
+use crate::api_client::{ToncoApiClient, DEFAULT_GRAPHQL_ENDPOINT};
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
@@ -8,25 +7,23 @@ use std::sync::Arc;
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Builder {
-    api_url: String,
+    graphql_endpoint: String,
     executor: Option<Arc<Executor>>,
 }
 
 impl Builder {
     pub(super) fn new() -> Self {
         Self {
-            api_url: DEFAULT_API_V1_URL.to_string(),
+            graphql_endpoint: DEFAULT_GRAPHQL_ENDPOINT.to_string(),
             executor: None,
         }
     }
 
-    pub fn build(self) -> ApiClientsResult<StonfiApiClient> {
+    pub fn build(self) -> ApiClientsResult<ToncoApiClient> {
         let executor = match self.executor {
             Some(executor) => executor,
-            None => Executor::builder(self.api_url).build()?.into(),
+            None => Executor::builder(self.graphql_endpoint).build()?.into(),
         };
-
-        let v1_client = V1Client::new(executor);
-        Ok(StonfiApiClient { v1: v1_client })
+        Ok(ToncoApiClient { executor })
     }
 }

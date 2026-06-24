@@ -1,12 +1,12 @@
 mod builder;
 
-use crate::client::builder::Builder;
-use crate::v1::V1Client;
+use crate::api_client::builder::Builder;
+use crate::v1::V1ApiClient;
 pub const DEFAULT_API_V1_URL: &str = "https://api.ston.fi/v1";
 
-#[non_exhaustive]
+#[derive(Clone)]
 pub struct StonfiApiClient {
-    pub v1: V1Client,
+    pub v1: V1ApiClient,
 }
 
 impl StonfiApiClient {

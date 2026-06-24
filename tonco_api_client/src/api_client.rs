@@ -1,6 +1,6 @@
 mod builder;
 
-use crate::client::builder::Builder;
+use crate::api_client::builder::Builder;
 use api_clients_core::{ApiClientsError, ApiClientsResult, Executor};
 use graphql_client::Response;
 use serde::{de, ser};
@@ -8,7 +8,7 @@ use std::sync::Arc;
 
 pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io";
 
-#[non_exhaustive]
+#[derive(Clone)]
 pub struct ToncoApiClient {
     executor: Arc<Executor>,
 }

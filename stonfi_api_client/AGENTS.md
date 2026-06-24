@@ -28,7 +28,7 @@ Treat these as public contracts:
 
 - `StonfiApiClient`
 - `DEFAULT_API_V1_URL`
-- `V1Client`
+- `V1ApiClient`
 - `V1Request`
 - all public request parameter structs
 - `V1Response` and public response/action/type structs
@@ -36,7 +36,7 @@ Treat these as public contracts:
 
 Request parameter structs are `#[non_exhaustive]`; use `Default::default()` or
 their `new()` constructors instead of struct literals in downstream examples and
-integration tests. Pass request parameters directly to `V1Client::exec` where
+integration tests. Pass request parameters directly to `V1ApiClient::exec` where
 `Into<V1Request>` is implemented. Public enums are `#[non_exhaustive]`; downstream
 matches need wildcard arms.
 
@@ -59,7 +59,7 @@ Known recent contract observations:
 ## Downstream Integration Example
 
 ```rust
-use stonfi_api_client::client::StonfiApiClient;
+use stonfi_api_client::api_client::StonfiApiClient;
 use stonfi_api_client::v1::{PoolsParams, V1Request, V1Response};
 
 # async fn example() -> anyhow::Result<()> {

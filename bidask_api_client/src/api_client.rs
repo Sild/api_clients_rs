@@ -5,7 +5,7 @@ use crate::api::PaginatedResponse;
 use crate::api::PoolInfo;
 use crate::api::Request;
 use crate::api::Response;
-use crate::client::builder::Builder;
+use crate::api_client::builder::Builder;
 use api_clients_core::{ApiClientsResult, Executor};
 use serde::Serialize;
 use std::sync::Arc;
@@ -13,7 +13,6 @@ use std::sync::Arc;
 pub const DEFAULT_API_URL: &str = "https://api.bidask.finance/api";
 
 #[derive(Clone)]
-#[non_exhaustive]
 pub struct BidaskApiClient {
     executor: Arc<Executor>,
 }

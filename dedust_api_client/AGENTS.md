@@ -51,7 +51,7 @@ counts, routing amounts, or ordering.
 
 ```rust
 use dedust_api_client::api_v2::{RoutingPlanParams, V2Request, V2Response};
-use dedust_api_client::client::DedustApiClient;
+use dedust_api_client::api_client::DedustApiClient;
 
 # async fn example() -> anyhow::Result<()> {
 let client = DedustApiClient::builder().build()?;

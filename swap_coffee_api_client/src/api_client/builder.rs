@@ -1,4 +1,4 @@
-use crate::client::{BidaskApiClient, DEFAULT_API_URL};
+use crate::api_client::{SwapCoffeeApiClient, DEFAULT_API_V1_URL};
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
@@ -14,17 +14,17 @@ pub struct Builder {
 impl Builder {
     pub(super) fn new() -> Self {
         Self {
-            api_url: DEFAULT_API_URL.to_string(),
+            api_url: DEFAULT_API_V1_URL.to_string(),
             executor: None,
         }
     }
 
-    pub fn build(self) -> ApiClientsResult<BidaskApiClient> {
+    pub fn build(self) -> ApiClientsResult<SwapCoffeeApiClient> {
         let executor = match self.executor {
             Some(executor) => executor,
             None => Executor::builder(self.api_url).build()?.into(),
         };
 
-        Ok(BidaskApiClient { executor })
+        Ok(SwapCoffeeApiClient { executor })
     }
 }

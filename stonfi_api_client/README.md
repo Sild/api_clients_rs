@@ -31,5 +31,5 @@
 
 Public request and response types are marked `#[non_exhaustive]` for semver
 headroom. Build request parameter structs through `Default::default()` or
-`new()` constructors, pass them directly to `V1Client::exec` where `Into<V1Request>`
+`new()` constructors, pass them directly to `V1ApiClient::exec` where `Into<V1Request>`
 is implemented, and include a wildcard arm when matching response enums.

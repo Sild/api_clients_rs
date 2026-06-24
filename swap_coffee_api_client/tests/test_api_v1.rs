@@ -1,9 +1,9 @@
 use std::vec;
 
 use anyhow::Result;
+use swap_coffee_api_client::api_client::SwapCoffeeApiClient;
 use swap_coffee_api_client::api_v1::Dexes;
 use swap_coffee_api_client::api_v1::V1Request;
-use swap_coffee_api_client::client::SwapCoffeeApiClient;
 use swap_coffee_api_client::unwrap_response;
 
 fn init_env() -> SwapCoffeeApiClient {

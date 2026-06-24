@@ -50,7 +50,7 @@ mock-server tests.
 
 ```rust
 use bidask_api_client::api::{Request, Response};
-use bidask_api_client::client::BidaskApiClient;
+use bidask_api_client::api_client::BidaskApiClient;
 
 # async fn example() -> anyhow::Result<()> {
 let client = BidaskApiClient::builder().build()?;

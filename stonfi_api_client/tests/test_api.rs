@@ -2,8 +2,8 @@ use anyhow::Result;
 use api_clients_core::Executor;
 use std::sync::Arc;
 use std::time::Duration;
-use stonfi_api_client::client::StonfiApiClient;
-use stonfi_api_client::client::DEFAULT_API_V1_URL;
+use stonfi_api_client::api_client::StonfiApiClient;
+use stonfi_api_client::api_client::DEFAULT_API_V1_URL;
 use stonfi_api_client::unwrap_response;
 use stonfi_api_client::v1::*;
 

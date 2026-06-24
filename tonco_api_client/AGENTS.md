@@ -50,7 +50,7 @@ against the live service.
 
 ```rust
 use graphql_client::GraphQLQuery;
-use tonco_api_client::client::ToncoApiClient;
+use tonco_api_client::api_client::ToncoApiClient;
 
 #[derive(GraphQLQuery)]
 #[graphql(

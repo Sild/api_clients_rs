@@ -1,15 +1,14 @@
 mod builder;
 
+use crate::api_client::builder::Builder;
 use crate::api_v2::V2Request;
 use crate::api_v2::V2Response;
-use crate::client::builder::Builder;
 use api_clients_core::{ApiClientsResult, Executor};
 use std::sync::Arc;
 
 pub const DEFAULT_API_V2_URL: &str = "https://api.dedust.io/v2";
 
 #[derive(Clone)]
-#[non_exhaustive]
 pub struct DedustApiClient {
     executor: Arc<Executor>,
 }
