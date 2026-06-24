@@ -28,7 +28,6 @@ serde = { version = "1.0", features = ["derive"] }
 reqwest = { version = "0.12", features = ["json"] }
 serde_json = { version = "1.0", features = ["preserve_order"] }
 tokio-test = "0.4"
-trybuild = "1.0"
 serde_with = "3.14"
 serde_qs = "0.15.0"
 serde_derive = "1.0"

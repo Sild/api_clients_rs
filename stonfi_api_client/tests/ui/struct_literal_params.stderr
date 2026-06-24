@@ -1,5 +1,0 @@
-error[E0639]: cannot create non-exhaustive struct using struct expression
- --> tests/ui/struct_literal_params.rs:4:13
-  |
-4 |     let _ = PoolsParams { dex_v2: true };
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

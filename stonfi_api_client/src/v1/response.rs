@@ -2,6 +2,7 @@ use crate::v1::types::{Asset, Farm, Pool, QueryAsset, Router};
 use crate::v1::{TransactionActionTree, TxId};
 use derive_more::From;
 use serde_derive::Deserialize;
+use std::collections::BTreeMap;
 
 #[macro_export]
 macro_rules! unwrap_response {
@@ -22,14 +23,30 @@ macro_rules! unwrap_response {
 pub enum V1Response {
     Assets(AssetsResponse),
     AssetsQuery(AssetsQueryResponse),
+    AssetsSearch(AssetsSearchResponse),
     Asset(AssetResponse),
     Farms(FarmsResponse),
     Farm(FarmResponse),
+    #[from(skip)]
+    FarmByPool(FarmsResponse),
+    Markets(MarketsResponse),
     Pools(PoolsResponse),
+    #[from(skip)]
+    PoolQuery(PoolsResponse),
     Pool(PoolResponse),
     Routers(RoutersResponse),
     Router(RouterResponse),
     SwapSimulate(SwapSimulateResponse),
+    #[from(skip)]
+    ReverseSwapSimulate(SwapSimulateResponse),
+    SwapStatus(SwapStatusResponse),
+    StatsDex(StatsDexResponse),
+    StatsFeeAccruals(StatsFeeAccrualsResponse),
+    StatsFeeWithdrawals(StatsFeeWithdrawalsResponse),
+    StatsFees(StatsFeesResponse),
+    StatsOperations(StatsOperationsResponse),
+    StatsPool(StatsPoolResponse),
+    StatsStaking(StatsStakingResponse),
     TransactionActionTree(TransactionActionTreeResponse),
     TransactionQuery(TransactionQueryResponse),
 }
@@ -43,6 +60,12 @@ pub struct AssetsResponse {
 #[derive(Deserialize, Debug, Clone)]
 #[non_exhaustive]
 pub struct AssetsQueryResponse {
+    pub asset_list: Vec<QueryAsset>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct AssetsSearchResponse {
     pub asset_list: Vec<QueryAsset>,
 }
 
@@ -62,6 +85,12 @@ pub struct FarmsResponse {
 #[non_exhaustive]
 pub struct FarmResponse {
     pub farm: Farm,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct MarketsResponse {
+    pub pairs: Vec<[String; 2]>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -106,6 +135,137 @@ pub struct SwapSimulateResponse {
     pub router_address: String,
     pub slippage_tolerance: String,
     pub swap_rate: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[serde(tag = "@type")]
+#[non_exhaustive]
+pub enum SwapStatusResponse {
+    Found(SwapStatus),
+    NotFound,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct SwapStatus {
+    pub address: String,
+    pub balance_deltas: SwapStatusBalanceDeltas,
+    pub coins: String,
+    pub exit_code: String,
+    pub logical_time: String,
+    pub query_id: String,
+    pub tx_hash: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[serde(untagged)]
+#[non_exhaustive]
+pub enum SwapStatusBalanceDeltas {
+    Map(BTreeMap<String, String>),
+    Text(String),
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsDexResponse {
+    pub since: String,
+    pub until: String,
+    pub stats: DexStats,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct DexStats {
+    pub trades: u64,
+    pub tvl: String,
+    pub unique_wallets: u64,
+    pub volume_usd: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsFeeAccrualsResponse {
+    pub operations: Vec<FeeAccrual>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct FeeAccrual {
+    pub pool_address: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsFeeWithdrawalsResponse {
+    pub withdrawals: Vec<FeeWithdrawal>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct FeeWithdrawal {
+    pub vault_address: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsFeesResponse {
+    pub assets_fee_stats: Vec<AssetFeeStats>,
+    pub since: String,
+    pub until: String,
+    pub total_accrued_usd: Option<String>,
+    pub total_withdrawn_usd: Option<String>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct AssetFeeStats {
+    pub accrued: String,
+    pub accrued_usd: Option<String>,
+    pub asset_address: String,
+    pub withdrawn: String,
+    pub withdrawn_usd: Option<String>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsOperationsResponse {
+    pub operations: Vec<StatsOperationInfo>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsOperationInfo {
+    pub operation: StatsOperation,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsOperation {
+    pub pool_address: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsPoolResponse {
+    pub since: String,
+    pub until: String,
+    pub unique_wallets_count: u64,
+    pub stats: Vec<PoolStats>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct PoolStats {
+    pub pool_address: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub struct StatsStakingResponse {
+    pub gemston_total_supply: String,
+    pub ston_price_usd: String,
+    pub ston_total_supply: String,
+    pub total_staked_ston: String,
 }
 
 #[derive(Deserialize, Debug, Clone)]
