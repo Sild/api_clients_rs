@@ -101,7 +101,9 @@ checksum = "b0674a1ddeecb70197781e945de4b3b8ffb61fa939a5597bcf48503737663100"
 name = "api_clients_core"
 version = "0.2.1"
 dependencies = [
+ "async-trait",
  "derive_setters",
+ "http",
  "log",
  "reqwest",
  "reqwest-middleware",
@@ -110,6 +112,7 @@ dependencies = [
  "serde_json",
  "serde_qs",
  "thiserror 2.0.16",
+ "tokio",
 ]
 
 [[package]]

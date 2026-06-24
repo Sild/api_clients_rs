@@ -1,3 +1,4 @@
+use crate::executor::rate_limiter::RateLimitMiddleware;
 use crate::{ApiClientsError, ApiClientsResult, Executor};
 use derive_setters::Setters;
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
@@ -14,6 +15,7 @@ pub struct Builder {
     api_url: String,
     retry_count: u32,
     timeout: Duration,
+    max_rps: usize,
     http_client: Option<Arc<ClientWithMiddleware>>,
 }
 
@@ -23,13 +25,15 @@ impl Builder {
             api_url,
             retry_count: 3,
             timeout: Duration::from_secs(10),
+            max_rps: 10,
             http_client: None,
         }
     }
 
     pub fn build(self) -> ApiClientsResult<Executor> {
+        let rate_limit = RateLimitMiddleware::new(self.max_rps);
         let http_client = match self.http_client {
-            Some(cli) => cli,
+            Some(cli) => ClientBuilder::from_client((*cli).clone()).with(rate_limit).build().into(),
             None => {
                 let retry = ExponentialBackoff::builder().build_with_max_retries(self.retry_count);
                 let client = reqwest::ClientBuilder::new()
@@ -37,7 +41,11 @@ impl Builder {
                     .build()
                     .map_err(|err| ApiClientsError::Internal(err.to_string()))?;
 
-                ClientBuilder::new(client).with(RetryTransientMiddleware::new_with_policy(retry)).build().into()
+                ClientBuilder::new(client)
+                    .with(RetryTransientMiddleware::new_with_policy(retry))
+                    .with(rate_limit)
+                    .build()
+                    .into()
             }
         };
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add smooth rate limiting to the core executor builder with a default of 10 RPS;
+  `max_rps = 0` waits without sending requests
+
 ## [0.2.1](https://github.com/Sild/api_clients_rs/compare/api_clients_core-v0.2.0...api_clients_core-v0.2.1) - 2025-11-05
 
 ### Other

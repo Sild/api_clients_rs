@@ -14,8 +14,8 @@ changes.
 `api_clients_core` owns common transport and error behavior:
 
 - `Executor` for HTTP GET, POST with query strings, and POST with JSON body.
-- `Executor::builder(api_endpoint)` for retry count, timeout, and injected HTTP
-  middleware client configuration.
+- `Executor::builder(api_endpoint)` for retry count, timeout, max RPS, and
+  injected HTTP middleware client configuration.
 - `ApiClientsError` and `ApiClientsResult` for common error handling.
 
 It should stay service-agnostic. Service endpoint paths, request parameters, and
@@ -38,8 +38,8 @@ Treat these as public library contracts:
 so new error variants can be added without breaking minor releases.
 
 Do not change URL construction, retry defaults, timeout defaults, error
-classification, or response parsing semantics without reviewing every service
-crate and downstream integration guidance.
+classification, rate-limit defaults, or response parsing semantics without
+reviewing every service crate and downstream integration guidance.
 
 ## Important Gotchas
 
@@ -51,6 +51,11 @@ crate and downstream integration guidance.
   `ApiClientsError::UnexpectedResponse`.
 - 4xx responses map to `Client`; 5xx responses map to `Server`; other reqwest
   errors map through the reqwest conversions.
+- Built executors rate-limit outbound HTTP attempts to 10 RPS by default. The
+  limiter is smooth/no-burst and is installed after retry middleware so retries
+  reserve their own slots.
+- `with_max_rps(0)` is allowed and causes requests to wait indefinitely instead
+  of sending.
 
 ## Downstream Integration Guidance
 
@@ -58,7 +63,7 @@ Final applications usually depend on a service crate instead of this crate
 directly. Use `api_clients_core` directly only when:
 
 - injecting a shared `Executor` into multiple generated clients
-- configuring retry count, timeout, or reqwest middleware once
+- configuring retry count, timeout, max RPS, or reqwest middleware once
 - building a new service wrapper in this workspace
 
 Application code should handle `ApiClientsError` explicitly and avoid

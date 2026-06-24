@@ -1,4 +1,5 @@
 mod builder;
+mod rate_limiter;
 
 use crate::errors::ApiClientsResult;
 use crate::executor::builder::Builder;
@@ -116,5 +117,17 @@ where
             log::warn!("Failed to parse response body: '{response_body}', err: {err}");
             Err(UnexpectedResponse(err.to_string()))
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Executor;
+
+    #[test]
+    fn test_builder_accepts_zero_max_rps() {
+        let result = Executor::builder("http://127.0.0.1:9").with_max_rps(0).build();
+
+        assert!(result.is_ok());
     }
 }

@@ -37,3 +37,5 @@ reqwest-middleware = "0.4"
 graphql_client = "0.14.0"
 derive_setters = "0.1"
 derive_more = { version = "2", features = ["from"] }
+async-trait = "0.1"
+http = "1"
