@@ -52,6 +52,11 @@ Treat these as public library surface:
 - exported helper macros such as `unwrap_response!`
 - README endpoint support tables and examples
 
+Release versions and generated release changelog entries are managed by
+release-plz in CI. Do not treat unchanged crate versions on a feature branch as
+a release-readiness finding unless the user explicitly asks for a manual
+release-prep change.
+
 Public structs and enums are generally marked `#[non_exhaustive]` to preserve
 semver headroom for new fields and variants. Use `Default::default()` or
 request parameter constructors in examples/tests instead of public struct literals,

@@ -10,6 +10,12 @@ use reqwest_middleware::ClientWithMiddleware;
 use serde::{de, ser};
 use std::sync::Arc;
 
+/// Shared HTTP executor used by the service-specific API clients.
+///
+/// Build an executor with [`Executor::builder`]. The default transport retries
+/// transient failures, uses a 10-second timeout, and applies a smooth 10 RPS
+/// client-side rate limit. Endpoints are joined with request paths as
+/// `"{endpoint}/{path}"`, so endpoint strings normally should not end with `/`.
 #[non_exhaustive]
 pub struct Executor {
     api_endpoint: String,
@@ -17,6 +23,11 @@ pub struct Executor {
 }
 
 impl Executor {
+    /// Start configuring an executor for a base API endpoint.
+    ///
+    /// The returned builder exposes `with_retry_count`, `with_timeout`,
+    /// `with_max_rps`, and `with_http_client` setters. `with_max_rps(0)` is
+    /// accepted and causes requests to wait indefinitely instead of being sent.
     pub fn builder<T: Into<String>>(api_endpoint: T) -> Builder { Builder::new(api_endpoint.into()) }
 
     pub async fn exec_get<RESPONSE>(&self, path: &str) -> ApiClientsResult<RESPONSE>

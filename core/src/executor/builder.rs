@@ -7,6 +7,11 @@ use reqwest_retry::RetryTransientMiddleware;
 use std::sync::Arc;
 use std::time::Duration;
 
+/// Builder for [`Executor`].
+///
+/// Defaults to 3 retries, a 10-second request timeout, and a smooth 10 RPS
+/// client-side rate limit. Set `max_rps` to `0` only when the caller wants
+/// requests to wait indefinitely instead of sending.
 #[derive(Setters, Debug)]
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
