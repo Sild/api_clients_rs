@@ -2,6 +2,7 @@ use crate::v1::actions::{Action, TxId};
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Meta {
     pub custom_payload_api_uri: Option<String>,
     pub decimals: Option<i32>,
@@ -11,6 +12,7 @@ pub struct Meta {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Asset {
     pub balance: Option<String>,
     pub blacklisted: bool,
@@ -37,6 +39,7 @@ pub struct Asset {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct QueryAsset {
     pub balance: Option<String>,
     pub contract_address: String,
@@ -51,6 +54,7 @@ pub struct QueryAsset {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Pool {
     pub address: String,
     pub collected_token0_protocol_fee: String,
@@ -70,6 +74,7 @@ pub struct Pool {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Router {
     pub address: String,
     pub major_version: i64,
@@ -82,6 +87,7 @@ pub struct Router {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FarmReward {
     pub address: Option<String>,
     pub remaining_rewards: String,
@@ -90,12 +96,14 @@ pub struct FarmReward {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FarmNftReward {
     pub address: String,
     pub amount: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FarmNft {
     pub address: String,
     pub create_timestamp: String,
@@ -107,6 +115,7 @@ pub struct FarmNft {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Farm {
     pub locked_total_lp: String,
     pub locked_total_lp_usd: String,
@@ -119,6 +128,7 @@ pub struct Farm {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TransactionActionTree {
     pub tx_chain_completed: bool,
     pub initial_tx_id: TxId,

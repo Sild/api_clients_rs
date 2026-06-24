@@ -16,3 +16,9 @@ reqwest-middleware.workspace = true
 log.workspace = true
 serde_qs.workspace = true
 derive_setters.workspace = true
+tokio = { workspace = true, features = ["sync", "time"] }
+async-trait.workspace = true
+http.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt", "test-util"] }

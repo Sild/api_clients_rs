@@ -1,6 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TxId {
     pub lt: i64,
     pub hash: String,
@@ -10,6 +11,7 @@ pub struct TxId {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
+#[non_exhaustive]
 pub enum Action {
     Amm(AmmAction),
     Farm(FarmAction),
@@ -18,6 +20,7 @@ pub enum Action {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum AmmAction {
     Swap(ActionData<DexMajorVersion, SwapData, ActionStatus<SwapResult>>),
     ProvideLiquidity(
@@ -35,6 +38,7 @@ pub enum AmmAction {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FarmAction {
     FarmDeposit(ActionData<FarmMajorVersion, FarmDepositData, ActionStatus<FarmMinterStakeResult>>),
     FarmWithdraw(
@@ -53,11 +57,13 @@ pub enum FarmAction {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum OtherAction {
     Other(ActionData<Blank, OtherTxPayload, UnknownActionStatus>),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ActionData<Version, Payload, Result> {
     pub contract_major_version: Option<Version>,
     pub destination: Option<String>,
@@ -67,6 +73,7 @@ pub struct ActionData<Version, Payload, Result> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WithEffects<T, Effect> {
     #[serde(flatten)]
     pub data: T,
@@ -77,6 +84,7 @@ pub struct WithEffects<T, Effect> {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum ActionStatus<Result> {
     Completed(CompletedActionStatus<Result>),
     Pending,
@@ -84,6 +92,7 @@ pub enum ActionStatus<Result> {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CompletedActionStatus<Result> {
     pub tx_id: TxId,
     pub success: bool,
@@ -94,6 +103,7 @@ pub struct CompletedActionStatus<Result> {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FarmMajorVersion {
     V1,
     V2,
@@ -102,12 +112,14 @@ pub enum FarmMajorVersion {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum DexMajorVersion {
     V1,
     V2,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SwapData {
     // Common fields
     pub opcode: u32,
@@ -132,6 +144,7 @@ pub struct SwapData {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum SwapResult {
     #[serde(rename = "swap_ok")]
     Ok {
@@ -333,6 +346,7 @@ pub enum SwapResult {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProvideLiquidityData {
     // Common fields
     pub opcode: u32,
@@ -351,6 +365,7 @@ pub struct ProvideLiquidityData {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
 #[allow(clippy::large_enum_variant)]
+#[non_exhaustive]
 pub enum ProvideLiquidityResult {
     #[serde(rename = "provide_liquidity_ok")]
     AddLiquidity {
@@ -369,6 +384,7 @@ pub enum ProvideLiquidityResult {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(tag = "@type", rename_all = "snake_case")]
 #[allow(clippy::large_enum_variant)]
+#[non_exhaustive]
 pub enum ProvideLiquidityEffect {
     #[default]
     Never,
@@ -377,6 +393,7 @@ pub enum ProvideLiquidityEffect {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum CbAddLiquidityResult {
     #[serde(rename = "add_liquidity_ok")]
     AddLiquidity {
@@ -404,12 +421,14 @@ pub enum CbAddLiquidityResult {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EffectData<Result> {
     pub status: ActionStatus<Result>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum UnknownActionStatus {
     Completed {},
     Pending,
@@ -417,6 +436,7 @@ pub enum UnknownActionStatus {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DirectAddLiquidityData {
     pub opcode: u32,
     pub query_id: u64,
@@ -432,6 +452,7 @@ pub struct DirectAddLiquidityData {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BurnData {
     pub opcode: u32,
     pub query_id: u64,
@@ -441,6 +462,7 @@ pub struct BurnData {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum BurnNotificationResult {
     #[serde(rename = "burn_ok")]
     Ok {
@@ -452,24 +474,28 @@ pub enum BurnNotificationResult {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CollectFeesData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WithdrawFeesData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct RefundLiquidityData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FarmDepositData {
     pub opcode: u32,
     pub query_id: u64,
@@ -477,12 +503,14 @@ pub struct FarmDepositData {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FarmWithdrawData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FarmClaimRewardsData {
     pub opcode: u32,
     pub query_id: u64,
@@ -492,6 +520,7 @@ pub struct FarmClaimRewardsData {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum CollectFeesResult {
     #[serde(rename = "collect_fees_ok")]
     Ok {
@@ -515,6 +544,7 @@ pub enum CollectFeesResult {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum WithdrawFeeResult {
     Ok {
         amount_out: String,
@@ -526,6 +556,7 @@ pub enum WithdrawFeeResult {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum RefundResult {
     #[serde(rename = "refund_ok")]
     Ok {
@@ -540,6 +571,7 @@ pub enum RefundResult {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FarmMinterStakeResult {
     #[serde(rename = "farm_minter_stake_ok")]
     Ok {},
@@ -548,6 +580,7 @@ pub enum FarmMinterStakeResult {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FarmNftClaimRewardsResult {
     #[serde(rename = "farm_nft_claim_rewards_ok")]
     Ok {},
@@ -556,6 +589,7 @@ pub enum FarmNftClaimRewardsResult {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FarmNftUnstakeResult {
     #[serde(rename = "farm_nft_unstake_ok")]
     Ok {},
@@ -564,6 +598,7 @@ pub enum FarmNftUnstakeResult {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FarmWithdrawEffect {
     #[default]
     Never,
@@ -572,6 +607,7 @@ pub enum FarmWithdrawEffect {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(tag = "@type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum FarmClaimRewardsEffect {
     #[default]
     Never,
@@ -580,12 +616,14 @@ pub enum FarmClaimRewardsEffect {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "exit_code", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum JettonTransferResult {
     Ok(JettonTransferData),
     Bounce,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JettonTransferData {
     pub opcode: u32,
     pub query_id: u64,
@@ -598,10 +636,12 @@ pub struct JettonTransferData {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum OtherTxPayload {
     #[serde(rename = "unknown")]
     Invalid { opcode: u32 },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Blank;

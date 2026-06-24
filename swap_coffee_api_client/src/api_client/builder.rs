@@ -1,11 +1,11 @@
-use crate::client::{StonfiApiClient, DEFAULT_API_V1_URL};
-use crate::v1::V1Client;
+use crate::api_client::{SwapCoffeeApiClient, DEFAULT_API_V1_URL};
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
 
 #[derive(Setters)]
 #[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
 pub struct Builder {
     api_url: String,
     executor: Option<Arc<Executor>>,
@@ -19,13 +19,12 @@ impl Builder {
         }
     }
 
-    pub fn build(self) -> ApiClientsResult<StonfiApiClient> {
+    pub fn build(self) -> ApiClientsResult<SwapCoffeeApiClient> {
         let executor = match self.executor {
             Some(executor) => executor,
             None => Executor::builder(self.api_url).build()?.into(),
         };
 
-        let v1_client = V1Client::new(executor);
-        Ok(StonfiApiClient { v1: v1_client })
+        Ok(SwapCoffeeApiClient { executor })
     }
 }

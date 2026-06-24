@@ -1,10 +1,11 @@
-use crate::client::{BidaskApiClient, DEFAULT_API_URL};
+use crate::api_client::{BidaskApiClient, DEFAULT_API_URL};
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
 
 #[derive(Setters)]
 #[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
 pub struct Builder {
     api_url: String,
     executor: Option<Arc<Executor>>,
