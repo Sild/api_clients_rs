@@ -3,7 +3,7 @@
 ## Scope
 
 This crate is `stonfi_api_client`, a Rust library crate that wraps STON.fi REST
-API v1.
+API v1 and public export endpoints.
 
 Use the repository root `AGENTS.md` first, then this file. Use the
 `rust-library-review` skill for public API, docs, package, or agent-guidance
@@ -15,9 +15,12 @@ The crate exposes a thin typed client:
 
 - `StonfiApiClient::builder().build()?`
 - `client.v1.exec(&V1Request::...)`
+- `client.export.exec(&ExportRequest::...)`
 - request params in `v1/request.rs`
-- response enums and models in `v1/response.rs`, `v1/types.rs`, and
-  `v1/actions.rs`
+- response enums and response wrappers in `v1/response.rs` and models/actions in
+  `v1/types.rs`
+- export dispatch in `export.rs`, requests in `export/request.rs`, responses in
+  `export/response.rs`, and export models in `export/types.rs`
 
 Do not add application-level swap orchestration or transaction execution logic
 here. This crate only wraps STON.fi API responses.
@@ -27,11 +30,14 @@ here. This crate only wraps STON.fi API responses.
 Treat these as public contracts:
 
 - `StonfiApiClient`
+- `DEFAULT_API_URL`
 - `DEFAULT_API_V1_URL`
 - `V1ApiClient`
 - `V1Request`
+- `ExportApiClient`
+- `ExportRequest`
 - all public request parameter structs
-- `V1Response` and public response/action/type structs
+- `V1Response`, `ExportResponse`, and public response/action/type structs
 - `unwrap_response!`
 
 Request parameter and response/model POD structs are `#[non_exhaustive]`; use

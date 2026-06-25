@@ -1,13 +1,18 @@
 # api_clients_rs
-Rust bindings for different services. MRs are welcome!
 
-| Service                | Client                                             | Status      |
-|------------------------|----------------------------------------------------|-------------|
-| https://ston.fi        | [stonfi_api_client](stonfi_api_client)             | Supported   |
-| https://dedust.io      | [dedust_api_client](dedust_api_client)             | Supported   |
-| https://app.tonco.io/  | [tonco_api_client](tonco_api_client)               | Supported   |
-| https://swap.coffee    | [swap_coffee_api_client](swap_coffee_api_client)   | Supported   |
-| Bidask                 | [bidask_api_client](bidask_api_client)             | Unsupported |
+Thin Rust API-client wrappers for TON ecosystem services. Each crate stays close
+to its upstream API contract and exposes typed request/response models without
+adding application-specific swap, routing, persistence, or fallback logic.
+
+MRs are welcome.
+
+| Service                | Client                                             | Status      | Capabilities |
+|------------------------|----------------------------------------------------|-------------|--------------|
+| https://ston.fi        | [stonfi_api_client](stonfi_api_client)             | Supported   | STON.fi API v1 assets, pools, farms, routers, swap/liquidity simulation, wallet views, stats, transactions, and public export feeds. |
+| https://dedust.io      | [dedust_api_client](dedust_api_client)             | Supported   | DeDust API v2 assets, pools, pool trades, and routing plans. |
+| https://app.tonco.io/  | [tonco_api_client](tonco_api_client)               | Supported   | Low-level Tonco Indexer GraphQL execution with caller-owned query/schema files and generated types. |
+| https://swap.coffee    | [swap_coffee_api_client](swap_coffee_api_client)   | Supported   | Swap Coffee API v1 tokens and pools. |
+| Bidask                 | [bidask_api_client](bidask_api_client)             | Unsupported | Legacy source only; not recommended for application integration and not published. |
 
 
 If you're interested in some particular endpoint which is not implemented yet, just raise an issue and I'll add it.
@@ -19,6 +24,7 @@ Add the crate for the service you need:
 ```toml
 [dependencies]
 stonfi_api_client = "0.8"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
 Then build a client and execute the typed request in an async Tokio runtime:

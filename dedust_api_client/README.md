@@ -1,4 +1,48 @@
-### https://api.dedust.io/
+# dedust_api_client
+
+Thin typed wrapper for the [DeDust API v2](https://api.dedust.io/).
+
+Use this crate when an application needs typed access to DeDust assets, pools,
+pool trades, or routing plans. The crate does not choose routes, calculate
+slippage, execute swaps, or normalize DeDust data into a shared DEX domain model.
+
+## Usage
+
+```toml
+[dependencies]
+dedust_api_client = "0.6"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+```
+
+Run requests inside an async Tokio runtime. Pass request parameter structs
+directly where `Into<V2Request>` is implemented, and match response enums with a
+wildcard arm.
+
+```rust,no_run
+use dedust_api_client::api_client::DedustApiClient;
+use dedust_api_client::api_v2::{RoutingPlanParams, V2Response};
+
+# async fn example() -> Result<(), Box<dyn std::error::Error>> {
+let client = DedustApiClient::builder().build()?;
+let params = RoutingPlanParams::new(
+    "0:0000000000000000000000000000000000000000000000000000000000000000",
+    "0:0000000000000000000000000000000000000000000000000000000000000000",
+    "1000000000",
+);
+let response = client.exec_api_v2(params).await?;
+
+match response {
+    V2Response::RoutingPlan(routes) => println!("route groups: {}", routes.len()),
+    _ => println!("unexpected DeDust response variant"),
+}
+# Ok(())
+# }
+```
+
+`RoutingPlanParams::new` maps the zero TON address to `native` and all other
+addresses to `jetton:<address>`.
+
+## Supported Endpoints
 
 | Method                                   | Supported |
 |------------------------------------------|-----------|
@@ -28,3 +72,6 @@ headroom. Build public POD structs with `Default::default().with_<field>(...)`
 or request parameter constructors, pass request parameters directly to
 `exec_api_v2` where `Into<V2Request>` is implemented, and include a wildcard arm
 when matching response enums.
+
+Live API tests hit DeDust directly. Pool counts, routing amounts, and ordering
+can drift with upstream state.

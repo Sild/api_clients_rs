@@ -13,6 +13,8 @@ fn init_env() -> Result<StonfiApiClient> {
     Ok(StonfiApiClient::builder().with_executor(Arc::new(executor)).build()?)
 }
 
+const WALLET_ADDRESS_WITH_POSITIONS: &str = "EQCariTouRoqxeqB9rVsXlSK5ML1XQW-QNxzzj4VXiQl9Vix";
+
 #[tokio::test]
 async fn test_swap_simulate_new_defaults_to_dex_v2() -> Result<()> {
     let params = SwapSimulateParams::new(
@@ -26,6 +28,7 @@ async fn test_swap_simulate_new_defaults_to_dex_v2() -> Result<()> {
 }
 
 #[tokio::test]
+#[ignore = "assets returns the full asset catalog; run explicitly when checking this heavy endpoint"]
 async fn test_assets() -> Result<()> {
     let client = init_env()?;
     let request = V1Request::Assets;
@@ -124,6 +127,7 @@ async fn test_markets() -> Result<()> {
 }
 
 #[tokio::test]
+#[ignore = "pools returns the full pool catalog; run explicitly when checking this heavy endpoint"]
 async fn test_pools() -> Result<()> {
     let client = init_env()?;
     let response = unwrap_response!(Pools, client.v1.exec(PoolsParams::default().with_dex_v2(false)).await?)?;
@@ -197,6 +201,51 @@ async fn test_swap_simulate() -> Result<()> {
     let response = unwrap_response!(SwapSimulate, client.v1.exec(params.clone()).await?)?;
     assert_eq!(response.offer_address, params.offer_address);
     assert_eq!(response.ask_address, params.ask_address);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_liquidity_provision_simulate() -> Result<()> {
+    let client = init_env()?;
+    let response = unwrap_response!(
+        LiquidityProvisionSimulate,
+        client
+            .v1
+            .exec(
+                LiquidityProvisionSimulateParams::new(
+                    LiquidityProvisionType::Balanced,
+                    "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
+                    "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+                    "0.001",
+                )
+                .with_pool_address("EQCGScrZe1xbyWqWDvdI6mzP-GAcAWFv6ZXuaJOuSqemxku4".to_string())
+                .with_wallet_address(WALLET_ADDRESS_WITH_POSITIONS.to_string())
+                .with_token_a_units("1000000000".to_string()),
+            )
+            .await?
+    )?;
+
+    assert_eq!(response.provision_type, LiquidityProvisionType::Balanced);
+    assert_eq!(response.token_a, "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c");
+    assert_eq!(response.token_b, "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs");
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_jetton_wallet_address() -> Result<()> {
+    let client = init_env()?;
+    let response = unwrap_response!(
+        JettonWalletAddress,
+        client
+            .v1
+            .exec(JettonWalletAddressParams::new(
+                "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+                WALLET_ADDRESS_WITH_POSITIONS,
+            ))
+            .await?
+    )?;
+
+    assert!(!response.address.is_empty());
     Ok(())
 }
 
@@ -367,6 +416,128 @@ async fn test_stats_staking() -> Result<()> {
     let client = init_env()?;
     let response = unwrap_response!(StatsStaking, client.v1.exec(V1Request::StatsStaking).await?)?;
     assert!(!response.total_staked_ston.is_empty());
+    Ok(())
+}
+
+#[tokio::test]
+#[ignore = "wallet assets returns the full asset catalog; run explicitly when checking this heavy endpoint"]
+async fn test_wallet_assets() -> Result<()> {
+    let client = init_env()?;
+    let response =
+        unwrap_response!(WalletAssets, client.v1.exec(WalletAssetsParams::new(WALLET_ADDRESS_WITH_POSITIONS)).await?)?;
+    assert_ne!(response.asset_list, vec![]);
+    assert!(response
+        .asset_list
+        .iter()
+        .any(|asset| asset.wallet_address.as_deref() == Some(WALLET_ADDRESS_WITH_POSITIONS)));
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_asset() -> Result<()> {
+    let client = init_env()?;
+    let response = unwrap_response!(
+        WalletAsset,
+        client
+            .v1
+            .exec(WalletAssetParams::new(
+                WALLET_ADDRESS_WITH_POSITIONS,
+                "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
+            ))
+            .await?
+    )?;
+    assert_eq!(response.asset.wallet_address.as_deref(), Some(WALLET_ADDRESS_WITH_POSITIONS));
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_pools() -> Result<()> {
+    let client = init_env()?;
+    let response =
+        unwrap_response!(WalletPools, client.v1.exec(WalletPoolsParams::new(WALLET_ADDRESS_WITH_POSITIONS)).await?)?;
+    assert_ne!(response.pool_list, vec![]);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_pool() -> Result<()> {
+    let client = init_env()?;
+    let pool_address = "EQCGScrZe1xbyWqWDvdI6mzP-GAcAWFv6ZXuaJOuSqemxku4";
+    let response = unwrap_response!(
+        WalletPool,
+        client.v1.exec(WalletPoolParams::new(WALLET_ADDRESS_WITH_POSITIONS, pool_address)).await?
+    )?;
+    assert_eq!(response.pool.address, pool_address);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_farms() -> Result<()> {
+    let client = init_env()?;
+    let response =
+        unwrap_response!(WalletFarms, client.v1.exec(WalletFarmsParams::new(WALLET_ADDRESS_WITH_POSITIONS)).await?)?;
+    assert_ne!(response.farm_list, vec![]);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_farm() -> Result<()> {
+    let client = init_env()?;
+    let farm_address = "EQD0eKCNL6SRy9ZOc8i6R7nvuIAcRs3BwREqq4Z4UzdXvnBz";
+    let response = unwrap_response!(
+        WalletFarm,
+        client.v1.exec(WalletFarmParams::new(WALLET_ADDRESS_WITH_POSITIONS, farm_address)).await?
+    )?;
+    assert_eq!(response.farm.minter_address, farm_address);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_stakes() -> Result<()> {
+    let client = init_env()?;
+    let response =
+        unwrap_response!(WalletStakes, client.v1.exec(WalletStakesParams::new(WALLET_ADDRESS_WITH_POSITIONS)).await?)?;
+    assert!(!response.ston_balance.is_empty());
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_operations() -> Result<()> {
+    let client = init_env()?;
+    let response = unwrap_response!(
+        WalletOperations,
+        client
+            .v1
+            .exec(WalletOperationsParams::new(
+                WALLET_ADDRESS_WITH_POSITIONS,
+                "2026-06-01T00:00:00",
+                "2026-06-02T00:00:00",
+            ))
+            .await?
+    )?;
+    assert!(response.operations.iter().all(|operation| !operation.operation.pool_address.is_empty()));
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_transactions_last() -> Result<()> {
+    let client = init_env()?;
+    let response = unwrap_response!(
+        WalletTransactionsLast,
+        client.v1.exec(WalletTransactionsLastParams::new(WALLET_ADDRESS_WITH_POSITIONS).with_limit(1)).await?
+    )?;
+    assert!(response.tx_list.len() <= 1);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_wallet_fee_vaults() -> Result<()> {
+    let client = init_env()?;
+    let response = unwrap_response!(
+        WalletFeeVaults,
+        client.v1.exec(WalletFeeVaultsParams::new(WALLET_ADDRESS_WITH_POSITIONS)).await?
+    )?;
+    assert!(response.vault_list.iter().all(|vault| !vault.vault_address.is_empty()));
     Ok(())
 }
 
