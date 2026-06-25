@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.8.0...stonfi_api_client-v0.9.0) - 2026-06-25
+
+### Other
+
+- Full stonfi support ([#42](https://github.com/Sild/api_clients_rs/pull/42))
+- add non-exhaustive pod builders
+- Extend stonfi api ([#39](https://github.com/Sild/api_clients_rs/pull/39))
+- fix stonfi and tonco integration checks
+
 ## [0.8.0](https://github.com/Sild/api_clients_rs/compare/stonfi_api_client-v0.7.0...stonfi_api_client-v0.8.0) - 2025-11-25
 
 ### Added
