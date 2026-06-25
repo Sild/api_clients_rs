@@ -1,16 +1,19 @@
 use core::str;
 
+use derive_setters::Setters;
 use serde::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolInfo {
     pub pool: Pool,
     pub info: Info,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Pool {
     pub dex: String,
@@ -26,21 +29,24 @@ pub struct Pool {
     pub unavailable_until: Option<i64>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Token {
     pub address: Address,
     pub metadata: Metadata,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Address {
     pub blockchain: String,
     pub address: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Metadata {
     pub name: String,
@@ -51,7 +57,8 @@ pub struct Metadata {
     pub image_url: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Fees {
     pub average_gas: f64,
@@ -62,7 +69,8 @@ pub struct Fees {
     pub second_token: Option<i64>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Info {
     pub address: String,
@@ -75,7 +83,8 @@ pub struct Info {
     pub locked_asset_amount: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Restriction {
     pub min_swap_amount: Option<f64>,

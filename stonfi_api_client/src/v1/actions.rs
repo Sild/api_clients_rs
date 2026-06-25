@@ -1,6 +1,8 @@
+use derive_setters::Setters;
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct TxId {
     pub lt: i64,
@@ -62,7 +64,8 @@ pub enum OtherAction {
     Other(ActionData<Blank, OtherTxPayload, UnknownActionStatus>),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct ActionData<Version, Payload, Result> {
     pub contract_major_version: Option<Version>,
@@ -72,7 +75,8 @@ pub struct ActionData<Version, Payload, Result> {
     pub prev_index: Option<u8>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct WithEffects<T, Effect> {
     #[serde(flatten)]
@@ -82,16 +86,18 @@ pub struct WithEffects<T, Effect> {
     pub effects: Vec<Effect>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(tag = "@type", rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum ActionStatus<Result> {
     Completed(CompletedActionStatus<Result>),
+    #[default]
     Pending,
     Aborted,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct CompletedActionStatus<Result> {
     pub tx_id: TxId,
@@ -118,7 +124,8 @@ pub enum DexMajorVersion {
     V2,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct SwapData {
     // Common fields
@@ -345,7 +352,8 @@ pub enum SwapResult {
     Bounce,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct ProvideLiquidityData {
     // Common fields
@@ -420,7 +428,8 @@ pub enum CbAddLiquidityResult {
     Bounce,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct EffectData<Result> {
     pub status: ActionStatus<Result>,
@@ -435,7 +444,8 @@ pub enum UnknownActionStatus {
     Aborted,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct DirectAddLiquidityData {
     pub opcode: u32,
@@ -451,7 +461,8 @@ pub struct DirectAddLiquidityData {
     pub excesses_address: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct BurnData {
     pub opcode: u32,
@@ -473,28 +484,32 @@ pub enum BurnNotificationResult {
     Bounce,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct CollectFeesData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct WithdrawFeesData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct RefundLiquidityData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct FarmDepositData {
     pub opcode: u32,
@@ -502,14 +517,16 @@ pub struct FarmDepositData {
     pub owner_address: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct FarmWithdrawData {
     pub opcode: u32,
     pub query_id: u64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct FarmClaimRewardsData {
     pub opcode: u32,
@@ -622,7 +639,8 @@ pub enum JettonTransferResult {
     Bounce,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct JettonTransferData {
     pub opcode: u32,
@@ -642,6 +660,6 @@ pub enum OtherTxPayload {
     Invalid { opcode: u32 },
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[non_exhaustive]
 pub struct Blank;

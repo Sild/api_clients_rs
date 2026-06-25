@@ -7,4 +7,5 @@ Do not add this crate as a dependency in final applications. No Bidask endpoint
 is currently documented as supported by this workspace.
 
 Public request and response types are marked `#[non_exhaustive]` for semver
-headroom. Include a wildcard arm when matching response enums.
+headroom. Public POD structs support `Default::default().with_<field>(...)` for
+tests and migration code. Include a wildcard arm when matching response enums.

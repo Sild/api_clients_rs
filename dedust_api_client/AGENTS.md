@@ -31,11 +31,11 @@ Treat these as public contracts:
 - `V2Response` and public response/type structs
 - `unwrap_response!`
 
-Request parameter structs are `#[non_exhaustive]`; use their constructors or
-`new()` constructors instead of struct literals in downstream examples and
-integration tests. Pass request parameters directly to `exec_api_v2` where
-`Into<V2Request>` is implemented. Public enums are `#[non_exhaustive]`; downstream
-matches need wildcard arms.
+Request parameter and response/model POD structs are `#[non_exhaustive]`; use
+`Default::default().with_<field>(...)` or request parameter constructors instead
+of struct literals in downstream examples and integration tests. Pass request
+parameters directly to `exec_api_v2` where `Into<V2Request>` is implemented.
+Public enums are `#[non_exhaustive]`; downstream matches need wildcard arms.
 
 `RoutingPlanParams::new` maps the zero TON address to `native` and all other
 addresses to `jetton:<address>`. Do not change that mapping without validating

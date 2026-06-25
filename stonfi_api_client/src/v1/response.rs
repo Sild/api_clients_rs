@@ -1,6 +1,7 @@
 use crate::v1::types::{Asset, Farm, Pool, QueryAsset, Router};
 use crate::v1::{TransactionActionTree, TxId};
 use derive_more::From;
+use derive_setters::Setters;
 use serde_derive::Deserialize;
 use std::collections::BTreeMap;
 
@@ -51,73 +52,85 @@ pub enum V1Response {
     TransactionQuery(TransactionQueryResponse),
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct AssetsResponse {
     pub asset_list: Vec<Asset>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct AssetsQueryResponse {
     pub asset_list: Vec<QueryAsset>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct AssetsSearchResponse {
     pub asset_list: Vec<QueryAsset>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct AssetResponse {
     pub asset: Asset,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct FarmsResponse {
     pub farm_list: Vec<Farm>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct FarmResponse {
     pub farm: Farm,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct MarketsResponse {
     pub pairs: Vec<[String; 2]>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolsResponse {
     pub pool_list: Vec<Pool>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolResponse {
     pub pool: Pool,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct RoutersResponse {
     pub router_list: Vec<Router>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct RouterResponse {
     pub router: Router,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct SwapSimulateResponse {
     pub ask_address: String,
@@ -145,7 +158,8 @@ pub enum SwapStatusResponse {
     NotFound,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct SwapStatus {
     pub address: String,
@@ -165,7 +179,12 @@ pub enum SwapStatusBalanceDeltas {
     Text(String),
 }
 
-#[derive(Deserialize, Debug, Clone)]
+impl Default for SwapStatusBalanceDeltas {
+    fn default() -> Self { Self::Map(BTreeMap::new()) }
+}
+
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsDexResponse {
     pub since: String,
@@ -173,7 +192,8 @@ pub struct StatsDexResponse {
     pub stats: DexStats,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct DexStats {
     pub trades: u64,
@@ -182,31 +202,36 @@ pub struct DexStats {
     pub volume_usd: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsFeeAccrualsResponse {
     pub operations: Vec<FeeAccrual>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct FeeAccrual {
     pub pool_address: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsFeeWithdrawalsResponse {
     pub withdrawals: Vec<FeeWithdrawal>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct FeeWithdrawal {
     pub vault_address: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsFeesResponse {
     pub assets_fee_stats: Vec<AssetFeeStats>,
@@ -216,7 +241,8 @@ pub struct StatsFeesResponse {
     pub total_withdrawn_usd: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct AssetFeeStats {
     pub accrued: String,
@@ -226,25 +252,29 @@ pub struct AssetFeeStats {
     pub withdrawn_usd: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsOperationsResponse {
     pub operations: Vec<StatsOperationInfo>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsOperationInfo {
     pub operation: StatsOperation,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsOperation {
     pub pool_address: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsPoolResponse {
     pub since: String,
@@ -253,13 +283,15 @@ pub struct StatsPoolResponse {
     pub stats: Vec<PoolStats>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolStats {
     pub pool_address: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsStakingResponse {
     pub gemston_total_supply: String,
@@ -268,7 +300,8 @@ pub struct StatsStakingResponse {
     pub total_staked_ston: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct TransactionQueryResponse {
     pub tx_id: Option<TxId>,

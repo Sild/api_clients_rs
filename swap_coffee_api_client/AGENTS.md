@@ -32,9 +32,10 @@ Treat these as public contracts:
 - `V1Response` and public response/type structs
 - `unwrap_response!`
 
-Request parameter structs are `#[non_exhaustive]`; use their `new()`
-methods instead of struct literals in downstream examples and integration
-tests. Pass request parameters directly to `exec_api_v1` where `Into<V1Request>` is
+Request parameter and response/model POD structs are `#[non_exhaustive]`; use
+`Default::default().with_<field>(...)` or request parameter `new()` methods
+instead of struct literals in downstream examples and integration tests. Pass
+request parameters directly to `exec_api_v1` where `Into<V1Request>` is
 implemented. Public enums are `#[non_exhaustive]`; downstream matches need
 wildcard arms.
 

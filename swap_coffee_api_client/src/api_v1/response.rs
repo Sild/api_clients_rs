@@ -1,5 +1,6 @@
 use crate::api_v1::types::*;
 use derive_more::From;
+use derive_setters::Setters;
 use serde_derive::Deserialize;
 
 #[macro_export]
@@ -23,7 +24,8 @@ pub enum V1Response {
     Pools(Vec<PoolsResponse>),
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolsResponse {
     pub total_count: i64,

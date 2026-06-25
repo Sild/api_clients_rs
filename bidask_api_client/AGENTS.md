@@ -42,7 +42,9 @@ Treat these as public contracts:
 
 Public request/response types are `#[non_exhaustive]`; downstream matches need
 wildcard arms, and examples should avoid struct literal construction for public
-models.
+models. Public POD structs still support `Default::default().with_<field>(...)`
+for tests and migration code, but do not document or recommend this crate for
+final-app integration unless the user explicitly revives Bidask support.
 
 Preserve pagination behavior unless the user explicitly asks for page-level
 control. If adding endpoints, keep pagination decisions explicit in the request

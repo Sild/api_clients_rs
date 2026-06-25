@@ -1,16 +1,19 @@
+use derive_setters::Setters;
 use serde::Deserialize;
 use serde_derive::Serialize;
 
 pub type TonAddress = String;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PaginatedResponse {
     pub page: PageInfo,
     pub result: Vec<PoolInfo>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PageInfo {
     pub current: i64,
@@ -18,7 +21,8 @@ pub struct PageInfo {
     pub total: i64,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolInfo {
     pub address: TonAddress,
@@ -60,14 +64,16 @@ pub struct PoolInfo {
     pub whoami: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct TokensPair {
     pub token_x: Option<TokenInfo>,
     pub token_y: Option<TokenInfo>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct TokenInfo {
     pub address: TonAddress,
@@ -94,14 +100,16 @@ pub struct TokenInfo {
     pub youtube: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct TokensInBin {
     pub bin: i32,
     pub tokens: TokenAmounts,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct TokenAmounts {
     pub token_x_amount: String,
@@ -117,10 +125,11 @@ pub enum FraudStatus {
     InitialProvideFailed,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum PoolType {
+    #[default]
     Clmm,
     Dlmm,
     MemeClmm,

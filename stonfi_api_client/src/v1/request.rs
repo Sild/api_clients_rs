@@ -55,7 +55,7 @@ impl AssetsQueryParams {
 }
 
 #[serde_with::skip_serializing_none]
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct AssetsSearchParams {
@@ -112,6 +112,10 @@ impl SwapSimulateParams {
     }
 }
 
+impl Default for SwapSimulateParams {
+    fn default() -> Self { Self::new("", "", "", "") }
+}
+
 #[serde_with::skip_serializing_none]
 #[derive(Serialize, Clone, Setters)]
 #[setters(prefix = "with_", strip_option)]
@@ -147,6 +151,10 @@ impl ReverseSwapSimulateParams {
             dex_version: None,
         }
     }
+}
+
+impl Default for ReverseSwapSimulateParams {
+    fn default() -> Self { Self::new("", "", "", "") }
 }
 
 #[derive(Serialize, Clone, Setters)]
@@ -194,7 +202,7 @@ impl RoutersParams {
     pub fn new() -> Self { Self::default() }
 }
 
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_")]
 #[non_exhaustive]
 pub struct FarmByPoolParams {
@@ -224,7 +232,7 @@ impl FarmsParams {
     pub fn new() -> Self { Self::default() }
 }
 
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_")]
 #[non_exhaustive]
 pub struct PoolsByMarketParams {
@@ -264,7 +272,7 @@ impl PoolQueryParams {
     }
 }
 
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_")]
 #[non_exhaustive]
 pub struct SwapStatusParams {
@@ -300,7 +308,7 @@ impl StatsDexParams {
     pub fn new() -> Self { Self::default() }
 }
 
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_")]
 #[non_exhaustive]
 pub struct StatsFeeAccrualsParams {
@@ -319,7 +327,7 @@ impl StatsFeeAccrualsParams {
     }
 }
 
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_")]
 #[non_exhaustive]
 pub struct StatsFeeWithdrawalsParams {
@@ -338,7 +346,7 @@ impl StatsFeeWithdrawalsParams {
     }
 }
 
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_")]
 #[non_exhaustive]
 pub struct StatsFeesParams {
@@ -358,7 +366,7 @@ impl StatsFeesParams {
 }
 
 #[serde_with::skip_serializing_none]
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsOperationsParams {
@@ -378,7 +386,7 @@ impl StatsOperationsParams {
 }
 
 #[serde_with::skip_serializing_none]
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct StatsPoolParams {

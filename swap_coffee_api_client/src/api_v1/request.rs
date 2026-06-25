@@ -10,7 +10,7 @@ pub enum V1Request {
     Pools(Dexes),
 }
 
-#[derive(Serialize, Clone, Setters)]
+#[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_")]
 #[non_exhaustive]
 pub struct Dexes {

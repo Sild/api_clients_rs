@@ -1,4 +1,5 @@
 use derive_more::From;
+use derive_setters::Setters;
 use serde_derive::Serialize;
 
 #[derive(Clone, From)]
@@ -17,7 +18,8 @@ pub enum V2Request {
 
 /// Expecting addresses in format `workchain_id:hex_hash`
 /// Check tests for examples
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct RoutingPlanParams {
     pub from: String,

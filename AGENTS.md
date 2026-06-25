@@ -60,10 +60,11 @@ a release-readiness finding unless the user explicitly asks for a manual
 release-prep change.
 
 Public structs and enums are generally marked `#[non_exhaustive]` to preserve
-semver headroom for new fields and variants. Use `Default::default()` or
-request parameter constructors in examples/tests instead of public struct literals,
-pass request parameters directly to clients where `Into<Request>` is implemented,
-and include wildcard arms when matching public enums.
+semver headroom for new fields and variants. Use
+`Default::default().with_<field>(...)` or request parameter constructors in
+examples/tests instead of public struct literals, pass request parameters
+directly to clients where `Into<Request>` is implemented, and include wildcard
+arms when matching public enums.
 
 When any public interface, endpoint capability, feature flag, workspace member,
 default endpoint, or crate package surface changes, review and update the

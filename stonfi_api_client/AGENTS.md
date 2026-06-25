@@ -34,11 +34,12 @@ Treat these as public contracts:
 - `V1Response` and public response/action/type structs
 - `unwrap_response!`
 
-Request parameter structs are `#[non_exhaustive]`; use `Default::default()` or
-their `new()` constructors instead of struct literals in downstream examples and
-integration tests. Pass request parameters directly to `V1ApiClient::exec` where
-`Into<V1Request>` is implemented. Public enums are `#[non_exhaustive]`; downstream
-matches need wildcard arms.
+Request parameter and response/model POD structs are `#[non_exhaustive]`; use
+`Default::default().with_<field>(...)` or request parameter `new()`
+constructors instead of struct literals in downstream examples and integration
+tests. Pass request parameters directly to `V1ApiClient::exec` where
+`Into<V1Request>` is implemented. Public enums are `#[non_exhaustive]`;
+downstream matches need wildcard arms.
 
 When adding an endpoint, update the README support matrix and add coverage that
 proves the request path, method, params, and response parsing.

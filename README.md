@@ -41,9 +41,10 @@ match response {
 
 Public request and response types are marked `#[non_exhaustive]` where the
 workspace needs room to add fields or enum variants in future minor releases.
-Use `Default::default()` or request parameter constructors instead of struct
-literals, pass request parameters directly to clients where `Into<Request>` is
-implemented, and keep wildcard arms when matching public enums.
+Build public POD structs with `Default::default().with_<field>(...)` or request
+parameter constructors instead of struct literals, pass request parameters
+directly to clients where `Into<Request>` is implemented, and keep wildcard
+arms when matching public enums.
 
 All service clients use `api_clients_core::Executor` underneath. The default
 executor retries transient failures, uses a 10-second timeout, and applies a

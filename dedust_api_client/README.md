@@ -24,5 +24,7 @@
 | /v2/routing/plan                         | ✅         |
 
 Public request and response types are marked `#[non_exhaustive]` for semver
-headroom. Build request parameter structs through their `new()` constructors,
-pass them directly to `exec_api_v2` where `Into<V2Request>` is implemented, and include a wildcard arm when matching response enums.
+headroom. Build public POD structs with `Default::default().with_<field>(...)`
+or request parameter constructors, pass request parameters directly to
+`exec_api_v2` where `Into<V2Request>` is implemented, and include a wildcard arm
+when matching response enums.

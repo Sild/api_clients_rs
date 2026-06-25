@@ -1,14 +1,17 @@
+use derive_setters::Setters;
 use serde::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Stats {
     pub fees: Vec<String>,
     pub volume: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Asset {
     #[serde(rename = "type")]
@@ -20,8 +23,9 @@ pub struct Asset {
     pub decimals: i64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
 #[serde(rename_all = "camelCase")]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct Pool {
     pub address: String,
@@ -36,8 +40,9 @@ pub struct Pool {
     pub stats: Stats,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
 #[serde(rename_all = "camelCase")]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolLite {
     pub address: String,
@@ -52,7 +57,8 @@ pub struct PoolLite {
     pub volume: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolAsset {
     #[serde(rename = "type")]
@@ -60,8 +66,9 @@ pub struct PoolAsset {
     pub address: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
 #[serde(rename_all = "camelCase")]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolTrade {
     pub sender: String,
@@ -73,8 +80,9 @@ pub struct PoolTrade {
     pub created_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
 #[serde(rename_all = "camelCase")]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct PoolRoutingPlan {
     pub address: String,
@@ -83,8 +91,9 @@ pub struct PoolRoutingPlan {
     pub reserves: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default, Setters)]
 #[serde(rename_all = "camelCase")]
+#[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
 pub struct RoutingPlanStep {
     pub pool: PoolRoutingPlan,
