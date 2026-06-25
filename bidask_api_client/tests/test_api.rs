@@ -17,7 +17,7 @@
 // async fn test_pools() -> Result<()> {
 //     let client = init_env();
 //     let request = Request::Pools;
-//     let response = unwrap_response!(Pools, client.exec_api(&request).await?)?;
+//     let response = unwrap_response!(Pools, client.api.exec(&request).await?)?;
 //     assert_ne!(response, vec![]);
 //     log::debug!("{:?}", response.len());
 //     Ok(())

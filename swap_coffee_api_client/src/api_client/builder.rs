@@ -1,4 +1,5 @@
 use crate::api_client::{SwapCoffeeApiClient, DEFAULT_API_V1_URL};
+use crate::v1::V1ApiClient;
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
@@ -25,6 +26,7 @@ impl Builder {
             None => Executor::builder(self.api_url).build()?.into(),
         };
 
-        Ok(SwapCoffeeApiClient { executor })
+        let v1 = V1ApiClient::new(executor);
+        Ok(SwapCoffeeApiClient { v1 })
     }
 }

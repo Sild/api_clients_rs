@@ -1,4 +1,5 @@
 use crate::api_client::{DedustApiClient, DEFAULT_API_V2_URL};
+use crate::v2::V2ApiClient;
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
@@ -25,6 +26,7 @@ impl Builder {
             None => Executor::builder(self.api_url).build()?.into(),
         };
 
-        Ok(DedustApiClient { executor })
+        let v2 = V2ApiClient::new(executor);
+        Ok(DedustApiClient { v2 })
     }
 }

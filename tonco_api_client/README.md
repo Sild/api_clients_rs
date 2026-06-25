@@ -5,7 +5,8 @@ Low-level GraphQL wrapper for the [Tonco Indexer API](https://indexer.tonco.io/d
 Use this crate when an application needs to execute Tonco GraphQL queries while
 keeping query files, generated query modules, schema refreshes, pagination, and
 domain mapping in the application layer. The crate intentionally exposes
-`exec_graphql(operation_name, query)` instead of higher-level pool or swap APIs.
+`client.graphql.exec(operation_name, query)` instead of higher-level pool or
+swap APIs.
 
 ## Usage
 
@@ -16,7 +17,7 @@ serde = { version = "1", features = ["derive"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
-Run requests inside an async Tokio runtime. `exec_graphql` sends the
+Run requests inside an async Tokio runtime. `client.graphql.exec` sends the
 `x-apollo-operation-name` header, unwraps GraphQL `data`, and maps GraphQL
 `errors` or missing `data` to `ApiClientsError::UnexpectedResponse`.
 
@@ -53,7 +54,7 @@ let request = GraphqlRequest {
     variables: EmptyVariables,
 };
 
-let data: PoolsData = client.exec_graphql("Pools", &request).await?;
+let data: PoolsData = client.graphql.exec("Pools", &request).await?;
 let pool_count = data.pools.unwrap_or_default().len();
 println!("pools: {pool_count}");
 # Ok(())

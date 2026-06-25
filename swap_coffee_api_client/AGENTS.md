@@ -14,9 +14,9 @@ changes.
 The crate exposes a thin typed client:
 
 - `SwapCoffeeApiClient::builder().build()?`
-- `client.exec_api_v1(&V1Request::...)`
-- request params in `api_v1/request.rs`
-- response enums and models in `api_v1/response.rs` and `api_v1/types.rs`
+- `client.v1.exec(&V1Request::...)`
+- request params in `v1/request.rs`
+- response enums and models in `v1/response.rs` and `v1/types.rs`
 
 Do not add routing decisions or swap execution flows here. Keep this crate to
 API request/response wrapping.
@@ -27,6 +27,7 @@ Treat these as public contracts:
 
 - `SwapCoffeeApiClient`
 - `DEFAULT_API_V1_URL`
+- `V1ApiClient`
 - `V1Request`
 - `Dexes`
 - `V1Response` and public response/type structs
@@ -35,7 +36,7 @@ Treat these as public contracts:
 Request parameter and response/model POD structs are `#[non_exhaustive]`; use
 `Default::default().with_<field>(...)` or request parameter `new()` methods
 instead of struct literals in downstream examples and integration tests. Pass
-request parameters directly to `exec_api_v1` where `Into<V1Request>` is
+request parameters directly to `client.v1.exec` where `Into<V1Request>` is
 implemented. Public enums are `#[non_exhaustive]`; downstream matches need
 wildcard arms.
 
@@ -50,12 +51,12 @@ assertions on returned pool counts, token ordering, or dynamic metadata.
 ## Downstream Integration Example
 
 ```rust
-use swap_coffee_api_client::api_v1::{Dexes, V1Request, V1Response};
 use swap_coffee_api_client::api_client::SwapCoffeeApiClient;
+use swap_coffee_api_client::v1::{Dexes, V1Request, V1Response};
 
 # async fn example() -> anyhow::Result<()> {
 let client = SwapCoffeeApiClient::builder().build()?;
-let response = client.exec_api_v1(Dexes::new("stonfi_v2")).await?;
+let response = client.v1.exec(Dexes::new("stonfi_v2")).await?;
 
 match response {
     V1Response::Pools(pools) => println!("pool pages: {}", pools.len()),

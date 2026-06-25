@@ -20,11 +20,11 @@ wildcard arm.
 
 ```rust,no_run
 use swap_coffee_api_client::api_client::SwapCoffeeApiClient;
-use swap_coffee_api_client::api_v1::{Dexes, V1Response};
+use swap_coffee_api_client::v1::{Dexes, V1Response};
 
 # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 let client = SwapCoffeeApiClient::builder().build()?;
-let response = client.exec_api_v1(Dexes::new("coffee")).await?;
+let response = client.v1.exec(Dexes::new("coffee")).await?;
 
 match response {
     V1Response::Pools(pages) => println!("pool pages: {}", pages.len()),
@@ -44,8 +44,8 @@ match response {
 Public request and response types are marked `#[non_exhaustive]` for semver
 headroom. Build public POD structs with `Default::default().with_<field>(...)`
 or request parameter constructors, pass request parameters directly to
-`exec_api_v1` where `Into<V1Request>` is implemented, and include a wildcard arm
-when matching response enums.
+`client.v1.exec` where `Into<V1Request>` is implemented, and include a wildcard
+arm when matching response enums.
 
 Live API tests hit Swap Coffee directly. Pool counts, token ordering, metadata,
 and liquidity fields can drift with upstream state.

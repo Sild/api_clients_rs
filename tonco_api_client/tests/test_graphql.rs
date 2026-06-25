@@ -22,7 +22,7 @@ pub struct Pools;
 async fn test_tonco_pools() -> anyhow::Result<()> {
     let client = init_env();
     let query = Pools::build_query(pools::Variables);
-    let response: pools::ResponseData = client.exec_graphql(pools::OPERATION_NAME, &query).await?;
+    let response: pools::ResponseData = client.graphql.exec(pools::OPERATION_NAME, &query).await?;
     assert!(response.pools.is_some());
     let pools = response.pools.unwrap();
     assert!(!pools.is_empty());

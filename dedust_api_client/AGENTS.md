@@ -14,9 +14,9 @@ changes.
 The crate exposes a thin typed client:
 
 - `DedustApiClient::builder().build()?`
-- `client.exec_api_v2(&V2Request::...)`
-- request params in `api_v2/request.rs`
-- response enums and models in `api_v2/response.rs` and `api_v2/types.rs`
+- `client.v2.exec(&V2Request::...)`
+- request params in `v2/request.rs`
+- response enums and models in `v2/response.rs` and `v2/types.rs`
 
 Keep DeDust-specific address formatting and endpoint mapping in this crate.
 
@@ -26,6 +26,7 @@ Treat these as public contracts:
 
 - `DedustApiClient`
 - `DEFAULT_API_V2_URL`
+- `V2ApiClient`
 - `V2Request`
 - `RoutingPlanParams`
 - `V2Response` and public response/type structs
@@ -34,7 +35,7 @@ Treat these as public contracts:
 Request parameter and response/model POD structs are `#[non_exhaustive]`; use
 `Default::default().with_<field>(...)` or request parameter constructors instead
 of struct literals in downstream examples and integration tests. Pass request
-parameters directly to `exec_api_v2` where `Into<V2Request>` is implemented.
+parameters directly to `client.v2.exec` where `Into<V2Request>` is implemented.
 Public enums are `#[non_exhaustive]`; downstream matches need wildcard arms.
 
 `RoutingPlanParams::new` maps the zero TON address to `native` and all other
@@ -50,8 +51,8 @@ counts, routing amounts, or ordering.
 ## Downstream Integration Example
 
 ```rust
-use dedust_api_client::api_v2::{RoutingPlanParams, V2Request, V2Response};
 use dedust_api_client::api_client::DedustApiClient;
+use dedust_api_client::v2::{RoutingPlanParams, V2Request, V2Response};
 
 # async fn example() -> anyhow::Result<()> {
 let client = DedustApiClient::builder().build()?;
@@ -60,7 +61,7 @@ let params = RoutingPlanParams::new(
     "0:0000000000000000000000000000000000000000000000000000000000000000",
     "1000000000",
 );
-let response = client.exec_api_v2(params).await?;
+let response = client.v2.exec(params).await?;
 
 match response {
     V2Response::RoutingPlan(routes) => println!("routes: {}", routes.len()),
