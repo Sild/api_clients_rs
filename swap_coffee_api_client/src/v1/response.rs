@@ -1,4 +1,4 @@
-use crate::api_v1::types::*;
+use crate::v1::types::*;
 use derive_more::From;
 use derive_setters::Setters;
 use serde_derive::Deserialize;
@@ -7,7 +7,7 @@ use serde_derive::Deserialize;
 macro_rules! unwrap_response {
     ($variant:ident, $result:expr) => {
         match $result {
-            $crate::api_v1::V1Response::$variant(inner) => Ok(inner),
+            $crate::v1::V1Response::$variant(inner) => Ok(inner),
             other => Err($crate::api_clients_core::ApiClientsError::UnexpectedResponse(format!(
                 "ApiClientError: expected {}, but got {:?}",
                 stringify!($variant),

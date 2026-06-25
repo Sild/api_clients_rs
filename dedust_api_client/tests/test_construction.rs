@@ -1,4 +1,13 @@
-use dedust_api_client::api_v2::{Asset, Pool, PoolAsset, RoutingPlanParams};
+use dedust_api_client::api_client::DedustApiClient;
+use dedust_api_client::v2::{Asset, Pool, PoolAsset, RoutingPlanParams, V2Request};
+
+#[test]
+fn test_client_exposes_v2_executor() -> anyhow::Result<()> {
+    let client = DedustApiClient::builder().build()?;
+    let future = client.v2.exec(V2Request::Assets);
+    drop(future);
+    Ok(())
+}
 
 #[test]
 fn test_request_params_support_default_setter_construction() {

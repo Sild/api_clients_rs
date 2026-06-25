@@ -1,4 +1,13 @@
-use swap_coffee_api_client::api_v1::{Address, Dexes, Pool, PoolsResponse, Token};
+use swap_coffee_api_client::api_client::SwapCoffeeApiClient;
+use swap_coffee_api_client::v1::{Address, Dexes, Pool, PoolsResponse, Token, V1Request};
+
+#[test]
+fn test_client_exposes_v1_executor() -> anyhow::Result<()> {
+    let client = SwapCoffeeApiClient::builder().build()?;
+    let future = client.v1.exec(V1Request::Assets);
+    drop(future);
+    Ok(())
+}
 
 #[test]
 fn test_request_params_support_default_setter_construction() {

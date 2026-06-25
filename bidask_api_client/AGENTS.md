@@ -14,7 +14,7 @@ changes.
 The crate currently contains a thin typed client:
 
 - `BidaskApiClient::builder().build()?`
-- `client.exec_api(&Request::...)`
+- `client.api.exec(&Request::...)`
 - request enum in `api/request.rs`
 - response enum and models in `api/response.rs` and `api/types.rs`
 
@@ -35,6 +35,7 @@ Treat these as public contracts:
 
 - `BidaskApiClient`
 - `DEFAULT_API_URL`
+- `api::ApiClient`
 - `Request`
 - `Response`
 - public response/type structs

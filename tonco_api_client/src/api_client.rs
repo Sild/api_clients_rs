@@ -1,43 +1,16 @@
 mod builder;
 
 use crate::api_client::builder::Builder;
-use api_clients_core::{ApiClientsError, ApiClientsResult, Executor};
-use graphql_client::Response;
-use serde::{de, ser};
-use std::sync::Arc;
+use crate::graphql::GraphqlApiClient;
 
 pub static DEFAULT_GRAPHQL_ENDPOINT: &str = "https://indexer.tonco.io";
 
 #[derive(Clone)]
+#[non_exhaustive]
 pub struct ToncoApiClient {
-    executor: Arc<Executor>,
+    pub graphql: GraphqlApiClient,
 }
 
 impl ToncoApiClient {
     pub fn builder() -> Builder { Builder::new() }
-
-    pub async fn exec_graphql<PARAMS, RSP>(&self, op_name: &str, graphql_query: &PARAMS) -> ApiClientsResult<RSP>
-    where
-        PARAMS: ser::Serialize,
-        RSP: de::DeserializeOwned,
-    {
-        let headers = &[
-            (reqwest::header::CONTENT_TYPE.to_string(), "application/json".to_string()),
-            ("x-apollo-operation-name".to_string(), op_name.to_string()),
-        ];
-        let response = self.executor.exec_post_body("", graphql_query, headers).await?;
-        handle_graphql_result(response)
-    }
-}
-
-fn handle_graphql_result<R>(graphql_result: Response<R>) -> ApiClientsResult<R> {
-    if let Some(errors) = graphql_result.errors {
-        let msgs: Vec<String> = errors.into_iter().map(|e| e.message).collect();
-        let err_msg = msgs.join(", ");
-        Err(ApiClientsError::UnexpectedResponse(err_msg))
-    } else if let Some(data) = graphql_result.data {
-        Ok(data)
-    } else {
-        Err(ApiClientsError::UnexpectedResponse("No data in GraphQL response".to_string()))
-    }
 }

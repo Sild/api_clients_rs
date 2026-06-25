@@ -1,4 +1,5 @@
 use crate::api_client::{ToncoApiClient, DEFAULT_GRAPHQL_ENDPOINT};
+use crate::graphql::GraphqlApiClient;
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
 use std::sync::Arc;
@@ -24,6 +25,7 @@ impl Builder {
             Some(executor) => executor,
             None => Executor::builder(self.graphql_endpoint).build()?.into(),
         };
-        Ok(ToncoApiClient { executor })
+        let graphql = GraphqlApiClient::new(executor);
+        Ok(ToncoApiClient { graphql })
     }
 }

@@ -77,8 +77,9 @@ change is needed, state why in the final report.
 - Preserve thin-wrapper behavior. Prefer adding the missing endpoint mapping,
   request params, response types, and tests over redesigning the client.
 - Follow the existing crate shape: `api_client.rs`, `api_client/builder.rs`, API module
-  files such as `api_v1.rs`, `api_v1/request.rs`, `api_v1/response.rs`, and
-  `api_v1/types.rs`.
+  files such as `v1.rs`, `v1/request.rs`, `v1/response.rs`, and `v1/types.rs`
+  for versioned REST APIs. Keep unversioned service groups in a descriptive
+  module such as `api.rs` or `graphql.rs`.
 - Use the existing `derive_setters` builder pattern for client configuration.
 - Prefer typed request parameter structs with serde derives over manual query
   string construction.
@@ -138,8 +139,8 @@ For GraphQL crates:
 
 1. Keep checked-in schema/query files aligned with the generated types used in
    tests or examples.
-2. Preserve the `exec_graphql(operation_name, query)` boundary unless the user
-   asks for a higher-level wrapper.
+2. Preserve the `exec(operation_name, query)` GraphQL boundary on the child
+   GraphQL client unless the user asks for a higher-level wrapper.
 3. Verify operation names and headers against the live endpoint.
 4. Document usage through tests or README examples.
 

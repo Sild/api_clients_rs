@@ -20,7 +20,7 @@ wildcard arm.
 
 ```rust,no_run
 use dedust_api_client::api_client::DedustApiClient;
-use dedust_api_client::api_v2::{RoutingPlanParams, V2Response};
+use dedust_api_client::v2::{RoutingPlanParams, V2Response};
 
 # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 let client = DedustApiClient::builder().build()?;
@@ -29,7 +29,7 @@ let params = RoutingPlanParams::new(
     "0:0000000000000000000000000000000000000000000000000000000000000000",
     "1000000000",
 );
-let response = client.exec_api_v2(params).await?;
+let response = client.v2.exec(params).await?;
 
 match response {
     V2Response::RoutingPlan(routes) => println!("route groups: {}", routes.len()),
@@ -70,8 +70,8 @@ addresses to `jetton:<address>`.
 Public request and response types are marked `#[non_exhaustive]` for semver
 headroom. Build public POD structs with `Default::default().with_<field>(...)`
 or request parameter constructors, pass request parameters directly to
-`exec_api_v2` where `Into<V2Request>` is implemented, and include a wildcard arm
-when matching response enums.
+`client.v2.exec` where `Into<V2Request>` is implemented, and include a wildcard
+arm when matching response enums.
 
 Live API tests hit DeDust directly. Pool counts, routing amounts, and ordering
 can drift with upstream state.

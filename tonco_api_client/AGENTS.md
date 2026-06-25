@@ -14,7 +14,7 @@ changes.
 The crate exposes a low-level GraphQL execution boundary:
 
 - `ToncoApiClient::builder().build()?`
-- `client.exec_graphql(operation_name, &query)`
+- `client.graphql.exec(operation_name, &query)`
 - checked-in GraphQL schema at `src/graphql_schema.json`
 - usage examples in `tests/test_graphql.rs` and `tests/pools.graphql`
 
@@ -27,13 +27,13 @@ Treat these as public contracts:
 
 - `ToncoApiClient`
 - `DEFAULT_GRAPHQL_ENDPOINT`
-- `ToncoApiClient::exec_graphql`
+- `GraphqlApiClient`
 
 Public client types are `#[non_exhaustive]` where applicable; avoid public
 struct literal construction in examples.
 
 The default endpoint intentionally has no trailing slash:
-`https://indexer.tonco.io`. `exec_graphql` posts through
+`https://indexer.tonco.io`. `client.graphql.exec` posts through
 `Executor::exec_post_body("", ...)`, so a trailing slash would produce `POST //`
 against the live service.
 
@@ -63,7 +63,7 @@ pub struct Pools;
 # async fn example() -> anyhow::Result<()> {
 let client = ToncoApiClient::builder().build()?;
 let query = Pools::build_query(pools::Variables);
-let data: pools::ResponseData = client.exec_graphql(pools::OPERATION_NAME, &query).await?;
+let data: pools::ResponseData = client.graphql.exec(pools::OPERATION_NAME, &query).await?;
 if let Some(pools) = data.pools {
     println!("pools: {}", pools.len());
 }

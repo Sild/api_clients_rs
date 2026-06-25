@@ -1,3 +1,4 @@
+use crate::api::ApiClient;
 use crate::api_client::{BidaskApiClient, DEFAULT_API_URL};
 use api_clients_core::{ApiClientsResult, Executor};
 use derive_setters::Setters;
@@ -25,6 +26,7 @@ impl Builder {
             None => Executor::builder(self.api_url).build()?.into(),
         };
 
-        Ok(BidaskApiClient { executor })
+        let api = ApiClient::new(executor);
+        Ok(BidaskApiClient { api })
     }
 }
