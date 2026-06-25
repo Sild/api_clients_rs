@@ -2,6 +2,7 @@
 name = "api_clients_core"
 version = "0.2.1"
 description = "core API clients features for various services"
+readme = "README.md"
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
