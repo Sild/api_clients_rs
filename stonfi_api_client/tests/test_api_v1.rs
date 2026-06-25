@@ -28,6 +28,7 @@ async fn test_swap_simulate_new_defaults_to_dex_v2() -> Result<()> {
 }
 
 #[tokio::test]
+#[ignore = "assets returns the full asset catalog; run explicitly when checking this heavy endpoint"]
 async fn test_assets() -> Result<()> {
     let client = init_env()?;
     let request = V1Request::Assets;
@@ -126,6 +127,7 @@ async fn test_markets() -> Result<()> {
 }
 
 #[tokio::test]
+#[ignore = "pools returns the full pool catalog; run explicitly when checking this heavy endpoint"]
 async fn test_pools() -> Result<()> {
     let client = init_env()?;
     let response = unwrap_response!(Pools, client.v1.exec(PoolsParams::default().with_dex_v2(false)).await?)?;
@@ -418,6 +420,7 @@ async fn test_stats_staking() -> Result<()> {
 }
 
 #[tokio::test]
+#[ignore = "wallet assets returns the full asset catalog; run explicitly when checking this heavy endpoint"]
 async fn test_wallet_assets() -> Result<()> {
     let client = init_env()?;
     let response =
