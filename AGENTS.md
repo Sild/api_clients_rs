@@ -16,7 +16,7 @@ Root guidance applies to the whole workspace. Also read the crate-local
 
 - `api_clients_core` (`core/`): shared HTTP executor, retry setup, and common
   error/result types.
-- `stonfi_api_client`: REST wrapper for STON.fi API v1.
+- `stonfi_api_client`: REST wrapper for STON.fi API v1 and public export endpoints.
 - `dedust_api_client`: REST wrapper for DeDust API v2.
 - `swap_coffee_api_client`: REST wrapper for Swap Coffee API v1.
 - `tonco_api_client`: GraphQL wrapper for Tonco Indexer.

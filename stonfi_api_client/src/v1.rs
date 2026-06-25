@@ -1,4 +1,3 @@
-mod actions;
 mod request;
 mod response;
 mod types;
@@ -6,7 +5,6 @@ mod types;
 use api_clients_core::{ApiClientsResult, Executor};
 use std::sync::Arc;
 
-pub use actions::*;
 pub use request::*;
 pub use response::*;
 pub use types::*;
@@ -46,6 +44,14 @@ impl V1ApiClient {
             },
             V1Request::FarmByPool(params) => {
                 V1Response::FarmByPool(self.executor.exec_get(&format!("farms/by_pool/{}", params.pool_address)).await?)
+            },
+            V1Request::JettonWalletAddress(params) => {
+                let path = format!("jetton/{}/address", params.asset_address);
+                let query = JettonWalletAddressQuery { owner_address: &params.owner_address };
+                V1Response::JettonWalletAddress(self.executor.exec_get_extra(&path, &query, &[]).await?)
+            },
+            V1Request::LiquidityProvisionSimulate(params) => {
+                V1Response::LiquidityProvisionSimulate(self.executor.exec_post_qs("liquidity_provision/simulate", params, &[]).await?)
             },
             V1Request::Markets(params) => {
                 V1Response::Markets(self.executor.exec_get_extra("markets", params, &[]).await?)
@@ -104,6 +110,55 @@ impl V1ApiClient {
             },
             V1Request::TransactionActionTree(hash) => {
                 V1Response::TransactionActionTree(self.executor.exec_get(&format!("transactions/{hash}/action_tree")).await?)
+            },
+            V1Request::WalletAssets(params) => {
+                V1Response::WalletAssets(self.executor.exec_get(&format!("wallets/{}/assets", params.wallet_address)).await?)
+            },
+            V1Request::WalletAsset(params) => {
+                let path = format!("wallets/{}/assets/{}", params.wallet_address, params.asset_address);
+                V1Response::WalletAsset(self.executor.exec_get(&path).await?)
+            },
+            V1Request::WalletPools(params) => {
+                let path = format!("wallets/{}/pools", params.wallet_address);
+                let query = DexV2Query { dex_v2: params.dex_v2 };
+                V1Response::WalletPools(self.executor.exec_get_extra(&path, &query, &[]).await?)
+            },
+            V1Request::WalletPool(params) => {
+                let path = format!("wallets/{}/pools/{}", params.wallet_address, params.pool_address);
+                V1Response::WalletPool(self.executor.exec_get(&path).await?)
+            },
+            V1Request::WalletFarms(params) => {
+                let path = format!("wallets/{}/farms", params.wallet_address);
+                let query = WalletFarmsQuery { dex_v2: params.dex_v2, only_active: params.only_active };
+                V1Response::WalletFarms(self.executor.exec_get_extra(&path, &query, &[]).await?)
+            },
+            V1Request::WalletFarm(params) => {
+                let path = format!("wallets/{}/farms/{}", params.wallet_address, params.farm_address);
+                V1Response::WalletFarm(self.executor.exec_get(&path).await?)
+            },
+            V1Request::WalletStakes(params) => {
+                V1Response::WalletStakes(self.executor.exec_get(&format!("wallets/{}/stakes", params.wallet_address)).await?)
+            },
+            V1Request::WalletOperations(params) => {
+                let path = format!("wallets/{}/operations", params.wallet_address);
+                let query = WalletOperationsQuery {
+                    since: &params.since,
+                    until: &params.until,
+                    op_type: &params.op_type,
+                    dex_v2: params.dex_v2,
+                };
+                V1Response::WalletOperations(self.executor.exec_get_extra(&path, &query, &[]).await?)
+            },
+            V1Request::WalletTransactionsLast(params) => {
+                let path = format!("wallets/{}/transactions/last", params.wallet_address);
+                let query = WalletTransactionsLastQuery {
+                    limit: params.limit,
+                    min_tx_timestamp: params.min_tx_timestamp.as_deref(),
+                };
+                V1Response::WalletTransactionsLast(self.executor.exec_get_extra(&path, &query, &[]).await?)
+            },
+            V1Request::WalletFeeVaults(params) => {
+                V1Response::WalletFeeVaults(self.executor.exec_get(&format!("wallets/{}/fee_vaults", params.wallet_address)).await?)
             },
         };
         Ok(response)

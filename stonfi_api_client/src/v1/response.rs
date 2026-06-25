@@ -1,9 +1,12 @@
-use crate::v1::types::{Asset, Farm, Pool, QueryAsset, Router};
-use crate::v1::{TransactionActionTree, TxId};
+use crate::v1::request::LiquidityProvisionType;
+use crate::v1::types::{
+    Asset, AssetFeeStats, DexStats, Farm, FeeAccrual, FeeWithdrawal, Pool, PoolStats, QueryAsset, Router,
+    StatsOperationInfo, SwapStatus, TransactionActionTree, TxId, WalletFeeVault, WalletOperationInfo, WalletStakeNft,
+    WalletTransactionId,
+};
 use derive_more::From;
 use derive_setters::Setters;
 use serde_derive::Deserialize;
-use std::collections::BTreeMap;
 
 #[macro_export]
 macro_rules! unwrap_response {
@@ -20,6 +23,7 @@ macro_rules! unwrap_response {
 }
 
 #[derive(Deserialize, Debug, Clone, From)]
+#[allow(clippy::large_enum_variant)]
 #[non_exhaustive]
 pub enum V1Response {
     Assets(AssetsResponse),
@@ -30,6 +34,8 @@ pub enum V1Response {
     Farm(FarmResponse),
     #[from(skip)]
     FarmByPool(FarmsResponse),
+    JettonWalletAddress(AddressResponse),
+    LiquidityProvisionSimulate(LiquidityProvisionSimulateResponse),
     Markets(MarketsResponse),
     Pools(PoolsResponse),
     #[from(skip)]
@@ -50,6 +56,22 @@ pub enum V1Response {
     StatsStaking(StatsStakingResponse),
     TransactionActionTree(TransactionActionTreeResponse),
     TransactionQuery(TransactionQueryResponse),
+    #[from(skip)]
+    WalletAsset(AssetResponse),
+    #[from(skip)]
+    WalletAssets(AssetsResponse),
+    #[from(skip)]
+    WalletFarm(FarmResponse),
+    #[from(skip)]
+    WalletFarms(FarmsResponse),
+    WalletFeeVaults(WalletFeeVaultsResponse),
+    WalletOperations(WalletOperationsResponse),
+    #[from(skip)]
+    WalletPool(PoolResponse),
+    #[from(skip)]
+    WalletPools(PoolsResponse),
+    WalletStakes(WalletStakesResponse),
+    WalletTransactionsLast(WalletTransactionsLastResponse),
 }
 
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
@@ -92,6 +114,13 @@ pub struct FarmsResponse {
 #[non_exhaustive]
 pub struct FarmResponse {
     pub farm: Farm,
+}
+
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct AddressResponse {
+    pub address: String,
 }
 
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
@@ -161,45 +190,10 @@ pub enum SwapStatusResponse {
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
-pub struct SwapStatus {
-    pub address: String,
-    pub balance_deltas: SwapStatusBalanceDeltas,
-    pub coins: String,
-    pub exit_code: String,
-    pub logical_time: String,
-    pub query_id: String,
-    pub tx_hash: String,
-}
-
-#[derive(Deserialize, Debug, Clone)]
-#[serde(untagged)]
-#[non_exhaustive]
-pub enum SwapStatusBalanceDeltas {
-    Map(BTreeMap<String, String>),
-    Text(String),
-}
-
-impl Default for SwapStatusBalanceDeltas {
-    fn default() -> Self { Self::Map(BTreeMap::new()) }
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
 pub struct StatsDexResponse {
     pub since: String,
     pub until: String,
     pub stats: DexStats,
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
-pub struct DexStats {
-    pub trades: u64,
-    pub tvl: String,
-    pub unique_wallets: u64,
-    pub volume_usd: String,
 }
 
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
@@ -212,22 +206,8 @@ pub struct StatsFeeAccrualsResponse {
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
-pub struct FeeAccrual {
-    pub pool_address: String,
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
 pub struct StatsFeeWithdrawalsResponse {
     pub withdrawals: Vec<FeeWithdrawal>,
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
-pub struct FeeWithdrawal {
-    pub vault_address: String,
 }
 
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
@@ -244,33 +224,8 @@ pub struct StatsFeesResponse {
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
 #[setters(prefix = "with_", strip_option)]
 #[non_exhaustive]
-pub struct AssetFeeStats {
-    pub accrued: String,
-    pub accrued_usd: Option<String>,
-    pub asset_address: String,
-    pub withdrawn: String,
-    pub withdrawn_usd: Option<String>,
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
 pub struct StatsOperationsResponse {
     pub operations: Vec<StatsOperationInfo>,
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
-pub struct StatsOperationInfo {
-    pub operation: StatsOperation,
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
-pub struct StatsOperation {
-    pub pool_address: String,
 }
 
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
@@ -281,13 +236,6 @@ pub struct StatsPoolResponse {
     pub until: String,
     pub unique_wallets_count: u64,
     pub stats: Vec<PoolStats>,
-}
-
-#[derive(Deserialize, Debug, Clone, Default, Setters)]
-#[setters(prefix = "with_", strip_option)]
-#[non_exhaustive]
-pub struct PoolStats {
-    pub pool_address: String,
 }
 
 #[derive(Deserialize, Debug, Clone, Default, Setters)]
@@ -309,3 +257,63 @@ pub struct TransactionQueryResponse {
 }
 
 pub type TransactionActionTreeResponse = TransactionActionTree;
+
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct LiquidityProvisionSimulateResponse {
+    pub estimated_lp_units: String,
+    pub estimated_token_a_rate: String,
+    pub estimated_token_a_units: String,
+    pub estimated_token_b_rate: String,
+    pub estimated_token_b_units: String,
+    pub lp_account_address: Option<String>,
+    pub lp_account_token_a_balance: Option<String>,
+    pub lp_account_token_b_balance: Option<String>,
+    pub lp_total_supply: String,
+    pub min_lp_units: String,
+    pub min_token_a_units: String,
+    pub min_token_b_units: String,
+    pub pool_address: String,
+    pub price_impact: String,
+    pub provision_type: LiquidityProvisionType,
+    pub router: Router,
+    pub router_address: String,
+    pub token_a: String,
+    pub token_a_units: String,
+    pub token_b: String,
+    pub token_b_units: String,
+}
+
+#[derive(Deserialize, Debug, Clone, Default, Setters, PartialEq, Eq)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletFeeVaultsResponse {
+    pub vault_list: Vec<WalletFeeVault>,
+}
+
+#[derive(Deserialize, Debug, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletOperationsResponse {
+    pub operations: Vec<WalletOperationInfo>,
+}
+
+#[derive(Deserialize, Debug, Clone, Default, Setters, PartialEq, Eq)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletStakesResponse {
+    pub minted_gemston: String,
+    pub nfts: Option<Vec<WalletStakeNft>>,
+    pub staked_ston: String,
+    pub ston_balance: String,
+    pub voting_power: String,
+}
+
+#[derive(Deserialize, Debug, Clone, Default, Setters, PartialEq, Eq)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletTransactionsLastResponse {
+    pub seqno: u32,
+    pub tx_list: Vec<WalletTransactionId>,
+}

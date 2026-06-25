@@ -1,6 +1,6 @@
 use derive_more::From;
 use derive_setters::Setters;
-use serde_derive::Serialize;
+use serde_derive::{Deserialize, Serialize};
 
 #[derive(Clone, From)]
 #[non_exhaustive]
@@ -15,6 +15,8 @@ pub enum V1Request {
     #[from(skip)]
     Farm(String),
     FarmByPool(FarmByPoolParams),
+    JettonWalletAddress(JettonWalletAddressParams),
+    LiquidityProvisionSimulate(LiquidityProvisionSimulateParams),
     Markets(MarketsParams),
     PoolQuery(PoolQueryParams),
     Pools(PoolsParams),
@@ -38,6 +40,16 @@ pub enum V1Request {
     TransactionQuery(TransactionQueryParams),
     #[from(skip)]
     TransactionActionTree(String),
+    WalletAsset(WalletAssetParams),
+    WalletAssets(WalletAssetsParams),
+    WalletFarm(WalletFarmParams),
+    WalletFarms(WalletFarmsParams),
+    WalletFeeVaults(WalletFeeVaultsParams),
+    WalletOperations(WalletOperationsParams),
+    WalletPool(WalletPoolParams),
+    WalletPools(WalletPoolsParams),
+    WalletStakes(WalletStakesParams),
+    WalletTransactionsLast(WalletTransactionsLastParams),
 }
 
 #[serde_with::skip_serializing_none]
@@ -365,6 +377,72 @@ impl StatsFeesParams {
     }
 }
 
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_")]
+#[non_exhaustive]
+pub struct JettonWalletAddressParams {
+    pub asset_address: String,
+    pub owner_address: String,
+}
+
+impl JettonWalletAddressParams {
+    pub fn new(asset_address: impl Into<String>, owner_address: impl Into<String>) -> Self {
+        Self {
+            asset_address: asset_address.into(),
+            owner_address: owner_address.into(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Default)]
+#[serde(rename_all = "PascalCase")]
+#[non_exhaustive]
+pub enum LiquidityProvisionType {
+    Initial,
+    #[default]
+    Balanced,
+    Arbitrary,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize, Clone, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct LiquidityProvisionSimulateParams {
+    pub provision_type: LiquidityProvisionType,
+    pub pool_address: Option<String>,
+    pub wallet_address: Option<String>,
+    pub token_a: String,
+    pub token_b: String,
+    pub token_a_units: Option<String>,
+    pub token_b_units: Option<String>,
+    pub slippage_tolerance: String,
+}
+
+impl LiquidityProvisionSimulateParams {
+    pub fn new(
+        provision_type: LiquidityProvisionType,
+        token_a: impl Into<String>,
+        token_b: impl Into<String>,
+        slippage_tolerance: impl Into<String>,
+    ) -> Self {
+        Self {
+            provision_type,
+            pool_address: None,
+            wallet_address: None,
+            token_a: token_a.into(),
+            token_b: token_b.into(),
+            token_a_units: None,
+            token_b_units: None,
+            slippage_tolerance: slippage_tolerance.into(),
+        }
+    }
+}
+
+impl Default for LiquidityProvisionSimulateParams {
+    fn default() -> Self { Self::new(LiquidityProvisionType::Balanced, "", "", "") }
+}
+
 #[serde_with::skip_serializing_none]
 #[derive(Serialize, Clone, Default, Setters)]
 #[setters(prefix = "with_", strip_option)]
@@ -418,6 +496,226 @@ pub struct TransactionQueryParams {
 
 impl TransactionQueryParams {
     pub fn new() -> Self { Self::default() }
+}
+
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_")]
+#[non_exhaustive]
+pub struct WalletAssetsParams {
+    pub wallet_address: String,
+}
+
+impl WalletAssetsParams {
+    pub fn new(wallet_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+        }
+    }
+}
+
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_")]
+#[non_exhaustive]
+pub struct WalletAssetParams {
+    pub wallet_address: String,
+    pub asset_address: String,
+}
+
+impl WalletAssetParams {
+    pub fn new(wallet_address: impl Into<String>, asset_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+            asset_address: asset_address.into(),
+        }
+    }
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize, Clone, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletPoolsParams {
+    pub wallet_address: String,
+    pub dex_v2: Option<bool>,
+}
+
+impl WalletPoolsParams {
+    pub fn new(wallet_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+            dex_v2: Some(true),
+        }
+    }
+}
+
+impl Default for WalletPoolsParams {
+    fn default() -> Self { Self::new("") }
+}
+
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_")]
+#[non_exhaustive]
+pub struct WalletPoolParams {
+    pub wallet_address: String,
+    pub pool_address: String,
+}
+
+impl WalletPoolParams {
+    pub fn new(wallet_address: impl Into<String>, pool_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+            pool_address: pool_address.into(),
+        }
+    }
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize, Clone, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletFarmsParams {
+    pub wallet_address: String,
+    pub dex_v2: Option<bool>,
+    pub only_active: Option<bool>,
+}
+
+impl WalletFarmsParams {
+    pub fn new(wallet_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+            dex_v2: Some(true),
+            only_active: None,
+        }
+    }
+}
+
+impl Default for WalletFarmsParams {
+    fn default() -> Self { Self::new("") }
+}
+
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_")]
+#[non_exhaustive]
+pub struct WalletFarmParams {
+    pub wallet_address: String,
+    pub farm_address: String,
+}
+
+impl WalletFarmParams {
+    pub fn new(wallet_address: impl Into<String>, farm_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+            farm_address: farm_address.into(),
+        }
+    }
+}
+
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_")]
+#[non_exhaustive]
+pub struct WalletStakesParams {
+    pub wallet_address: String,
+}
+
+impl WalletStakesParams {
+    pub fn new(wallet_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+        }
+    }
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletOperationsParams {
+    pub wallet_address: String,
+    pub since: String,
+    pub until: String,
+    pub op_type: Vec<String>,
+    pub dex_v2: Option<bool>,
+}
+
+impl WalletOperationsParams {
+    pub fn new(wallet_address: impl Into<String>, since: impl Into<String>, until: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+            since: since.into(),
+            until: until.into(),
+            op_type: Vec::new(),
+            dex_v2: Some(true),
+        }
+    }
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_", strip_option)]
+#[non_exhaustive]
+pub struct WalletTransactionsLastParams {
+    pub wallet_address: String,
+    pub limit: Option<u32>,
+    pub min_tx_timestamp: Option<String>,
+}
+
+impl WalletTransactionsLastParams {
+    pub fn new(wallet_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+            limit: None,
+            min_tx_timestamp: None,
+        }
+    }
+}
+
+#[derive(Serialize, Clone, Default, Setters)]
+#[setters(prefix = "with_")]
+#[non_exhaustive]
+pub struct WalletFeeVaultsParams {
+    pub wallet_address: String,
+}
+
+impl WalletFeeVaultsParams {
+    pub fn new(wallet_address: impl Into<String>) -> Self {
+        Self {
+            wallet_address: wallet_address.into(),
+        }
+    }
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize)]
+pub(super) struct DexV2Query {
+    pub(super) dex_v2: Option<bool>,
+}
+
+#[derive(Serialize)]
+pub(super) struct JettonWalletAddressQuery<'a> {
+    pub(super) owner_address: &'a str,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize)]
+pub(super) struct WalletFarmsQuery {
+    pub(super) dex_v2: Option<bool>,
+    pub(super) only_active: Option<bool>,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize)]
+pub(super) struct WalletOperationsQuery<'a> {
+    pub(super) since: &'a str,
+    pub(super) until: &'a str,
+    pub(super) op_type: &'a [String],
+    pub(super) dex_v2: Option<bool>,
+}
+
+#[serde_with::skip_serializing_none]
+#[derive(Serialize)]
+pub(super) struct WalletTransactionsLastQuery<'a> {
+    pub(super) limit: Option<u32>,
+    pub(super) min_tx_timestamp: Option<&'a str>,
 }
 
 impl From<&V1Request> for V1Request {

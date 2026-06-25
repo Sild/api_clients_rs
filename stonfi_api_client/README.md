@@ -8,11 +8,12 @@
 | AMM   | /v1/farms                                     | ✅        |
 | AMM   | /v1/farms/by_pool/{pool_addr_str}             | ✅        |
 | AMM   | /v1/farms/{addr_str}                          | ✅        |
-| AMM   | /v1/liquidity_provision/simulate              |          |
+| AMM   | /v1/jetton/{addr_str}/address                 | ✅        |
+| AMM   | /v1/liquidity_provision/simulate              | ✅        |
 | AMM   | /v1/markets                                   | ✅        |
 | AMM   | /v1/pools/query                               | ✅        |
 | AMM   | /v1/pools                                     | ✅        |
-| AMM   | /v1/pools/by_market/{asset0_str}/{asset1_str} | ✅        |
+| AMM   | /v1/pools/by_market/{asset_0_addr_str}/{asset_1_addr_str} | ✅        |
 | AMM   | /v1/pools/{addr_str}                          | ✅        |
 | AMM   | /v1/reverse_swap/simulate                     | ✅        |
 | AMM   | /v1/routers                                   | ✅        |
@@ -28,9 +29,25 @@
 | AMM   | /v1/swap/status                               | ✅        |
 | AMM   | /v1/transactions/query                        | ✅        |
 | AMM   | /v1/transactions/{hash}/action_tree           | ✅        |
+| AMM   | /v1/wallets/{addr_str}/assets                 | ✅        |
+| AMM   | /v1/wallets/{addr_str}/assets/{asset_str}     | ✅        |
+| AMM   | /v1/wallets/{addr_str}/farms                  | ✅        |
+| AMM   | /v1/wallets/{addr_str}/farms/{farm_str}       | ✅        |
+| AMM   | /v1/wallets/{addr_str}/fee_vaults             | ✅        |
+| AMM   | /v1/wallets/{addr_str}/operations             | ✅        |
+| AMM   | /v1/wallets/{addr_str}/pools                  | ✅        |
+| AMM   | /v1/wallets/{addr_str}/pools/{pool_str}       | ✅        |
+| AMM   | /v1/wallets/{addr_str}/stakes                 | ✅        |
+| AMM   | /v1/wallets/{addr_str}/transactions/last      | ✅        |
+| Export | /export/cmc/v1                               | ✅        |
+| Export | /export/dexscreener/v1/asset/{address}       | ✅        |
+| Export | /export/dexscreener/v1/events                | ✅        |
+| Export | /export/dexscreener/v1/latest-block          | ✅        |
+| Export | /export/dexscreener/v1/pair/{address}        | ✅        |
 
 Public request and response types are marked `#[non_exhaustive]` for semver
 headroom. Build public POD structs with `Default::default().with_<field>(...)`
 or request parameter `new()` constructors, pass request parameters directly to
-`V1ApiClient::exec` where `Into<V1Request>` is implemented, and include a
-wildcard arm when matching response enums.
+`V1ApiClient::exec` or `ExportApiClient::exec` where `Into<V1Request>` or
+`Into<ExportRequest>` is implemented, and include a wildcard arm when matching
+response enums.
