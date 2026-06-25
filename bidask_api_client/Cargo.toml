@@ -5,6 +5,7 @@ repository.workspace = true
 name = "bidask_api_client"
 version = "0.0.1"
 description = "API client for bidask"
+publish = false
 
 [dependencies]
 # Internal

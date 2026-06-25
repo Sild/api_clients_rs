@@ -2,8 +2,8 @@
 
 ## Scope
 
-This crate is `bidask_api_client`, a Rust library crate that wraps the Bidask
-pools REST API.
+This crate is `bidask_api_client`, an unsupported legacy Rust library crate for
+Bidask.
 
 Use the repository root `AGENTS.md` first, then this file. Use the
 `rust-library-review` skill for public API, docs, package, or agent-guidance
@@ -11,15 +11,23 @@ changes.
 
 ## Crate Purpose
 
-The crate exposes a thin typed client:
+The crate currently contains a thin typed client:
 
 - `BidaskApiClient::builder().build()?`
 - `client.exec_api(&Request::...)`
 - request enum in `api/request.rs`
 - response enum and models in `api/response.rs` and `api/types.rs`
 
-The current client aggregates paginated `/pools` responses into one
-`Vec<PoolInfo>`.
+The crate is not supported for final-app integration. Do not recommend it to
+downstream users, document it as available, or add new endpoint support unless
+the user explicitly asks to revive Bidask support.
+
+## Release / Publishing
+
+`bidask_api_client` is intentionally excluded from the release-plz publish cycle
+with `publish = false` in `Cargo.toml`. Do not re-enable publishing or prepare
+crates.io release metadata for this crate unless the user explicitly asks to
+revive Bidask support.
 
 ## Public API Boundary
 
@@ -42,30 +50,9 @@ or response type.
 
 ## Live API Notes
 
-Tests in `tests/test_api.rs` hit the live Bidask API. Avoid brittle assertions
-on pool totals, ordering, or token metadata. Do not replace live coverage with
-mock-server tests.
-
-## Downstream Integration Example
-
-```rust
-use bidask_api_client::api::{Request, Response};
-use bidask_api_client::api_client::BidaskApiClient;
-
-# async fn example() -> anyhow::Result<()> {
-let client = BidaskApiClient::builder().build()?;
-let response = client.exec_api(&Request::Pools).await?;
-
-match response {
-    Response::Pools(pools) => println!("pools: {}", pools.len()),
-    other => anyhow::bail!("unexpected Bidask response: {other:?}"),
-}
-# Ok(())
-# }
-```
-
-Final applications should apply their own filtering, persistence, and refresh
-strategy after receiving the aggregated pool list.
+The live API test is intentionally commented out while this crate remains
+unsupported. Do not re-enable Bidask live coverage unless the user explicitly
+asks to revive Bidask support.
 
 ## Validation
 

@@ -20,7 +20,9 @@ Root guidance applies to the whole workspace. Also read the crate-local
 - `dedust_api_client`: REST wrapper for DeDust API v2.
 - `swap_coffee_api_client`: REST wrapper for Swap Coffee API v1.
 - `tonco_api_client`: GraphQL wrapper for Tonco Indexer.
-- `bidask_api_client`: REST wrapper for Bidask pools API.
+- `bidask_api_client`: unsupported legacy Bidask crate; it is intentionally
+  excluded from publishing and should not be recommended for final-app
+  integration.
 
 ## Project Goals
 
