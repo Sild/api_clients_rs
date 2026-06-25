@@ -21,6 +21,13 @@ The crate exposes a thin typed client:
 The current client aggregates paginated `/pools` responses into one
 `Vec<PoolInfo>`.
 
+## Release / Publishing
+
+`bidask_api_client` is intentionally excluded from the release-plz publish
+cycle with `publish = false` in `Cargo.toml`. Do not re-enable publishing or
+prepare crates.io release metadata for this crate unless the user explicitly
+asks for that.
+
 ## Public API Boundary
 
 Treat these as public contracts:
