@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0](https://github.com/Sild/api_clients_rs/compare/api_clients_core-v0.2.1...api_clients_core-v0.3.0) - 2026-06-25
+
+### Other
+
+- Full stonfi support ([#42](https://github.com/Sild/api_clients_rs/pull/42))
+- Extend stonfi api ([#39](https://github.com/Sild/api_clients_rs/pull/39))
+
 ### Added
 
 - add smooth rate limiting to the core executor builder with a default of 10 RPS;
