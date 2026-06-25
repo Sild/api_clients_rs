@@ -50,8 +50,9 @@ or response type.
 
 ## Live API Notes
 
-Do not treat existing live tests as evidence that the crate is supported. The
-crate is retained in the workspace as unsupported legacy code.
+The live API test is intentionally commented out while this crate remains
+unsupported. Do not re-enable Bidask live coverage unless the user explicitly
+asks to revive Bidask support.
 
 ## Validation
 

@@ -8,3 +8,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Mark `bidask_api_client` as unsupported and excluded from publishing.
+- Comment out the unsupported Bidask live API test.
